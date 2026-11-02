@@ -126,7 +126,9 @@ def backup_if_changed(store,keyfile,destination):
         if root is None:return None
         content_hash=load_json(root/'manifest.json')['contentHash']
         for a in store.db.execute('SELECT * FROM artifacts WHERE snapshot_hash=? ORDER BY created_at DESC',(content_hash,)):
-            if Path(a['path']).is_file() and digest_file(Path(a['path']))==a['sha256']:return Path(a['path'])
+            if Path(a['path']).is_file() and digest_file(Path(a['path']))==a['sha256']:
+                inspect_backup(Path(a['path']),keyfile) # A replaced/lost key must not silently pass a backup readiness check.
+                return Path(a['path'])
     return create_backup(store,keyfile,destination)
 
 

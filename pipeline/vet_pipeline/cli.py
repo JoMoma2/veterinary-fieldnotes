@@ -89,7 +89,8 @@ def dispatch(a,store,cfg):
             except Exception as e:result['backup_error']=type(e).__name__
         if cfg['backup']['remote']:
             with lock(store.root):result['uploads']=backup.upload_backups(store,cfg)
-        result['cleanup']={'eligible':backup.cleanup(store,cfg,cfg['retention']['enabled']),'deleted':cfg['retention']['enabled']}
+        apply_retention=cfg['retention']['enabled'] and not result.get('backup_error')
+        result['cleanup']={'eligible':backup.cleanup(store,cfg,apply_retention),'deleted':bool(apply_retention)}
         return result
     if a.command=='sync-master':
         from .github import sync_master

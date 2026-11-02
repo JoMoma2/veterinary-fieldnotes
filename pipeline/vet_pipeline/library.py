@@ -162,6 +162,7 @@ def commit(store,job,t,extracted,timezone_name='Unknown until configured'):
     pending=[j for j in store.jobs() if j['shift_id']==shift['id'] and j['id']!=job['id'] and j['stage']!='done']
     shift['processing']='partial' if pending else 'complete';shift['publication']={'status':'draft','audience':'private'}
     validate_library(lib)
+    if rejected:write_json(store.root/'quarantine'/f"{job['id']}-questions.json",rejected)
     # The durable per-recording checkpoint is one SQLite transaction. Markdown/JSON projection is
     # generated once per run, so a 100-file shift does not create 100 copies of the entire library.
     with store.db:
@@ -171,7 +172,6 @@ def commit(store,job,t,extracted,timezone_name='Unknown until configured'):
                 store.db.execute('INSERT INTO library_records VALUES(?,?,?) ON CONFLICT(kind,id) DO UPDATE SET data=excluded.data WHERE data<>excluded.data',(group,entry['id'],data))
         for key,cid in manifest['caseKeys'].items():store.db.execute('INSERT OR REPLACE INTO case_keys VALUES(?,?)',(key,cid))
         store.db.execute('INSERT INTO applied_recordings VALUES(?)',(job['id'],))
-    if rejected:write_json(store.root/'quarantine'/f"{job['id']}-questions.json",rejected)
     return current_root(store)
 
 

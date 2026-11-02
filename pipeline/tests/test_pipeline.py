@@ -237,3 +237,18 @@ def test_model_cannot_approve_questions_or_override_origin(store,cfg,first,monke
         data=original(self,*args);q=data['questions'][0];q['origin']='authorized-record';q['publication']={'status':'approved','audience':'public','reviewedBy':'model','reviewedAt':'2026-10-22T00:00:00Z','authorizationRef':'invented'};return data
     monkeypatch.setattr(Provider,'extract',response);assert run(store,cfg)[0]['status']=='done'
     q=current(store)['questions'][0];assert q['origin']=='synthetic';assert q['publication']=={'status':'draft','audience':'private'}
+
+def test_changed_backup_key_cannot_silently_reuse_old_ciphertext(store,cfg,first,tmp_path):
+    from vet_pipeline.backup import backup_if_changed
+    run(store,cfg);key=tmp_path/'key';other=tmp_path/'other-key';create_key(key);create_key(other);backup_if_changed(store,key,tmp_path/'backups')
+    with pytest.raises(Exception):backup_if_changed(store,other,tmp_path/'backups')
+    assert len(list((tmp_path/'backups').glob('*.vkb')))==1
+
+def test_quarantine_write_failure_does_not_commit_away_invalid_question(store,cfg,first,monkeypatch):
+    import vet_pipeline.library as module
+    original=module.write_json
+    def fail(path,value):
+        if 'quarantine' in path.parts:raise OSError('disk failure')
+        original(path,value)
+    monkeypatch.setattr(module,'write_json',fail);assert run(store,cfg)[0]['status']=='failed';assert not current(store)['articles']
+    monkeypatch.setattr(module,'write_json',original);assert run(store,cfg,True)[0]['status']=='done';assert (store.root/'quarantine'/f'{first}-questions.json').exists()
