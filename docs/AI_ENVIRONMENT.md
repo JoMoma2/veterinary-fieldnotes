@@ -1,6 +1,6 @@
 # AI environment diagnosis — 2026-11-02
 
-**Update later in the same day:** Vulkan whisper.cpp is now built and integrated; tiny.en GPU smoke and real Qwen3 extraction tests were run. Large V3 remains pending acquisition; extraction quality is not validated. Read [LOCAL_AI_BENCHMARKS.md](LOCAL_AI_BENCHMARKS.md) and [SESSION_HANDOFF.md](SESSION_HANDOFF.md) for the current state. The diagnostic snapshot below predates those changes.
+**Current update (resumed session):** Large V3 f16 is installed and benchmarked on the existing Vulkan backend. Qwen3.5 9B and Gemma3 12B are installed alongside unchanged Qwen3. Compact grounded-v2 extraction, full synthetic WAV processing and bounded long-recording recovery now work. Clinical readiness is not established. Read [LOCAL_AI_BENCHMARKS.md](LOCAL_AI_BENCHMARKS.md) and [SESSION_HANDOFF.md](SESSION_HANDOFF.md) for current results. The diagnostic snapshot below predates these installations; no system driver/ROCm/Ollama/MMM/FCC configuration was replaced.
 
 These were diagnostics and project-local benchmark preparations. No GPU drivers, kernel packages, ROCm installations, Ollama service configuration, installed models, or MMM/FCC configuration were changed. No large model was downloaded. One existing small model generated one synthetic diagnostic token; it expired normally afterward.
 

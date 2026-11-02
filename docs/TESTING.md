@@ -54,3 +54,11 @@ Install Playwright Chromium once if absent. Browser tests use built `dist` and a
 ## Local AI verification — 2026-11-02
 
 52 Python tests pass, including the new whisper.cpp subprocess/checkpoint adapter, timeout preservation, bounded padded timestamps, real-corpus authorization gates, schema prompt grounding and rejected-response diagnostics. 16 TypeScript tests and Astro/content checks pass. Real Qwen3 synthetic output built through pipeline-demo twice (6 discussions from direct transcripts; 4 from partial WAV success). Final empty production build verified 8 pages/87 internal links; 4 desktop/mobile production browser tests passed. GPU tiny.en inference and Qwen3 GPU inference were actually executed. Their semantic limitations and failed bounded full-pipeline job are documented in LOCAL_AI_BENCHMARKS.md. Automated contract tests do not establish medical extraction accuracy.
+
+## Resumed local AI verification (r2)
+
+75 Python tests pass, including 23 grounded-adapter tests covering source/ID assignment, exact citation repair, number/negation rejection, anonymous/negative/legacy case identity, topic binding, context bounds, chronological preservation and bounded split/SIGINT-style checkpoint reuse. Existing failure isolation, malformed questions, upload retries and backups remain covered. 16 TypeScript tests and type/content checks pass.
+
+Real local inference: Large V3 versus tiny on six timed clips; Qwen3/Qwen3.5/Gemma on seven identical transcripts; seven-WAV and 374-second end-to-end workloads; actual child-checkpoint SIGINT recovery. See LOCAL_AI_BENCHMARKS.md for failures and measurement limits. Synthetic source retention/JSON acceptance is not medical accuracy.
+
+The real seven-WAV test export built 40 pages/617 links; long output including unclassified excerpts built 68 pages/1057 links. Four desktop/mobile pipeline browser cases pass for each (article → actual discussion → exact shift anchor, stored recall answer and search). CI now runs E2E_PIPELINE=1 on its mock export before the existing demo/empty/public suites, without downloading models or calling inference. Finish with a production build and public privacy/empty-state audits.

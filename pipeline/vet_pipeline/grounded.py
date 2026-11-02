@@ -462,6 +462,7 @@ def project(raw, transcript, context, kinds):
                 "conclusions": "Requires review; no clinical interpretation or case association was inferred.",
             }
         )
+    result["discussions"].sort(key=lambda d: min(q["start"] for q in d["quotes"]))
     quality = {
         "protocol": VERSION,
         "inputSources": len(sources),

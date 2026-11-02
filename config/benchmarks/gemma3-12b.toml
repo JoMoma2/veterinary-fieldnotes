@@ -1,6 +1,7 @@
-# Candidate only: not installed. No global service or model-default changes.
+# Installed comparison model; no global service or model-default changes.
 [provider]
 kind = "ollama"
+extraction_protocol = "grounded-v2"
 model = "gemma3:12b-it-q4_K_M"
 base_url = "http://127.0.0.1:11434"
 allow_remote = false
@@ -8,6 +9,8 @@ allow_paid = false
 timeout_seconds = 300
 context_window = 8192
 max_output_tokens = 4096
+repeat_penalty = 1.0
+presence_penalty = 0.0
 keep_alive = "0"
 context_char_limit = 6000
 transcript_char_limit = 12000

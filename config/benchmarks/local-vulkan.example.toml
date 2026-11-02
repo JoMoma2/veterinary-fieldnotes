@@ -2,6 +2,7 @@
 # Request-only settings. Does not modify Ollama/MMM/FCC defaults.
 [provider]
 kind = "ollama"
+extraction_protocol = "grounded-v2"
 model = "qwen3:30b"
 base_url = "http://127.0.0.1:11434"
 allow_remote = false
@@ -9,6 +10,8 @@ allow_paid = false
 timeout_seconds = 300
 context_window = 8192
 max_output_tokens = 4096
+repeat_penalty = 1.0
+presence_penalty = 0.0
 thinking = false
 keep_alive = "0"
 context_char_limit = 6000
@@ -16,8 +19,8 @@ transcript_char_limit = 12000
 
 [transcription]
 kind = "whisper-cpp"
-executable = "/absolute/path/to/build-vulkan/bin/whisper-cli"
-model = "/absolute/path/to/ggml-large-v3.bin"
+executable = "~/.local/share/vet-fieldnotes-ai/whisper.cpp-v1.9.5/build-vulkan/bin/whisper-cli"
+model = "~/.local/share/vet-fieldnotes-ai/models/ggml-large-v3.bin"
 language = "en"
 threads = 4
 gpu_device = 0

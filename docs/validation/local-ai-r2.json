@@ -1,0 +1,486 @@
+{
+  "session": "local-ai-r2",
+  "origin": "synthetic",
+  "clinicalReadiness": false,
+  "codeMilestone": "caed084",
+  "transcription": {
+    "large": {
+      "modelSha256": "64d182b440b98d5203c4f9bd541544d84c605196c4f7b845dfa11fb23594d1e2",
+      "audioSeconds": 166.62343750000002,
+      "wallSeconds": 12.77,
+      "referenceWordCount": 420,
+      "wordErrorCount": 3,
+      "weightedWER": 0.007142857142857143,
+      "results": [
+        {
+          "id": "01-first",
+          "audioSeconds": 31.3784375,
+          "seconds": 2.658,
+          "wordErrorRate": 0.0,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              },
+              {
+                "referenceStart": 10.6553125,
+                "hypothesisSegmentStart": 10.68,
+                "startErrorSeconds": 0.024687499999998863
+              },
+              {
+                "referenceStart": 18.9463125,
+                "hypothesisSegmentStart": 18.96,
+                "startErrorSeconds": 0.01368749999999963
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.012791666666666165,
+            "maxAbsoluteStartErrorSeconds": 0.024687499999998863
+          }
+        },
+        {
+          "id": "02-followup",
+          "audioSeconds": 22.6576875,
+          "seconds": 1.808,
+          "wordErrorRate": 0.0,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              },
+              {
+                "referenceStart": 13.3763125,
+                "hypothesisSegmentStart": 13.38,
+                "startErrorSeconds": 0.00368750000000162
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.00184375000000081,
+            "maxAbsoluteStartErrorSeconds": 0.00368750000000162
+          }
+        },
+        {
+          "id": "03-workaround",
+          "audioSeconds": 11.324375,
+          "seconds": 1.33,
+          "wordErrorRate": 0.037037037037037035,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.0,
+            "maxAbsoluteStartErrorSeconds": 0.0
+          }
+        },
+        {
+          "id": "04-medication",
+          "audioSeconds": 41.130625,
+          "seconds": 2.778,
+          "wordErrorRate": 0.010526315789473684,
+          "missingTerminology": ["maropitant"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              },
+              {
+                "referenceStart": 13.129,
+                "hypothesisSegmentStart": 13.08,
+                "startErrorSeconds": -0.04899999999999949
+              },
+              {
+                "referenceStart": 29.7110625,
+                "hypothesisSegmentStart": 29.7,
+                "startErrorSeconds": -0.011062500000001307
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.0200208333333336,
+            "maxAbsoluteStartErrorSeconds": 0.04899999999999949
+          }
+        },
+        {
+          "id": "05-continued",
+          "audioSeconds": 32.6669375,
+          "seconds": 2.241,
+          "wordErrorRate": 0.0,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              },
+              {
+                "referenceStart": 17.9338125,
+                "hypothesisSegmentStart": 17.98,
+                "startErrorSeconds": 0.046187500000002046
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.023093750000001023,
+            "maxAbsoluteStartErrorSeconds": 0.046187500000002046
+          }
+        },
+        {
+          "id": "06-ambiguous",
+          "audioSeconds": 27.465375,
+          "seconds": 1.955,
+          "wordErrorRate": 0.014285714285714285,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              },
+              {
+                "referenceStart": 14.138375,
+                "hypothesisSegmentStart": 14.18,
+                "startErrorSeconds": 0.0416249999999998
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.0208124999999999,
+            "maxAbsoluteStartErrorSeconds": 0.0416249999999998
+          }
+        }
+      ],
+      "peakHostGpuVramBytes": 5262151680
+    },
+    "tiny": {
+      "modelSha256": "921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f",
+      "audioSeconds": 166.62343750000002,
+      "wallSeconds": 2.729,
+      "referenceWordCount": 420,
+      "wordErrorCount": 71,
+      "weightedWER": 0.16904761904761906,
+      "results": [
+        {
+          "id": "01-first",
+          "audioSeconds": 31.3784375,
+          "seconds": 0.5,
+          "wordErrorRate": 0.11764705882352941,
+          "missingTerminology": ["grooming"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              },
+              {
+                "referenceStart": 10.6553125,
+                "hypothesisSegmentStart": 10.94,
+                "startErrorSeconds": 0.28468749999999865
+              },
+              {
+                "referenceStart": 18.9463125,
+                "hypothesisSegmentStart": 19.02,
+                "startErrorSeconds": 0.07368749999999835
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.1791874999999985,
+            "maxAbsoluteStartErrorSeconds": 0.28468749999999865
+          }
+        },
+        {
+          "id": "02-followup",
+          "audioSeconds": 22.6576875,
+          "seconds": 0.373,
+          "wordErrorRate": 0.22580645161290322,
+          "missingTerminology": ["grooming"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              },
+              {
+                "referenceStart": 13.3763125,
+                "hypothesisSegmentStart": 10.22,
+                "startErrorSeconds": -3.1563124999999985
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 3.1563124999999985,
+            "maxAbsoluteStartErrorSeconds": 3.1563124999999985
+          }
+        },
+        {
+          "id": "03-workaround",
+          "audioSeconds": 11.324375,
+          "seconds": 0.246,
+          "wordErrorRate": 0.14814814814814814,
+          "missingTerminology": [],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "hypothesisSegmentStart": 0.0,
+                "startErrorSeconds": 0.0
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.0,
+            "maxAbsoluteStartErrorSeconds": 0.0
+          }
+        },
+        {
+          "id": "04-medication",
+          "audioSeconds": 41.130625,
+          "seconds": 0.626,
+          "wordErrorRate": 0.22105263157894736,
+          "missingTerminology": ["norepinephrine", "maropitant", "buprenorphine", "ALT", "BUN"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              },
+              {
+                "referenceStart": 13.129,
+                "hypothesisSegmentStart": 13.08,
+                "startErrorSeconds": -0.04899999999999949
+              },
+              {
+                "referenceStart": 29.7110625,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.04899999999999949,
+            "maxAbsoluteStartErrorSeconds": 0.04899999999999949
+          }
+        },
+        {
+          "id": "05-continued",
+          "audioSeconds": 32.6669375,
+          "seconds": 0.514,
+          "wordErrorRate": 0.12345679012345678,
+          "missingTerminology": ["ultrasound", "vasopressor"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              },
+              {
+                "referenceStart": 17.9338125,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": null,
+            "maxAbsoluteStartErrorSeconds": null
+          }
+        },
+        {
+          "id": "06-ambiguous",
+          "audioSeconds": 27.465375,
+          "seconds": 0.47,
+          "wordErrorRate": 0.17142857142857143,
+          "missingTerminology": ["Addison's", "mannequin"],
+          "gpuAccelerationConfirmed": true,
+          "utteranceAlignment": {
+            "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+            "utterances": [
+              {
+                "referenceStart": 0.0,
+                "startErrorSeconds": null,
+                "reason": "Opening phrase did not match uniquely"
+              },
+              {
+                "referenceStart": 14.138375,
+                "hypothesisSegmentStart": 13.8,
+                "startErrorSeconds": -0.3383749999999992
+              }
+            ],
+            "meanAbsoluteStartErrorSeconds": 0.3383749999999992,
+            "maxAbsoluteStartErrorSeconds": 0.3383749999999992
+          }
+        }
+      ],
+      "peakHostGpuVramBytes": 1298448384
+    }
+  },
+  "models": [
+    {
+      "model": "qwen3:30b",
+      "protocol": "grounded-v2",
+      "measuredContractSha256": "7d0fbd2e3f5717d6fc102feb34dd5dfce5c48a5a6b1bc298369439902f6d1e89",
+      "wallSeconds": 44.222,
+      "accepted": 7,
+      "expectedFacts": 51,
+      "strictSourceAndTypeMatches": 36,
+      "clausesInSourceAccounts": 51,
+      "questions": 18,
+      "unclassifiedSources": 0,
+      "warnings": 2,
+      "repairs": 0,
+      "tokensPerSecondRange": [138.6, 140.4],
+      "caseCountsAfterEachInput": [1, 1, 1, 2, 2, 3, 4],
+      "articleCountsAfterEachInput": [3, 3, 4, 5, 6, 7, 8]
+    },
+    {
+      "model": "qwen3.5:9b-q4_K_M",
+      "protocol": "grounded-v2",
+      "measuredContractSha256": "7d0fbd2e3f5717d6fc102feb34dd5dfce5c48a5a6b1bc298369439902f6d1e89",
+      "wallSeconds": 62.103,
+      "accepted": 7,
+      "expectedFacts": 51,
+      "strictSourceAndTypeMatches": 41,
+      "clausesInSourceAccounts": 51,
+      "questions": 0,
+      "unclassifiedSources": 0,
+      "warnings": 1,
+      "repairs": 3,
+      "tokensPerSecondRange": [91.4, 92.2],
+      "caseCountsAfterEachInput": [1, 1, 1, 2, 2, 3, 4],
+      "articleCountsAfterEachInput": [3, 3, 4, 5, 6, 7, 8]
+    },
+    {
+      "model": "gemma3:12b-it-q4_K_M",
+      "protocol": "grounded-v2",
+      "measuredContractSha256": "7d0fbd2e3f5717d6fc102feb34dd5dfce5c48a5a6b1bc298369439902f6d1e89",
+      "wallSeconds": 78.22,
+      "accepted": 7,
+      "expectedFacts": 51,
+      "strictSourceAndTypeMatches": 35,
+      "clausesInSourceAccounts": 51,
+      "questions": 26,
+      "unclassifiedSources": 0,
+      "warnings": 1,
+      "repairs": 0,
+      "tokensPerSecondRange": [64.3, 66.3],
+      "caseCountsAfterEachInput": [1, 1, 1, 2, 2, 3, 4],
+      "articleCountsAfterEachInput": [3, 3, 4, 5, 7, 9, 10]
+    }
+  ],
+  "pipelines": {
+    "seven-files": {
+      "audioSeconds": 180.00106250000002,
+      "currentInvocationSeconds": 73.718,
+      "recordCounts": {
+        "topics": 11,
+        "articles": 11,
+        "cases": 3,
+        "shifts": 1,
+        "discussions": 17,
+        "questions": 6
+      },
+      "classifiedSources": 55,
+      "unclassifiedSources": 0,
+      "duplicateImportPrevented": true,
+      "stageSeconds": {
+        "transcription": 14.383,
+        "retrieval": 0.03,
+        "extraction": 58.863,
+        "commit": 0.062
+      },
+      "outputLimitSplits": 0,
+      "peakHostGpuVramBytes": 23878733824
+    },
+    "long-file": {
+      "audioSeconds": 374.002125,
+      "currentInvocationSeconds": 229.06,
+      "recordCounts": {
+        "topics": 15,
+        "articles": 14,
+        "cases": 7,
+        "shifts": 1,
+        "discussions": 38,
+        "questions": 39
+      },
+      "classifiedSources": 158,
+      "unclassifiedSources": 14,
+      "duplicateImportPrevented": true,
+      "stageSeconds": {
+        "transcription": 28.976,
+        "retrieval": 0.004,
+        "extraction": 199.387,
+        "commit": 0.036
+      },
+      "outputLimitSplits": 2,
+      "peakHostGpuVramBytes": 21056815104,
+      "oversizedPromptTokens": [7055, 6415],
+      "acceptedChildPromptTokens": [3891, 3958, 3589, 3672]
+    }
+  },
+  "recovery": {
+    "interruptedAtChildCheckpoint": true,
+    "initialExitCode": 130,
+    "resumeExitCode": 0,
+    "preservedCheckpointCount": 3,
+    "allPreexistingCheckpointHashesPreserved": true
+  },
+  "modelResidency": [
+    {
+      "name": "qwen3:30b",
+      "digest": "ad815644918f0eaab341c12b67837cc6dd4562342cdaf118f83d5d554cb37226",
+      "size": 19373962034,
+      "size_vram": 19373962034,
+      "context_length": 8192
+    },
+    {
+      "name": "qwen3.5:9b-q4_K_M",
+      "digest": "56671c2ab9385f9cfcb404638e32cd62d88e3501d44822208363c010179a3c90",
+      "size": 5828646010,
+      "size_vram": 5828646010,
+      "context_length": 8192
+    },
+    {
+      "name": "gemma3:12b-it-q4_K_M",
+      "digest": "b92b218582c521ba287f38f1d6057dcd3c6cbff036f13cac97b5d861f5e58ec3",
+      "size": 8350314004,
+      "size_vram": 8350314004,
+      "context_length": 8192
+    }
+  ],
+  "limitations": [
+    "No real ER audio or medical accuracy certification.",
+    "Narrative counts measure deterministic source-wording preservation, not semantic accuracy.",
+    "Typed-fact matching is a strict clause/source/type screen and undercounts partial clauses.",
+    "Long workload repeats synthetic material; novel/noisy conversations may perform worse.",
+    "Accounts are source extracts; articles remain additive notes requiring curation."
+  ],
+  "regressionTests": {
+    "python": 75,
+    "typescript": 16,
+    "pipelineBrowserDesktopMobile": 4,
+    "typeAndContentChecks": "passed"
+  }
+}

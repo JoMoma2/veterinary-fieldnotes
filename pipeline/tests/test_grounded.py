@@ -404,3 +404,19 @@ def test_legacy_case_keys_keep_existing_case_identifiers(store, tmp_path):
     )
     save(store, tmp_path, t2, d2, "second")
     assert [c["id"] for c in current(store)["cases"]] == [existing]
+
+
+def test_unclassified_and_model_discussions_remain_chronological():
+    t = {
+        "segments": [
+            {"start": 0, "end": 4, "text": "Earlier observation."},
+            {"start": 5, "end": 9, "text": "Later observation."},
+        ]
+    }
+    row = lesson(t, caseLabel=None, isCase=False)
+    token = list(source_map(t))[1]
+    row["sources"] = [token]
+    row["facts"][0].update(source=token, quote=t["segments"][1]["text"])
+    data, _ = project({"discussions": [row]}, t, [], KIND)
+    assert [d["quotes"][0]["start"] for d in data["discussions"]] == [0, 5]
+    validate_extraction(data, t)
