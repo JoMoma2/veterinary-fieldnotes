@@ -12,10 +12,23 @@ p.add_argument("--backend", choices=["faster-whisper", "whisper-cpp"], required=
 p.add_argument("--model", required=True)
 p.add_argument("--executable", type=Path)
 p.add_argument("--threads", type=int, default=4)
+p.add_argument(
+    "--origin", choices=["synthetic", "authorized-record"], default="synthetic"
+)
+p.add_argument("--authorization-ref", default="")
 a = p.parse_args()
 if not 1 <= a.threads <= 16:
     raise SystemExit("Use 1–16 threads")
-r = benchmark_audio(a.manifest, a.output, a.backend, a.model, a.executable, a.threads)
+r = benchmark_audio(
+    a.manifest,
+    a.output,
+    a.backend,
+    a.model,
+    a.executable,
+    a.threads,
+    a.origin,
+    a.authorization_ref,
+)
 print(
     json.dumps(
         {

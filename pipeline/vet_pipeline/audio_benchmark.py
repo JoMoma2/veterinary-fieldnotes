@@ -3,14 +3,13 @@
 from __future__ import annotations
 import json
 import re
-import subprocess
-import tempfile
 import time
 import wave
 from pathlib import Path
 
 from .hardware import ResourceSampler, inventory
 from .ingest import transcript_valid
+from .whisper_cpp import parse_whisper_cpp
 from .util import load_json, write_json, now, digest_file
 
 
@@ -33,27 +32,24 @@ def word_error_rate(reference, hypothesis):
     return previous[-1] / len(expected)
 
 
-def parse_whisper_cpp(data):
-    segments = []
-    for entry in data.get("transcription", []):
-        offsets = entry.get("offsets", {})
-        segments.append(
-            {
-                "start": offsets["from"] / 1000,
-                "end": offsets["to"] / 1000,
-                "text": entry["text"],
-            }
-        )
-    return transcript_valid({"segments": segments})
-
-
 def benchmark_audio(
-    manifest: Path, output: Path, backend: str, model: str, executable=None, threads=4
+    manifest: Path,
+    output: Path,
+    backend: str,
+    model: str,
+    executable=None,
+    threads=4,
+    origin="synthetic",
+    authorization_ref="",
 ):
     data = load_json(manifest)
-    if data.get("origin") != "synthetic":
+    if origin not in ["synthetic", "authorized-record"] or data.get("origin") != origin:
         raise ValueError(
-            "This prepared audio benchmark accepts synthetic audio only; real audio requires a separately authorized corpus"
+            "Manifest origin must match the explicitly selected benchmark origin"
+        )
+    if origin == "authorized-record" and not authorization_ref:
+        raise ValueError(
+            "Real audio benchmark requires a recording/processing authorization reference"
         )
     if backend not in ["faster-whisper", "whisper-cpp"]:
         raise ValueError("Unknown transcription benchmark backend")
@@ -99,43 +95,23 @@ def benchmark_audio(
                     )
                     row["gpuAccelerationConfirmed"] = False
                 else:
-                    with tempfile.TemporaryDirectory(prefix="vet-whisper-cpp-") as tmp:
-                        prefix = Path(tmp) / "transcript"
-                        r = subprocess.run(
-                            [
-                                str(executable),
-                                "-m",
-                                model,
-                                "-f",
-                                str(path),
-                                "-l",
-                                "en",
-                                "-t",
-                                str(threads),
-                                "-ojf",
-                                "-of",
-                                str(prefix),
-                            ],
-                            capture_output=True,
-                            text=True,
-                            check=True,
-                            timeout=600,
-                        )
-                        transcript = parse_whisper_cpp(
-                            load_json(prefix.with_suffix(".json"))
-                        )
-                        # A compiled GPU backend alone is not proof that inference used it.
-                        proof = [
-                            line
-                            for line in r.stderr.splitlines()
-                            if re.search(
-                                r"whisper_backend_init_gpu.*using.*(?:Vulkan|ROCm|HIP)",
-                                line,
-                                re.I,
-                            )
-                        ]
-                        row["gpuAccelerationConfirmed"] = bool(proof)
-                        row["backendEvidence"] = proof
+                    from .whisper_cpp import transcribe_cpp
+
+                    transcript = transcribe_cpp(
+                        path,
+                        {
+                            "executable": str(executable),
+                            "model": model,
+                            "language": "en",
+                            "threads": threads,
+                            "gpu_device": 0,
+                            "timeout_seconds": 600,
+                        },
+                    )
+                    row.update(transcript["transcriptionBackend"])
+                    row["rawTimestampBoundsValid"] = not transcript[
+                        "transcriptionBackend"
+                    ]["timestampAdjustments"]
                 text = " ".join(s["text"].strip() for s in transcript["segments"])
                 seconds = time.monotonic() - start
                 row.update(
@@ -143,8 +119,22 @@ def benchmark_audio(
                     seconds=round(seconds, 3),
                     audioSeconds=duration,
                     realTimeFactor=seconds / duration,
-                    wordErrorRate=word_error_rate(item["reference"], text),
-                    reference=item["reference"],
+                    wordErrorRate=word_error_rate(item["reference"], text)
+                    if item.get("reference")
+                    and (
+                        origin == "synthetic"
+                        or item.get("referenceKind") == "human-transcript"
+                    )
+                    else None,
+                    reference=item.get("reference"),
+                    referenceKind=item.get(
+                        "referenceKind",
+                        "synthetic-text" if origin == "synthetic" else "recollection",
+                    ),
+                    timestampBoundsValid=all(
+                        0 <= s["start"] < s["end"] <= duration + 0.1
+                        for s in transcript["segments"]
+                    ),
                     transcript=transcript,
                     missingTerminology=[
                         term
@@ -165,7 +155,7 @@ def benchmark_audio(
     report = {
         "schemaVersion": 1,
         "at": now(),
-        "origin": "synthetic",
+        "origin": origin,
         "backend": backend,
         "model": model,
         "threads": threads,

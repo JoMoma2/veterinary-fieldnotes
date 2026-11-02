@@ -92,6 +92,13 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
                         inference_start = time.monotonic()
                         data = provider.extract(t, context, origin)
                         inference_seconds = time.monotonic() - inference_start
+                        # Retain structured responses and timing even when validation rejects them.
+                        # Reports are private artifacts, never website content.
+                        row.update(
+                            output=data,
+                            providerMetrics=provider.last_metrics,
+                            inferenceSeconds=round(inference_seconds, 3),
+                        )
                         validate_extraction(data, t)
                         commit(store, store.get(job_id), t, data)
                         store.update(job_id, stage="done")
@@ -127,6 +134,9 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
                         )
                     except Exception as e:
                         row.update(valid=False, error=type(e).__name__)
+                        row.setdefault("providerMetrics", provider.last_metrics)
+                        if "output" not in row and provider.last_content is not None:
+                            row["rawResponse"] = provider.last_content
                         if type(e) is ValueError:
                             row["reason"] = str(e)
                 row["seconds"] = round(time.monotonic() - start, 3)
@@ -153,8 +163,11 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
             for k in ["context_window", "max_output_tokens", "thinking", "keep_alive"]
         },
         "promptContractSha256": hashlib.sha256(
-            (PROMPT + json.dumps(SCHEMA, sort_keys=True)).encode()
+            (
+                "schema-in-prompt-v1\n" + PROMPT + json.dumps(SCHEMA, sort_keys=True)
+            ).encode()
         ).hexdigest(),
+        "schemaIncludedInPrompt": True,
         "hardware": hardware,
         "origin": origin,
         "warning": "Screening metrics are not clinical accuracy scores. Human review is required. No 90% capture claim is implied. Results include private model output; keep authorized-record reports outside the public repository.",

@@ -26,6 +26,10 @@ DEFAULT = {
         "compute_type": "int8",
         "language": "en",
         "allow_model_download": False,
+        "executable": "",
+        "threads": 4,
+        "gpu_device": 0,
+        "timeout_seconds": 1800,
     },
     "archive": {"timezone": "Unknown until configured"},
     "retry": {"max_attempts": 3, "base_delay_seconds": 30},
@@ -70,6 +74,11 @@ def config(path: Path | None = None):
         raise ValueError("max_attempts must be 1–10")
     if out["retry"]["base_delay_seconds"] < 0 or out["retention"]["days"] < 0:
         raise ValueError("Negative retry or retention interval")
+    t = out["transcription"]
+    if t["kind"] not in ["faster-whisper", "whisper-cpp"]:
+        raise ValueError("Unknown transcription backend")
+    if not 1 <= t["threads"] <= 16 or t["timeout_seconds"] <= 0 or t["gpu_device"] < 0:
+        raise ValueError("Invalid transcription resource limits")
     return out
 
 

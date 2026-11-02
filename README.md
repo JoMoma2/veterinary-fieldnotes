@@ -128,3 +128,5 @@ The initial empty-production assertion is intentional; adapt it when genuinely a
 ## Continue development
 
 Read [AGENTS.md](AGENTS.md), [architecture decisions](docs/ARCHITECTURE.md), and [current status](docs/STATUS.md). Next: inspect the [operational readiness report](docs/OPERATIONAL_READINESS.md), benchmark candidate local extraction/transcription models on authorized material, configure recorder matching when the hardware arrives, and dry-run USB import and service operation. Real-model factual accuracy, 12-hour throughput, recorder clock behavior, and long-term unattended reliability remain to be measured. No 90% capture guarantee is made.
+
+Local GPU transcription setup, measured Qwen3 limitations and authorized real-audio benchmark instructions are in [docs/LOCAL_AI_BENCHMARKS.md](docs/LOCAL_AI_BENCHMARKS.md). Continue from [docs/SESSION_HANDOFF.md](docs/SESSION_HANDOFF.md). The Vulkan backend works, but Large V3 acquisition and reliable clinical-quality extraction remain unfinished.

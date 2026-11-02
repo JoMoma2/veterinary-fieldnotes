@@ -1,0 +1,218 @@
+{
+  "date": "2026-11-02",
+  "origin": "synthetic",
+  "clinicalQualityValidated": false,
+  "whisper": {
+    "version": "v1.9.5",
+    "commit": "d1be6fde11ac6e0407606b4e42fe72d34add8037",
+    "backend": "Vulkan0 (RX 7900 XTX)",
+    "installedModels": ["tiny.en f16 (GPU smoke only)"],
+    "largeV3Installed": false,
+    "tinySha256": "921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f",
+    "results": [
+      {
+        "id": "history",
+        "audioSeconds": 14.438,
+        "seconds": 0.843,
+        "realTimeFactor": 0.05836435932315672,
+        "wordErrorRate": 0.3333333333333333,
+        "missingTerminology": ["grooming", "obstruction"],
+        "timestampBoundsValid": false,
+        "backendEvidence": ["whisper_backend_init_gpu: using Vulkan0 backend"],
+        "hardwareUtilization": {
+          "scope": "Host-wide CPU/RAM/GPU; Python RSS excludes the separate Ollama server. GPU activity alone does not prove model offload.",
+          "sampleCount": 3,
+          "meanHostCpuPercent": 6.687933234472531,
+          "peakPythonRssBytes": 26439680,
+          "minimumHostRamAvailableBytes": 51018416128,
+          "gpus": [
+            {
+              "card": "card2",
+              "peakBusyPercent": 0,
+              "peakVramUsedBytes": 16674816
+            },
+            {
+              "card": "card1",
+              "peakBusyPercent": 55,
+              "peakVramUsedBytes": 1190903808
+            }
+          ]
+        }
+      },
+      {
+        "id": "uncertainty",
+        "audioSeconds": 12.0871875,
+        "seconds": 0.302,
+        "realTimeFactor": 0.02495214482146947,
+        "wordErrorRate": 0.06451612903225806,
+        "missingTerminology": ["peritonitis"],
+        "timestampBoundsValid": true,
+        "backendEvidence": ["whisper_backend_init_gpu: using Vulkan0 backend"],
+        "hardwareUtilization": {
+          "scope": "Host-wide CPU/RAM/GPU; Python RSS excludes the separate Ollama server. GPU activity alone does not prove model offload.",
+          "sampleCount": 2,
+          "meanHostCpuPercent": 7.2916666666666625,
+          "peakPythonRssBytes": 26763264,
+          "minimumHostRamAvailableBytes": 51089408000,
+          "gpus": [
+            {
+              "card": "card2",
+              "peakBusyPercent": 0,
+              "peakVramUsedBytes": 16662528
+            },
+            {
+              "card": "card1",
+              "peakBusyPercent": 29,
+              "peakVramUsedBytes": 931295232
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "qwen3": {
+    "model": "qwen3:30b",
+    "globalSettingsChanged": false,
+    "offload": "49/49 layers, ROCm0 RX 7900 XTX; system journal",
+    "representativeAttemptResults": [
+      {
+        "input": "01-first.json",
+        "valid": true,
+        "seconds": 14.684,
+        "reason": null,
+        "providerMetrics": {
+          "total_duration": 14672084033,
+          "load_duration": 2209627822,
+          "prompt_eval_count": 967,
+          "prompt_eval_duration": 419900000,
+          "eval_count": 1631,
+          "eval_duration": 12036248000,
+          "done_reason": "stop"
+        },
+        "consolidation": {
+          "articlesAfter": 3,
+          "casesAfter": 1,
+          "earlierArticleTextPreserved": true,
+          "caseCountMatchesExpectation": true
+        },
+        "hardwareUtilization": {
+          "scope": "Host-wide CPU/RAM/GPU; Python RSS excludes the separate Ollama server. GPU activity alone does not prove model offload.",
+          "sampleCount": 31,
+          "meanHostCpuPercent": 29.99880547092634,
+          "peakPythonRssBytes": 49655808,
+          "minimumHostRamAvailableBytes": 50571526144,
+          "gpus": [
+            {
+              "card": "card1",
+              "peakBusyPercent": 97,
+              "peakVramUsedBytes": 20979322880
+            },
+            {
+              "card": "card2",
+              "peakBusyPercent": 0,
+              "peakVramUsedBytes": 16695296
+            }
+          ]
+        }
+      },
+      {
+        "input": "02-followup.json",
+        "valid": true,
+        "seconds": 12.976,
+        "reason": null,
+        "providerMetrics": {
+          "total_duration": 12965690859,
+          "load_duration": 2201774887,
+          "prompt_eval_count": 1475,
+          "prompt_eval_duration": 615461000,
+          "eval_count": 1363,
+          "eval_duration": 10141270000,
+          "done_reason": "stop"
+        },
+        "consolidation": {
+          "articlesAfter": 5,
+          "casesAfter": 2,
+          "earlierArticleTextPreserved": true,
+          "caseCountMatchesExpectation": false
+        },
+        "hardwareUtilization": {
+          "scope": "Host-wide CPU/RAM/GPU; Python RSS excludes the separate Ollama server. GPU activity alone does not prove model offload.",
+          "sampleCount": 27,
+          "meanHostCpuPercent": 29.83531904011246,
+          "peakPythonRssBytes": 49868800,
+          "minimumHostRamAvailableBytes": 50586517504,
+          "gpus": [
+            {
+              "card": "card1",
+              "peakBusyPercent": 97,
+              "peakVramUsedBytes": 20982988800
+            },
+            {
+              "card": "card2",
+              "peakBusyPercent": 0,
+              "peakVramUsedBytes": 16695296
+            }
+          ]
+        }
+      },
+      {
+        "input": "03-workaround.json",
+        "valid": false,
+        "seconds": 13.76,
+        "reason": "Case connection lacks explicit verbatim evidence",
+        "providerMetrics": {
+          "total_duration": 13752002537,
+          "load_duration": 2222124900,
+          "prompt_eval_count": 1777,
+          "prompt_eval_duration": 685073000,
+          "eval_count": 1438,
+          "eval_duration": 10837474000,
+          "done_reason": "stop"
+        },
+        "consolidation": null,
+        "hardwareUtilization": {
+          "scope": "Host-wide CPU/RAM/GPU; Python RSS excludes the separate Ollama server. GPU activity alone does not prove model offload.",
+          "sampleCount": 29,
+          "meanHostCpuPercent": 33.64676648093734,
+          "peakPythonRssBytes": 50630656,
+          "minimumHostRamAvailableBytes": 50586517504,
+          "gpus": [
+            {
+              "card": "card1",
+              "peakBusyPercent": 97,
+              "peakVramUsedBytes": 20982988800
+            },
+            {
+              "card": "card2",
+              "peakBusyPercent": 0,
+              "peakVramUsedBytes": 16695296
+            }
+          ]
+        }
+      }
+    ],
+    "warning": "These attempts used an intermediate prompt. Valid means structural acceptance, not semantic correctness. Final prompt also missed substantial information; see LOCAL_AI_BENCHMARKS.md."
+  },
+  "recovery": {
+    "interruption": "SIGINT to owned CLI during extraction",
+    "completedFilesPreserved": 2,
+    "checkpointHashesPreserved": 7,
+    "remainingFile": "bounded extraction failure after 3 attempts; source and transcript retained"
+  },
+  "websiteTest": {
+    "dataset": "pipeline-demo",
+    "articles": 1,
+    "cases": 0,
+    "shifts": 1,
+    "discussions": 4,
+    "questions": 0,
+    "verifiedPages": 14,
+    "verifiedLinks": 178
+  },
+  "deferred": [
+    "Large V3 acquisition and benchmark",
+    "Qwen3.5 9B and Gemma3 12B comparison",
+    "Validated clinical-quality extraction",
+    "Reliable full-shift capacity estimate"
+  ]
+}

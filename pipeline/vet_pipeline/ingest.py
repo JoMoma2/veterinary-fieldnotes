@@ -134,6 +134,10 @@ def transcribe(store, job, cfg):
     )
     if job["source_kind"] == "transcript":
         t = transcript_valid(load_json(source))
+    elif cfg["transcription"]["kind"] == "whisper-cpp":
+        from .whisper_cpp import transcribe_cpp
+
+        t = transcribe_cpp(source, cfg["transcription"])
     else:
         from faster_whisper import WhisperModel
 

@@ -545,6 +545,13 @@ def test_both_provider_protocols_use_structured_requests_without_paid_calls(
         == __import__("vet_pipeline.extraction", fromlist=["SCHEMA"]).SCHEMA
     )
     assert seen[1][0] == "/v1/chat/completions"
+    for _, body in seen:
+        payload = json.loads(body["messages"][1]["content"])
+        assert (
+            payload["extraction_schema"]
+            == __import__("vet_pipeline.extraction", fromlist=["SCHEMA"]).SCHEMA
+        )
+        assert payload["transcript"] == t
 
 
 def test_owner_edits_preserve_ids_and_invalidate_publication_reviews(

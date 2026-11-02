@@ -1,23 +1,25 @@
 # AI environment diagnosis — 2026-11-02
 
+**Update later in the same day:** Vulkan whisper.cpp is now built and integrated; tiny.en GPU smoke and real Qwen3 extraction tests were run. Large V3 remains pending acquisition; extraction quality is not validated. Read [LOCAL_AI_BENCHMARKS.md](LOCAL_AI_BENCHMARKS.md) and [SESSION_HANDOFF.md](SESSION_HANDOFF.md) for the current state. The diagnostic snapshot below predates those changes.
+
 These were diagnostics and project-local benchmark preparations. No GPU drivers, kernel packages, ROCm installations, Ollama service configuration, installed models, or MMM/FCC configuration were changed. No large model was downloaded. One existing small model generated one synthetic diagnostic token; it expired normally afterward.
 
 ## Confirmed hardware and runtime
 
-| Item | Observation |
-|---|---|
-| CPU | AMD Ryzen 7 7800X3D, 8 cores / 16 threads |
-| OS | Ubuntu 26.04.1 LTS, Resolute Raccoon |
-| Running kernel | `7.0.0-38-generic` |
-| RAM | 64 GB DDR5 owner-confirmed; Linux exposes about 60 GiB usable |
-| Dedicated GPU | AMD Radeon RX 7900 XTX, Navi 31 / gfx1100, 24 GiB VRAM |
-| Other graphics | Ryzen integrated graphics; do not select it for transcription |
-| Graphics driver | Kernel `amdgpu`, Mesa RADV 26.0.8; Vulkan device enumeration succeeds |
-| Vulkan | Loader 1.4.341, dedicated GPU API 1.4.335 |
-| Ollama | Client/server 0.34.0, active system service as user `ollama`, loopback `127.0.0.1:11434` |
-| ROCm SDK | No `/opt/rocm`, `hipcc`, `rocminfo`, `rocm-smi`, or system ROCm packages found |
-| Bundled inference runtime | Ollama includes ROCm 7.2.70201 HIP/HSA/BLAS libraries and a Vulkan backend |
-| whisper.cpp/build prerequisites | No whisper.cpp executable, CMake, Ninja, GLSL compiler, or HIP development SDK detected |
+| Item                            | Observation                                                                              |
+| ------------------------------- | ---------------------------------------------------------------------------------------- |
+| CPU                             | AMD Ryzen 7 7800X3D, 8 cores / 16 threads                                                |
+| OS                              | Ubuntu 26.04.1 LTS, Resolute Raccoon                                                     |
+| Running kernel                  | `7.0.0-38-generic`                                                                       |
+| RAM                             | 64 GB DDR5 owner-confirmed; Linux exposes about 60 GiB usable                            |
+| Dedicated GPU                   | AMD Radeon RX 7900 XTX, Navi 31 / gfx1100, 24 GiB VRAM                                   |
+| Other graphics                  | Ryzen integrated graphics; do not select it for transcription                            |
+| Graphics driver                 | Kernel `amdgpu`, Mesa RADV 26.0.8; Vulkan device enumeration succeeds                    |
+| Vulkan                          | Loader 1.4.341, dedicated GPU API 1.4.335                                                |
+| Ollama                          | Client/server 0.34.0, active system service as user `ollama`, loopback `127.0.0.1:11434` |
+| ROCm SDK                        | No `/opt/rocm`, `hipcc`, `rocminfo`, `rocm-smi`, or system ROCm packages found           |
+| Bundled inference runtime       | Ollama includes ROCm 7.2.70201 HIP/HSA/BLAS libraries and a Vulkan backend               |
+| whisper.cpp/build prerequisites | No whisper.cpp executable, CMake, Ninja, GLSL compiler, or HIP development SDK detected  |
 
 AMD's current ROCm 10.1 matrix supports Ubuntu 26.04.1 GA kernel 7.0 and gfx1100. That establishes a supported potential SDK installation; it does **not** mean ROCm 10.1 is installed here, or that the working bundled runtime must be replaced. [AMD compatibility matrix](https://rocm.docs.amd.com/en/latest/compatibility/compatibility-matrix.html).
 
@@ -29,15 +31,15 @@ Historical service logs also show Qwen3 30B offloaded **49/49 layers**, about 17
 
 ## Existing Ollama inventory
 
-| Tag | Parameters / quantization | Stored size (decimal GB) | Role |
-|---|---|---:|---|
-| `qwen3:30b` | 30.5B MoE, Q4_K_M | 18.56 | Existing capable benchmark baseline; explicitly used by MMM source |
-| `llama3:latest` | 8B, Q4_0 | 4.66 | Existing legacy comparison |
-| `llama2:7b` | 7B, Q4_0 | 3.83 | Legacy; do not select as the clinical default |
-| `llama2:latest` | Same digest as `llama2:7b` | Alias | Not a second independent model |
-| `phi3:mini` | 3.8B, Q4_0 | 2.18 | Small legacy comparison |
-| `llama3.2:latest` | 3.2B, Q4_K_M | 2.02 | Small compatibility probe, not a clinical selection |
-| `tinyllama:latest` | 1B, Q4_0 | 0.64 | Mechanical testing only |
+| Tag                | Parameters / quantization  | Stored size (decimal GB) | Role                                                               |
+| ------------------ | -------------------------- | -----------------------: | ------------------------------------------------------------------ |
+| `qwen3:30b`        | 30.5B MoE, Q4_K_M          |                    18.56 | Existing capable benchmark baseline; explicitly used by MMM source |
+| `llama3:latest`    | 8B, Q4_0                   |                     4.66 | Existing legacy comparison                                         |
+| `llama2:7b`        | 7B, Q4_0                   |                     3.83 | Legacy; do not select as the clinical default                      |
+| `llama2:latest`    | Same digest as `llama2:7b` |                    Alias | Not a second independent model                                     |
+| `phi3:mini`        | 3.8B, Q4_0                 |                     2.18 | Small legacy comparison                                            |
+| `llama3.2:latest`  | 3.2B, Q4_K_M               |                     2.02 | Small compatibility probe, not a clinical selection                |
+| `tinyllama:latest` | 1B, Q4_0                   |                     0.64 | Mechanical testing only                                            |
 
 Seven tags represent six distinct model digests. Qwen3's stored defaults include temperature 0.6, top-p 0.95, top-k 20. Its advertised trained context is 262,144 tokens; that is not a safe memory budget for this workstation. Benchmark configs explicitly request 8,192 context tokens and bounded output. Model defaults and service settings remain unchanged. Full digests and read-only hardware inventory are in `docs/validation/hardware.json`.
 

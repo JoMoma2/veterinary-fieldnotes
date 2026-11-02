@@ -43,6 +43,30 @@ def test_completeness_screen_does_not_count_copied_quotes():
     ] == ["essential observation"]
 
 
+def test_rejected_benchmark_response_retains_diagnostics(cfg, tmp_path, monkeypatch):
+    from vet_pipeline.extraction import Provider
+    from vet_pipeline.util import load_json
+
+    response = load_json(REPO / "fixtures/pipeline/responses/first.json")
+    response["discussions"][0]["quotes"][0]["text"] = "Invented evidence"
+
+    def infer(self, *args):
+        self.last_metrics = {"eval_count": 123}
+        return response
+
+    monkeypatch.setattr(Provider, "extract", infer)
+    report = benchmark(
+        cfg,
+        [REPO / "fixtures/pipeline/transcripts/01-first.json"],
+        tmp_path / "rejected.json",
+    )
+    row = report["results"][0]
+    assert row["valid"] is False
+    assert row["output"] == response
+    assert row["providerMetrics"]["eval_count"] == 123
+    assert row["inferenceSeconds"] >= 0
+
+
 def test_hallucination_screen_flags_invented_known_outcome_and_diagnosis():
     data = {
         "discussions": [],

@@ -10,6 +10,7 @@ from vet_pipeline.synthetic_audio import resample_pcm16_mono
 
 p = argparse.ArgumentParser()
 p.add_argument("--output", required=True, type=Path)
+p.add_argument("--corpus", choices=["basic", "pipeline"], default="basic")
 a = p.parse_args()
 if a.output.exists():
     raise SystemExit("Choose a new directory; existing audio is never overwritten")
@@ -48,6 +49,15 @@ texts = [
         ["feline", "peritonitis", "diagnosis"],
     ),
 ]
+if a.corpus == "pipeline":
+    from vet_pipeline.util import REPO
+
+    texts = []
+    for file in sorted((REPO / "fixtures/pipeline/transcripts").glob("[0-9]*.json")):
+        if file.name.endswith(".expected.json"):
+            continue
+        original = json.loads(file.read_text())
+        texts.append((file.stem, " ".join(s["text"] for s in original["segments"]), []))
 rows = []
 for id, text, terms in texts:
     samples.clear()
