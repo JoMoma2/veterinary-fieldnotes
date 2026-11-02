@@ -14,7 +14,7 @@
 - Public application: https://github.com/JoMoma2/veterinary-fieldnotes
 - Private master scaffold: https://github.com/JoMoma2/veterinary-fieldnotes-master
 
-Both use `main`. The public repository contains application code, synthetic fixtures, and an empty production library. The private repository contains only the README/ignore scaffold. No actual records, credentials, keys, temporary transcripts, or audio were uploaded.
+Both are pushed on `main`. The initial GitHub Actions verification passed, including all three website datasets and both browser suites. The public repository contains application code, synthetic fixtures, and an empty production library. The private repository contains only the README/ignore scaffold. No actual records, credentials, keys, temporary transcripts, or audio were uploaded.
 
 ## Awaiting configuration or external dependencies
 

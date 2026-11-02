@@ -54,7 +54,7 @@ def dispatch(a,store,cfg):
         with lock(store.root):
             for file in a.paths:
                 try:id,created=ingest(store,file,a.shift,a.date,a.origin,a.authorization_ref);result.append({'id':id,'imported':created})
-                except Exception as e:result.append({'status':'failed','error':type(e).__name__})
+                except Exception as e:result.append({'source':file.name,'status':'failed','error':type(e).__name__})
         return result
     if a.command=='run':return run(store,cfg,a.force_retry)
     if a.command=='status':return [dict(j) for j in store.jobs()]

@@ -3,9 +3,10 @@ import Tags from './Tags.astro';import Facts from './Facts.astro';
 import {offset,markdown} from '../lib/format';
 import type {Discussion,PublicLibrary} from '../lib/schemas';
 const {discussion:d,library:lib}=Astro.props as {discussion:Omit<Discussion,'publication'>;library:PublicLibrary};
+const ordinal=lib.discussions.filter(x=>x.shiftId===d.shiftId).sort((a,b)=>a.order-b.order).findIndex(x=>x.id===d.id)+1;
 ---
 <article class="discussion" id={d.id}>
- <div class="discussion-meta"><span class="eyebrow">DISCUSSION {String(d.order+1).padStart(2,'0')}</span><a href={`/discussions/${d.id}/`} class="permalink" aria-label={`Permanent link to ${d.title}`}># Permanent link</a></div>
+ <div class="discussion-meta"><span class="eyebrow">DISCUSSION {String(ordinal).padStart(2,'0')}</span><a href={`/discussions/${d.id}/`} class="permalink" aria-label={`Permanent link to ${d.title}`}># Permanent link</a></div>
  <h2>{d.title}</h2><Tags ids={d.topics} topics={lib.topics}/>
  <div class="recording-strip">{d.segments.map(s=><span><strong>{s.recordingId}</strong> · {offset(s.startSeconds)}–{offset(s.endSeconds)} <small>{s.clockTime?`${s.clockTime} (${s.clockConfidence})`:'Recording relative · clock time unknown'}</small></span>)}</div>
  <div class="prose" set:html={markdown(d.account)}/><h3>Evidence in the discussion</h3><Facts facts={d.facts}/>

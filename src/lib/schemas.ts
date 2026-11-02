@@ -34,7 +34,7 @@ export const sourceSegmentSchema = z.strictObject({ recordingId: id, startSecond
 });
 export const evidenceKinds = ['direct-observation','owner-report','clinical-suspicion','confirmed-diagnosis','actual-treatment','proposed-treatment','outcome','ai-explanation','externally-verified','unknown'] as const;
 export const factSchema = z.strictObject({ kind: z.enum(evidenceKinds), text,
-  sourceDiscussionIds: ids, externalUrl: z.url().optional(),
+  sourceDiscussionIds: ids, externalUrl: z.url().regex(/^https?:\/\//).optional(),
 }).superRefine((v,c) => { if(v.kind === 'externally-verified' && !v.externalUrl) c.addIssue({code:'custom',message:'Externally verified claims require a source URL'}); });
 export const discussionSchema = z.strictObject({ ...common, shiftId: id, order: z.number().int().nonnegative(),
   title: text, topics: ids.min(1), segments: z.array(sourceSegmentSchema).min(1),

@@ -37,5 +37,5 @@ def scan(store,cfg,source:Path,date:str):
                 if time.time()-path.stat().st_mtime<u['stable_seconds']:continue
                 if source.resolve() not in path.resolve().parents:raise ValueError('Path escapes recorder root')
                 id,created=ingest(store,path,shift,date,u['origin'],u['authorization_ref']);results.append({'id':id,'imported':created})
-            except Exception as e:results.append({'status':'failed','error':type(e).__name__})
+            except Exception as e:results.append({'source':str(path.relative_to(source)),'status':'failed','error':type(e).__name__})
     return results

@@ -225,3 +225,15 @@ def test_remote_upload_confirms_encrypted_bytes_and_retry_reset(store,cfg,first,
     def remote(args,**kwargs):return types.SimpleNamespace(stdout=file.read_bytes() if args[1]=='cat' else b'')
     monkeypatch.setattr('subprocess.run',remote);assert upload_backups(store,cfg)[0]['status']=='verified';assert upload_backups(store,cfg)==[]
     id=store.db.execute('SELECT id FROM artifacts').fetchone()[0];retry_upload(store,id);assert store.db.execute('SELECT attempts FROM artifacts').fetchone()[0]==0
+
+def test_corrupted_file_projection_is_rebuilt_before_backup(store,cfg,first,tmp_path):
+    run(store,cfg);canonical=current(store);article=next((current_root(store)/'articles').glob('*.md'));article.write_text(article.read_text().replace('Source addition','Corrupted prose'))
+    assert read_library(current_root(store))!=canonical
+    key=tmp_path/'key';create_key(key);file=create_backup(store,key,tmp_path/'backups');assert read_library(current_root(store))==canonical;assert inspect_backup(file,key)
+
+def test_model_cannot_approve_questions_or_override_origin(store,cfg,first,monkeypatch):
+    original=Provider.extract
+    def response(self,*args):
+        data=original(self,*args);q=data['questions'][0];q['origin']='authorized-record';q['publication']={'status':'approved','audience':'public','reviewedBy':'model','reviewedAt':'2026-10-22T00:00:00Z','authorizationRef':'invented'};return data
+    monkeypatch.setattr(Provider,'extract',response);assert run(store,cfg)[0]['status']=='done'
+    q=current(store)['questions'][0];assert q['origin']=='synthetic';assert q['publication']=={'status':'draft','audience':'private'}

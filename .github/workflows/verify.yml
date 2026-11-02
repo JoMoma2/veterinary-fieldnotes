@@ -15,6 +15,7 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - run: npm run schemas && git diff --exit-code -- schemas
       - run: npm run check && npm test && npm run build
       - uses: astral-sh/setup-uv@v6
         with:

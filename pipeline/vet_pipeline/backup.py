@@ -2,7 +2,7 @@ from __future__ import annotations
 import hashlib,io,json,os,shutil,subprocess,tarfile,tempfile,time,uuid
 from pathlib import Path
 from cryptography.fernet import Fernet,InvalidToken
-from .library import current_root,read_library,validate_library,materialize
+from .library import current_root,read_library,validate_library,materialize,current
 from .util import atomic_write,digest_file,load_json,write_json,now,lock
 
 def create_key(path:Path):
@@ -20,6 +20,7 @@ def create_backup(store,keyfile:Path,destination:Path):
         root=current_root(store)
         if not root.exists():raise ValueError('No completed library snapshot')
         validate_library(read_library(root))
+        if read_library(root)!=current(store):raise ValueError('File projection differs from the durable canonical library')
         entries={}
         for file in root.rglob('*'):
             if file.is_symlink():raise ValueError('Snapshot contains a symlink')

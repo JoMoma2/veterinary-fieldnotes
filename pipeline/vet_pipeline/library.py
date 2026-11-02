@@ -144,7 +144,7 @@ def commit(store,job,t,extracted,timezone_name='Unknown until configured'):
     rejected=[]
     for q in extracted['questions']:
         try:
-            q=copy.deepcopy(q);localid=q.pop('id');q={**metadata(f"q-{job['id'][2:]}-{localid}",origin),**q}
+            q=copy.deepcopy(q);localid=q.pop('id');q={**q,**metadata(f"q-{job['id'][2:]}-{localid}",origin)}
             q['sourceDiscussionIds']=[dsmap[x] for x in q['sourceDiscussionIds']];q['articleIds']=['a-'+x for x in q['articleIds']]
             qschema.validate(q)
             # JSON Schema cannot express all Zod refinements; enforce answer/reference consistency here too.
@@ -183,7 +183,10 @@ def materialize(store):
     # authorized Git history preserve versions; the durable database and source checkpoints survive.
     applied=[r['id'] for r in store.db.execute('SELECT id FROM applied_recordings ORDER BY id')]
     content_hash=hashlib.sha256(json.dumps(lib,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
-    if ptr.exists() and load_json(ptr/'manifest.json').get('contentHash')==content_hash:return ptr.resolve()
+    if ptr.exists() and load_json(ptr/'manifest.json').get('contentHash')==content_hash:
+        try:
+            if read_library(ptr)==lib:return ptr.resolve()
+        except (ValueError,KeyError,OSError,yaml.YAMLError):pass # Rebuild a damaged portable view from the durable canonical transaction.
     snapshot=store.root/'library/snapshots'/uuid.uuid4().hex
     write_library(snapshot,lib)
     write_json(snapshot/'manifest.json',{'applied':applied,'caseKeys':{r['key']:r['id'] for r in store.db.execute('SELECT key,id FROM case_keys')},'contentHash':content_hash,'createdAt':now()})

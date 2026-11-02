@@ -162,7 +162,7 @@
           },
           "externalUrl": {
             "type": "string",
-            "format": "uri"
+            "pattern": "^https?:\\/\\/"
           }
         },
         "required": [
