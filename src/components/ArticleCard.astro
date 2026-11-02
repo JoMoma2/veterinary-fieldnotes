@@ -8,13 +8,17 @@ const { article: a, topics } = Astro.props as {
 ---
 
 <article class="article-card" data-filter-topics={a.topics.join(' ')}>
-  <div class="card-icon">↗</div><Tags ids={a.topics} topics={topics} /><h3>
+  <div class="card-icon">↗</div>
+  <Tags ids={a.topics} topics={topics} />
+  <h3>
     <a href={`/knowledge/${a.id}/`}>{a.title}</a>
-  </h3><p>{a.summary}</p><div class="card-foot">
-    <span
-      >{a.sourceDiscussionIds.length} source discussion{
-        a.sourceDiscussionIds.length === 1 ? '' : 's'
-      }</span
-    ><span aria-hidden="true">↗</span>
+  </h3>
+  <p>{a.summary}</p>
+  <div class="card-foot">
+    <span>
+      {a.sourceDiscussionIds.length} source discussion
+      {a.sourceDiscussionIds.length === 1 ? '' : 's'}
+    </span>
+    <span aria-hidden="true">↗</span>
   </div>
 </article>

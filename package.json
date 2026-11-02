@@ -35,7 +35,7 @@
     "cheerio": "^1.1.2",
     "pagefind": "1.6.0",
     "prettier": "^3.9.10",
-    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro": "^1.1.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

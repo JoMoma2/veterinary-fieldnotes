@@ -11,11 +11,13 @@ test('desktop navigation and topic filtering', async ({ page }) => {
 });
 test('source links connect article, discussion, and shift anchor', async ({ page }) => {
   await page.goto('/knowledge/a-fip-reasoning/');
+  await expect(page.getByRole('heading', { name: 'Follow the sources' })).toBeVisible();
   await page.locator('.source-row').first().click();
   await expect(page).toHaveURL(/\/discussions\/d-fip-first\//);
   await page.getByRole('link', { name: /View in shift archive/ }).click();
   await expect(page).toHaveURL(/\/shifts\/s-2026-10-22\/#d-fip-first/);
   await expect(page.locator('#d-fip-first')).toBeVisible();
+  await expect(page.locator('.archive-index details strong')).toHaveCount(5);
   await page.locator('#d-fip-first .connected a').first().click();
   await expect(page).toHaveURL(/a-fip-reasoning/);
 });
@@ -34,6 +36,7 @@ test('unknown case facts are explicit', async ({ page }) => {
 });
 test('topic select all/deselect all and empty selection feedback', async ({ page }) => {
   await page.goto('/study/');
+  await expect(page.getByRole('group', { name: 'Choose subjects' })).toBeVisible();
   await page.getByRole('button', { name: 'Deselect all' }).click();
   await expect(page.locator('input[name=topic]:checked')).toHaveCount(0);
   await page.getByRole('button', { name: 'Start studying' }).click();

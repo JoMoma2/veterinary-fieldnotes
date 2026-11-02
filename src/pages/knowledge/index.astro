@@ -6,46 +6,48 @@ import { getLibrary } from '../../lib/library';
 const lib = await getLibrary();
 ---
 
-<Layout title="Knowledge library" section="Knowledge library"
-  ><div class="page-heading">
+<Layout title="Knowledge library" section="Knowledge library">
+  <div class="page-heading">
     <div>
-      <span class="eyebrow">A GROWING BODY OF UNDERSTANDING</span><h1>Knowledge library</h1><p>
-        Medical knowledge, practical lessons, and questions worth returning to.
-      </p>
-    </div><span class="count-badge">{lib.articles.length} articles</span>
-  </div><div class="filter-bar" role="group" aria-label="Filter articles by topic">
-    <button class="filter active" data-topic="all" aria-pressed="true">All topics</button>{
-      lib.topics.map((t) => (
-        <button class="filter" data-topic={t.id} aria-pressed="false">
-          {t.name}
-        </button>
-      ))
-    }
-  </div>{
-    lib.articles.length ? (
+      <span class="eyebrow">A GROWING BODY OF UNDERSTANDING</span>
+      <h1>Knowledge library</h1>
+      <p>Medical knowledge, practical lessons, and questions worth returning to.</p>
+    </div>
+    <span class="count-badge">{lib.articles.length} articles</span>
+  </div>
+  <div class="filter-bar" role="group" aria-label="Filter articles by topic">
+    <button class="filter active" data-topic="all" aria-pressed="true">
+      All topics
+    </button>
+    {lib.topics.map((t) => (
+      <button class="filter" data-topic={t.id} aria-pressed="false">
+        {t.name}
+      </button>
+    ))}
+  </div>
+  {lib.articles.length ? (
+    <>
       <>
-        <>
-          <p id="filter-count" class="muted" aria-live="polite">
-            {lib.articles.length} articles
-          </p>
-          <div class="article-grid">
-            {lib.articles.map((a) => (
-              <ArticleCard article={a} topics={lib.topics} />
-            ))}
-          </div>
-          <p id="no-matches" class="panel" hidden>
-            No articles in this topic yet. Try another topic.
-          </p>
-        </>
+        <p id="filter-count" class="muted" aria-live="polite">
+          {lib.articles.length} articles
+        </p>
+        <div class="article-grid">
+          {lib.articles.map((a) => (
+            <ArticleCard article={a} topics={lib.topics} />
+          ))}
+        </div>
+        <p id="no-matches" class="panel" hidden>
+          No articles in this topic yet. Try another topic.
+        </p>
       </>
-    ) : (
-      <Empty
-        title="A place for everything you learn"
-        message="No knowledge articles have been published. Approved notes will appear here with links to their source discussions."
-      />
-    )
-  }</Layout
->
+    </>
+  ) : (
+    <Empty
+      title="A place for everything you learn"
+      message="No knowledge articles have been published. Approved notes will appear here with links to their source discussions."
+    />
+  )}
+</Layout>
 <script>
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-topic]');
   function filter(topic: string) {

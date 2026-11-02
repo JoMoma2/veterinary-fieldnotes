@@ -11,23 +11,27 @@ const sources = ids
   .filter((d): d is Omit<Discussion, 'publication'> => !!d);
 ---
 
-{
-  sources.length > 0 && (
-    <section class="sources" aria-label="Source discussions">
-      <p class="muted">The detailed conversations behind this note.</p>
-      {sources.map((d) => (
-        <a class="source-row" href={`/discussions/${d.id}/`}>
-          <span class="source-icon">↗</span>
-          <span>
-            <strong>{d.title}</strong>
-            <small>
-              {dateLabel(shifts.find((s) => s.id === d.shiftId)!.date)} ·{' '}
-              {d.segments.map((s) => s.recordingId).join(', ')}
-            </small>
-          </span>
-          <span class="row-arrow">→</span>
-        </a>
-      ))}
-    </section>
-  )
-}
+{sources.length > 0 && (
+  <section class="sources" aria-label="Source discussions">
+    <div class="section-heading">
+      <h2>Follow the sources</h2>
+      <span class="muted">
+        {sources.length} discussion{sources.length === 1 ? '' : 's'}
+      </span>
+    </div>
+    <p class="muted">The detailed conversations behind this note.</p>
+    {sources.map((d) => (
+      <a class="source-row" href={`/discussions/${d.id}/`}>
+        <span class="source-icon">↗</span>
+        <span>
+          <strong>{d.title}</strong>
+          <small>
+            {dateLabel(shifts.find((s) => s.id === d.shiftId)!.date)} ·{' '}
+            {d.segments.map((s) => s.recordingId).join(', ')}
+          </small>
+        </span>
+        <span class="row-arrow">→</span>
+      </a>
+    ))}
+  </section>
+)}

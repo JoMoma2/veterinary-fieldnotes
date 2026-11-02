@@ -11,25 +11,41 @@ export async function getStaticPaths() {
 const { item: c, lib } = Astro.props;
 ---
 
-<Layout title={c.title} section="Clinical cases"
-  ><a href="/cases/" class="back-link">← Clinical cases</a><div
-    class="reading-heading"
-    data-pagefind-body
-  >
-    <span class="eyebrow">{c.patientLabel} · {c.species}</span><h1 data-pagefind-meta="title">
-      {c.title}
-    </h1><p class="lead">{c.summary}</p><Tags ids={c.topics} topics={lib.topics} /><dl
-      class="case-status panel"
-    >
+<Layout title={c.title} section="Clinical cases">
+  <a href="/cases/" class="back-link">
+    ← Clinical cases
+  </a>
+  <div class="reading-heading" data-pagefind-body>
+    <span class="eyebrow">
+      {c.patientLabel} · {c.species}
+    </span>
+    <h1 data-pagefind-meta="title">{c.title}</h1>
+    <p class="lead">{c.summary}</p>
+    <Tags ids={c.topics} topics={lib.topics} />
+    <dl class="case-status panel">
       <div>
-        <dt>Diagnosis</dt><dd>{c.diagnosis ?? 'Unknown · not established in the sources'}</dd>
-      </div><div>
-        <dt>Outcome</dt><dd>{c.outcome ?? 'Unknown · not captured in the sources'}</dd>
+        <dt>Diagnosis</dt>
+        <dd>{c.diagnosis ?? 'Unknown · not established in the sources'}</dd>
       </div>
-    </dl><h2>The evidence, as captured</h2><Facts facts={c.facts} /><div class="question-note">
-      <h2>What remains uncertain</h2><ul>{c.uncertainties.map((u) => <li>{u}</li>)}</ul>
-    </div><h2>Why these discussions are linked</h2><p>{c.linkBasis}</p>
-  </div><div class="reading">
+      <div>
+        <dt>Outcome</dt>
+        <dd>{c.outcome ?? 'Unknown · not captured in the sources'}</dd>
+      </div>
+    </dl>
+    <h2>The evidence, as captured</h2>
+    <Facts facts={c.facts} />
+    <div class="question-note">
+      <h2>What remains uncertain</h2>
+      <ul>
+        {c.uncertainties.map((u) => (
+          <li>{u}</li>
+        ))}
+      </ul>
+    </div>
+    <h2>Why these discussions are linked</h2>
+    <p>{c.linkBasis}</p>
+  </div>
+  <div class="reading">
     <Sources ids={c.sourceDiscussionIds} discussions={lib.discussions} shifts={lib.shifts} />
-  </div></Layout
->
+  </div>
+</Layout>

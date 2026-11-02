@@ -16,6 +16,7 @@ Implementation session: 2026-11-02. All clinical examples used in development ar
 | Generated-speech Faster-Whisper | Passed mechanically | Actual WAV decoding and CPU/int8 `tiny.en` inference returned increasing offsets and nonempty transcript; transcription had wording errors |
 | Synthetic benchmark smoke | Passed | Three fixture outputs valid, expected markers captured, no configured forbidden marker; no real-model accuracy inference |
 | systemd unit verification | Passed | Supplied user unit syntax/commands accepted; host reported an unrelated existing spice-vdagent unit warning |
+| Formatter compatibility regression | Passed | Current formatter pinned; all 26 rendered page bodies match the previously passing build semantically |
 | Visual QA | Inspected | Desktop 1440px and phone 390px screenshots, notebook-style layout and readable stacked cards |
 
 The static build checker traverses internal links and fragments and rejects source maps, raw WAV output, and a private sentinel string. Dataset projection tests remove withheld discussions/cases, private relationships, and review identities. An additional production-root gate rejects synthetic records.

@@ -7,91 +7,91 @@ import { formats } from '../lib/study';
 const lib = await getLibrary();
 ---
 
-<Layout title="Study center" section="Study center"
-  ><div class="page-heading">
+<Layout title="Study center" section="Study center">
+  <div class="page-heading">
     <div>
-      <span class="eyebrow">CONNECT KNOWLEDGE WITH RECALL</span><h1>Make the learning stick.</h1><p>
-        Your subjects. Your pace. Explanations connected to their sources.
-      </p>
-    </div><span class="count-badge">{lib.questions.length} questions</span>
-  </div>{
-    lib.questions.length ? (
-      <div class="study-layout">
-        <>
-          <form id="study-settings" class="study-settings">
+      <span class="eyebrow">CONNECT KNOWLEDGE WITH RECALL</span>
+      <h1>Make the learning stick.</h1>
+      <p>Your subjects. Your pace. Explanations connected to their sources.</p>
+    </div>
+    <span class="count-badge">{lib.questions.length} questions</span>
+  </div>
+  {lib.questions.length ? (
+    <div class="study-layout">
+      <>
+        <form id="study-settings" class="study-settings">
+          <>
+            <fieldset>
+              <legend>Choose subjects</legend>
+              <div class="select-controls">
+                <>
+                  <button class="plain-button" type="button" id="select-all">
+                    Select all
+                  </button>
+                  <button class="plain-button" type="button" id="deselect-all">
+                    Deselect all
+                  </button>
+                </>
+              </div>
+              {lib.topics.map((t) => (
+                <label class="check-label">
+                  <input type="checkbox" name="topic" value={t.id} checked />
+                  {t.name}
+                </label>
+              ))}
+            </fieldset>
+            <fieldset>
+              <legend>Question formats</legend>
+              {Object.entries(formats).map(([key, label]) => (
+                <label class="check-label">
+                  <input type="checkbox" name="format" value={key} checked />
+                  {label}
+                </label>
+              ))}
+            </fieldset>
+            <button type="submit" class="button primary">
+              Start studying <span>→</span>
+            </button>
+            <p class="muted sr-only" id="study-error" role="alert" />
+          </>
+        </form>
+        <section class="study-session" id="study-session" aria-label="Study session">
+          <div class="session-empty">
             <>
-              <fieldset>
-                <div class="select-controls">
-                  <>
-                    <button class="plain-button" type="button" id="select-all">
-                      Select all
-                    </button>
-                    <button class="plain-button" type="button" id="deselect-all">
-                      Deselect all
-                    </button>
-                  </>
-                </div>
-                {lib.topics.map((t) => (
-                  <label class="check-label">
-                    <input type="checkbox" name="topic" value={t.id} checked />
-                    {t.name}
-                  </label>
-                ))}
-              </fieldset>
-              <fieldset>
-                <legend>Question formats</legend>
-                {Object.entries(formats).map(([key, label]) => (
-                  <label class="check-label">
-                    <input type="checkbox" name="format" value={key} checked />
-                    {label}
-                  </label>
-                ))}
-              </fieldset>
-              <button type="submit" class="button primary">
-                Start studying <span>→</span>
-              </button>
-              <p class="muted sr-only" id="study-error" role="alert" />
+              <span class="empty-icon">
+                <Icon name="study" size={32} />
+              </span>
+              <h2>A little practice goes a long way.</h2>
+              <p>
+                Choose your subjects and question formats, then begin. Nothing is saved between
+                visits.
+              </p>
             </>
-          </form>
-          <section class="study-session" id="study-session" aria-label="Study session">
-            <div class="session-empty">
-              <>
-                <span class="empty-icon">
-                  <Icon name="study" size={32} />
-                </span>
-                <h2>A little practice goes a long way.</h2>
-                <p>
-                  Choose your subjects and question formats, then begin. Nothing is saved between
-                  visits.
-                </p>
-              </>
-            </div>
-          </section>
-        </>
-      </div>
-    ) : (
-      <Empty
-        title="Your study material will grow with your library"
-        message="No study questions have been published. Reviewed questions and explanations will be ready here without an AI call or an account."
-        icon="study"
-      />
-    )
-  }<noscript
-    ><p class="notice">
+          </div>
+        </section>
+      </>
+    </div>
+  ) : (
+    <Empty
+      title="Your study material will grow with your library"
+      message="No study questions have been published. Reviewed questions and explanations will be ready here without an AI call or an account."
+      icon="study"
+    />
+  )}
+  <noscript>
+    <p class="notice">
       Enable JavaScript to use the interactive study center. Articles and source discussions remain
       readable.
-    </p></noscript
-  ></Layout
->
-{
-  lib.questions.length > 0 && (
-    <script
-      id="study-data"
-      type="application/json"
-      set:html={JSON.stringify(lib.questions).replace(/</g, '\\u003c')}
-    />
-  )
-}
+    </p>
+  </noscript>
+</Layout>
+{lib.questions.length > 0 && (
+  <script
+    id="study-data"
+    type="application/json"
+    set:html={JSON.stringify(lib.questions).replace(/</g, '\\u003c')}
+  />
+)}
 <script>
   import '../scripts/study-client';
 </script>

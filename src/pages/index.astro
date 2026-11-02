@@ -10,125 +10,154 @@ const latest = [...lib.articles].sort((a, b) => b.updated.localeCompare(a.update
 const shifts = [...lib.shifts].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
-<Layout
-  ><div class="page-heading">
+<Layout>
+  <div class="page-heading">
     <div>
-      <span class="eyebrow">THE VETERINARY LEARNING LIBRARY</span><h1>
-        Your learning, connected.
-      </h1><p>Turn the lessons from every shift into knowledge that stays.</p>
-    </div><a class="button secondary" href="/knowledge/"
-      >Explore the library <Icon name="arrow" size={17} /></a>
+      <span class="eyebrow">THE VETERINARY LEARNING LIBRARY</span>
+      <h1>Your learning, connected.</h1>
+      <p>Turn the lessons from every shift into knowledge that stays.</p>
+    </div>
+    <a class="button secondary" href="/knowledge/">
+      Explore the library <Icon name="arrow" size={17} />
+    </a>
   </div>
   <section class="welcome-panel">
     <div>
-      <span class="welcome-label"
-        ><span class="status-dot"></span> FROM EXPERIENCE TO UNDERSTANDING</span
-      ><h2>Every shift has<br />something to teach you.</h2><p>
+      <span class="welcome-label">
+        <span class="status-dot"></span> FROM EXPERIENCE TO UNDERSTANDING
+      </span>
+      <h2>
+        Every shift has
+        <br />
+        something to teach you.
+      </h2>
+      <p>
         A home for clinical questions, practical lessons, and the small details worth remembering.
         All connected to where the learning began.
-      </p><a class="button light" href={shifts.length ? `/shifts/${shifts[0].id}/` : '/about/'}
-        >{shifts.length ? 'Open the latest shift' : 'See how it works'}
-        <Icon name="arrow" size={17} /></a>
-    </div><div class="notebook-art" aria-hidden="true">
-      <div class="paper back"></div><div class="paper">
-        <div class="paper-top">FIELD NOTES <span>✳</span></div><div class="paper-line long">
-        </div><div class="paper-line"></div><div class="paper-line short"></div><svg
-          viewBox="0 0 220 65"
-          ><path
+      </p>
+      <a class="button light" href={shifts.length ? `/shifts/${shifts[0].id}/` : '/about/'}>
+        {shifts.length ? 'Open the latest shift' : 'See how it works'}
+        <Icon name="arrow" size={17} />
+      </a>
+    </div>
+    <div class="notebook-art" aria-hidden="true">
+      <div class="paper back"></div>
+      <div class="paper">
+        <div class="paper-top">
+          FIELD NOTES <span>✳</span>
+        </div>
+        <div class="paper-line long"></div>
+        <div class="paper-line"></div>
+        <div class="paper-line short"></div>
+        <svg viewBox="0 0 220 65">
+          <path
             d="M0 40h40l8-8 10 16 13-40 18 55 12-29 10 6h109"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"></path></svg
-        ><div class="paper-line"></div><div class="paper-line short"></div><span
-          class="paper-caption">Observe. Ask. Connect.</span>
-      </div><div class="art-stamp"><Icon name="leaf" size={28} /></div>
+            stroke-width="2"
+          ></path>
+        </svg>
+        <div class="paper-line"></div>
+        <div class="paper-line short"></div>
+        <span class="paper-caption">Observe. Ask. Connect.</span>
+      </div>
+      <div class="art-stamp">
+        <Icon name="leaf" size={28} />
+      </div>
     </div>
   </section>
   <div class="stats">
-    {
-      [
-        ['Knowledge articles', lib.articles.length, 'book', '/knowledge/'],
-        ['Clinical cases', lib.cases.length, 'case', '/cases/'],
-        ['Archived shifts', lib.shifts.length, 'clock', '/shifts/'],
-        ['Study questions', lib.questions.length, 'study', '/study/'],
-      ].map(([label, count, icon, url]) => (
-        <a href={String(url)} class="stat">
-          <>
-            <span class="stat-icon">
-              <Icon name={String(icon)} />
-            </span>
-            <span>
-              <>
-                <strong>{count}</strong>
-                <small>{label}</small>
-              </>
-            </span>
-            <span class="stat-arrow">↗</span>
-          </>
-        </a>
-      ))
-    }
+    {[
+      ['Knowledge articles', lib.articles.length, 'book', '/knowledge/'],
+      ['Clinical cases', lib.cases.length, 'case', '/cases/'],
+      ['Archived shifts', lib.shifts.length, 'clock', '/shifts/'],
+      ['Study questions', lib.questions.length, 'study', '/study/'],
+    ].map(([label, count, icon, url]) => (
+      <a href={String(url)} class="stat">
+        <>
+          <span class="stat-icon">
+            <Icon name={String(icon)} />
+          </span>
+          <span>
+            <>
+              <strong>{count}</strong>
+              <small>{label}</small>
+            </>
+          </span>
+          <span class="stat-arrow">↗</span>
+        </>
+      </a>
+    ))}
   </div>
   <section class="home-section">
     <div class="section-heading">
       <div>
-        <span class="eyebrow">BUILD YOUR UNDERSTANDING</span><h2>Recently added to the library</h2>
-      </div><a class="text-link" href="/knowledge/">All articles →</a>
-    </div>{
-      latest.length ? (
-        <div class="article-grid">
-          {latest.map((a) => (
-            <ArticleCard article={a} topics={lib.topics} />
-          ))}
-        </div>
-      ) : (
-        <Empty
-          title="Your library starts here"
-          message="Approved articles will connect knowledge to the discussions it came from. Nothing has been published yet."
-        />
-      )
-    }
+        <span class="eyebrow">BUILD YOUR UNDERSTANDING</span>
+        <h2>Recently added to the library</h2>
+      </div>
+      <a class="text-link" href="/knowledge/">
+        All articles →
+      </a>
+    </div>
+    {latest.length ? (
+      <div class="article-grid">
+        {latest.map((a) => (
+          <ArticleCard article={a} topics={lib.topics} />
+        ))}
+      </div>
+    ) : (
+      <Empty
+        title="Your library starts here"
+        message="Approved articles will connect knowledge to the discussions it came from. Nothing has been published yet."
+      />
+    )}
   </section>
   <div class="home-bottom">
     <section class="panel">
       <div class="section-heading">
-        <h2>From the shift archive</h2><a class="text-link" href="/shifts/">View all →</a>
-      </div>{
-        shifts.length ? (
-          shifts.slice(0, 2).map((s) => (
-            <a class="shift-preview" href={`/shifts/${s.id}/`}>
-              <>
-                <span class="date-tile">
-                  {new Date(s.date + 'T12:00Z').getUTCDate()}
+        <h2>From the shift archive</h2>
+        <a class="text-link" href="/shifts/">
+          View all →
+        </a>
+      </div>
+      {shifts.length ? (
+        shifts.slice(0, 2).map((s) => (
+          <a class="shift-preview" href={`/shifts/${s.id}/`}>
+            <>
+              <span class="date-tile">
+                {new Date(s.date + 'T12:00Z').getUTCDate()}
+                <small>
+                  {new Date(s.date + 'T12:00Z')
+                    .toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })
+                    .toUpperCase()}
+                </small>
+              </span>
+              <span>
+                <>
+                  <strong>{s.title}</strong>
                   <small>
-                    {new Date(s.date + 'T12:00Z')
-                      .toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })
-                      .toUpperCase()}
+                    {dateLabel(s.date)} · {lib.discussions.filter((d) => d.shiftId === s.id).length}{' '}
+                    discussions
                   </small>
-                </span>
-                <span>
-                  <>
-                    <strong>{s.title}</strong>
-                    <small>
-                      {dateLabel(s.date)} ·{' '}
-                      {lib.discussions.filter((d) => d.shiftId === s.id).length} discussions
-                    </small>
-                  </>
-                </span>
-                <span>→</span>
-              </>
-            </a>
-          ))
-        ) : (
-          <p class="muted">
-            Detailed, source-linked shift archives will appear after review and publication.
-          </p>
-        )
-      }
-    </section><section class="study-invite">
-      <span class="eyebrow">A LITTLE PRACTICE, EVERY DAY</span><h2>Make the learning stick.</h2><p>
-        Pick a subject. Test your understanding. Follow the explanation back to its source.
-      </p><a class="text-link" href="/study/">Visit the study center →</a>
+                </>
+              </span>
+              <span>→</span>
+            </>
+          </a>
+        ))
+      ) : (
+        <p class="muted">
+          Detailed, source-linked shift archives will appear after review and publication.
+        </p>
+      )}
+    </section>
+    <section class="study-invite">
+      <span class="eyebrow">A LITTLE PRACTICE, EVERY DAY</span>
+      <h2>Make the learning stick.</h2>
+      <p>Pick a subject. Test your understanding. Follow the explanation back to its source.</p>
+      <a class="text-link" href="/study/">
+        Visit the study center →
+      </a>
     </section>
   </div>
 </Layout>
