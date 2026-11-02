@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "q-unknown",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "flashcard",
+  "topics": [
+    "clinical-reasoning"
+  ],
+  "prompt": "How should an unstated diagnosis or outcome appear in the case library?",
+  "explanation": "A source gap must remain visible. Do not complete a case by matching it to a textbook pattern.",
+  "sourceDiscussionIds": [
+    "d-urinary-handover"
+  ],
+  "articleIds": [
+    "a-handover"
+  ],
+  "answer": "Mark it as unknown. Retain the open question and link to the discussion that establishes the information gap."
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "q-fip",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "multiple-choice",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "prompt": "What changed when FIP was discussed on the second shift?",
+  "explanation": "The existing topic article gained another discussion. The recording provided no supported link to the first patient and no new diagnostic result.",
+  "sourceDiscussionIds": [
+    "d-fip-return"
+  ],
+  "articleIds": [
+    "a-fip-reasoning"
+  ],
+  "correct": {
+    "id": "topic",
+    "text": "The knowledge article gained a new educational source"
+  },
+  "distractors": [
+    {
+      "id": "confirmation",
+      "text": "Case Birch\u2019s diagnosis became confirmed"
+    },
+    {
+      "id": "outcome",
+      "text": "Case Birch\u2019s outcome became known"
+    },
+    {
+      "id": "merge",
+      "text": "The two recordings established one continuing patient case"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[Unit]
+Description=Import and process authorized veterinary learning recordings
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+UMask=0077
+WorkingDirectory=%h/vet-knowledge-library
+Environment=VET_WORKSPACE=%h/.local/share/vet-fieldnotes
+EnvironmentFile=-%h/.config/vet-fieldnotes/environment
+ExecStart=%h/vet-knowledge-library/pipeline/.venv/bin/vet-pipeline --config %h/.config/vet-fieldnotes/pipeline.toml nightly --key %h/.config/vet-fieldnotes/backup.key --backup-directory %h/.local/share/vet-fieldnotes-backups
+TimeoutStartSec=infinity
+Nice=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/.local/share/vet-fieldnotes %h/.local/share/vet-fieldnotes-backups
+# Recorder mounts and model caches need read access. First cache the chosen model with the owner account.

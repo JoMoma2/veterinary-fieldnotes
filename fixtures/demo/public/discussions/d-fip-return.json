@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "d-fip-return",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-24",
+  "order": 0,
+  "title": "Revisiting FIP without overwriting earlier uncertainty",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-004",
+      "startSeconds": 8,
+      "endSeconds": 237,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "This fictional teaching conversation returns to the subject of FIP, but does not identify the cat discussed on the earlier shift. It is related to the same knowledge article, while a patient-level connection to Case Birch remains unsupported. No new clinical case is created from a generic teaching conversation.\n\nThe learner asks whether hearing a condition discussed repeatedly should make a prior suspected case appear confirmed. The answer in the sample is no: educational discussion is not new patient evidence. The FIP article gains a note about the difference between topic continuity and case continuity, while the original source remains accessible.\n\nThe discussion also raises a literature question: how are history, examination, and testing combined in FIP assessment? That question is retained for external reading. The source conversation itself contains no validated diagnostic algorithm or treatment recommendation. Any subsequently added medical explanation needs its own reference and date of review.",
+  "facts": [
+    {
+      "kind": "ai-explanation",
+      "text": "Repeated discussion of a topic does not prove that two recordings concern the same patient.",
+      "sourceDiscussionIds": [
+        "d-fip-return"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "There is no supported patient connection to the prior shift.",
+      "sourceDiscussionIds": [
+        "d-fip-return"
+      ]
+    }
+  ],
+  "questions": [
+    "How does the published literature describe diagnostic uncertainty?"
+  ],
+  "conclusions": "Update the existing FIP topic; do not merge clinical cases.",
+  "articleIds": [
+    "a-fip-reasoning"
+  ],
+  "caseIds": []
+}

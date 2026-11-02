@@ -1,0 +1,11 @@
+{
+  "must_capture": [
+    "contradict",
+    "sample",
+    "FIP"
+  ],
+  "must_not_assert": [
+    "confirmed hyperkalemia",
+    "patient recovered uneventfully"
+  ]
+}

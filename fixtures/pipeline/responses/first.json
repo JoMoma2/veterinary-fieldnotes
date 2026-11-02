@@ -1,0 +1,189 @@
+{
+  "discussions": [
+    {
+      "localId": "history",
+      "title": "Owner history, not a confirmed diagnosis",
+      "topics": [
+        {
+          "id": "feline-medicine",
+          "name": "Feline medicine"
+        },
+        {
+          "id": "clinical-reasoning",
+          "name": "Clinical reasoning"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 0,
+          "end": 20,
+          "text": "For synthetic case AMBER-TRAINING, the owner reports repeated litter-box visits and increased grooming. We do not know urine volume. Obstruction is a concern, not confirmed."
+        }
+      ],
+      "account": "The fictional owner describes repeated litter-box visits and increased grooming. Urine volume is unknown. The team raises obstruction as a concern without confirming it. This observation is retained separately from suspicion. No examination, test result, treatment, or outcome was supplied.",
+      "facts": [
+        {
+          "kind": "owner-report",
+          "text": "Repeated litter-box visits and increased grooming."
+        },
+        {
+          "kind": "clinical-suspicion",
+          "text": "Obstruction was a concern, not confirmed."
+        },
+        {
+          "kind": "unknown",
+          "text": "Urine volume, diagnosis, tests, treatment, and outcome are unknown."
+        }
+      ],
+      "questions": [
+        "What was the last witnessed normal urination?"
+      ],
+      "conclusions": "The missing information remains unknown."
+    },
+    {
+      "localId": "fip",
+      "title": "FIP remains a differential",
+      "topics": [
+        {
+          "id": "feline-medicine",
+          "name": "Feline medicine"
+        },
+        {
+          "id": "clinical-reasoning",
+          "name": "Clinical reasoning"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 22,
+          "end": 40,
+          "text": "Separate teaching topic: FIP is on a differential list, not a confirmed diagnosis. We have no test result for that fictional cat."
+        }
+      ],
+      "account": "A separate teaching conversation discusses FIP as a differential. No test result confirms it. This conversation is not linked to case AMBER-TRAINING; a shared species or medical theme would not support that link.",
+      "facts": [
+        {
+          "kind": "clinical-suspicion",
+          "text": "FIP was discussed as a differential, not confirmed."
+        }
+      ],
+      "questions": [],
+      "conclusions": "The missing information remains unknown."
+    },
+    {
+      "localId": "pump",
+      "title": "Classroom instructions with device limits",
+      "topics": [
+        {
+          "id": "equipment",
+          "name": "Equipment & techniques"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 42,
+          "end": 60,
+          "text": "In the classroom pump exercise, the trainer says open the training menu and read the displayed alarm history. The model and exact menu sequence are unknown. This is not a verified instruction for a clinical pump."
+        }
+      ],
+      "account": "The trainer describes opening a training menu to read displayed alarm history. The device model and exact sequence are unknown. Preserve this classroom instruction with its limits; it is not a validated procedure for operating a clinical pump.",
+      "facts": [
+        {
+          "kind": "direct-observation",
+          "text": "The fictional trainer described a training-menu review."
+        },
+        {
+          "kind": "unknown",
+          "text": "Model and exact sequence are unknown."
+        }
+      ],
+      "questions": [],
+      "conclusions": "The missing information remains unknown."
+    }
+  ],
+  "articles": [
+    {
+      "topicKey": "urinary-observations",
+      "title": "Urinary observations",
+      "summary": "Urinary observations \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "history"
+      ],
+      "bodyAddition": "Keep increased grooming and repeated litter-box visits as owner reports. Obstruction remains a suspicion. Urine volume, diagnosis, and outcome are unknown."
+    },
+    {
+      "topicKey": "fip-reasoning",
+      "title": "FIP reasoning",
+      "summary": "FIP reasoning \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "fip"
+      ],
+      "bodyAddition": "FIP is a differential in the synthetic discussion. There is no confirming result."
+    },
+    {
+      "topicKey": "pump-context",
+      "title": "Pump training context",
+      "summary": "Pump training context \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "pump"
+      ],
+      "bodyAddition": "A classroom instruction to review displayed alarm history was described. Device model and exact menu sequence are unknown; this is not a general clinical operating procedure."
+    }
+  ],
+  "cases": [
+    {
+      "caseKey": "AMBER-TRAINING",
+      "linkEvidence": "For synthetic case AMBER-TRAINING, the owner reports repeated litter-box visits and increased grooming. We do not know urine volume. Obstruction is a concern, not confirmed.",
+      "title": "A synthetic urinary concern",
+      "species": "Feline",
+      "discussionIds": [
+        "history"
+      ],
+      "diagnosis": null,
+      "outcome": null,
+      "uncertainties": [
+        "Diagnosis, test results, and outcome are unknown."
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "history",
+      "format": "multiple-choice",
+      "topics": [
+        "feline-medicine"
+      ],
+      "prompt": "Which detail was owner reported?",
+      "explanation": "Increased grooming came from the owner, not a measured examination finding.",
+      "articleIds": [
+        "urinary-observations"
+      ],
+      "sourceDiscussionIds": [
+        "history"
+      ],
+      "correct": {
+        "id": "grooming",
+        "text": "Increased grooming"
+      },
+      "distractors": [
+        {
+          "id": "values",
+          "text": "Electrolyte results"
+        },
+        {
+          "id": "recovery",
+          "text": "Documented recovery"
+        },
+        {
+          "id": "diagnosis",
+          "text": "Confirmed obstruction"
+        }
+      ]
+    },
+    {
+      "id": "broken",
+      "format": "multiple-choice",
+      "prompt": "Malformed question must be quarantined"
+    }
+  ]
+}

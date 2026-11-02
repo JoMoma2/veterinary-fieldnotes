@@ -1,0 +1,38 @@
+[
+  {
+    "id": "feline-medicine",
+    "name": "Feline medicine",
+    "description": "Clinical observations and diagnostic questions in cats.",
+    "color": "green"
+  },
+  {
+    "id": "emergency-care",
+    "name": "Emergency care",
+    "description": "Assessment, uncertainty, and decisions in the ER.",
+    "color": "rose"
+  },
+  {
+    "id": "clinical-reasoning",
+    "name": "Clinical reasoning",
+    "description": "Evidence, differentials, and what remains unknown.",
+    "color": "blue"
+  },
+  {
+    "id": "equipment",
+    "name": "Equipment & techniques",
+    "description": "Device observations, troubleshooting, and practical learning.",
+    "color": "amber"
+  },
+  {
+    "id": "communication",
+    "name": "Communication",
+    "description": "Owner histories, team handovers, and questions worth asking.",
+    "color": "green"
+  },
+  {
+    "id": "workflows",
+    "name": "Hospital workflows",
+    "description": "Reliable handovers and everyday systems.",
+    "color": "blue"
+  }
+]

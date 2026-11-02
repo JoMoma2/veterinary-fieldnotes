@@ -1,0 +1,11 @@
+[Unit]
+Description=Check for the configured recorder every two minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+Persistent=true
+Unit=vet-fieldnotes.service
+
+[Install]
+WantedBy=timers.target

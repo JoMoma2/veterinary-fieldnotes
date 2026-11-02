@@ -1,0 +1,15 @@
+---
+import Tags from './Tags.astro';import Facts from './Facts.astro';
+import {offset,markdown} from '../lib/format';
+import type {Discussion,PublicLibrary} from '../lib/schemas';
+const {discussion:d,library:lib}=Astro.props as {discussion:Omit<Discussion,'publication'>;library:PublicLibrary};
+---
+<article class="discussion" id={d.id}>
+ <div class="discussion-meta"><span class="eyebrow">DISCUSSION {String(d.order+1).padStart(2,'0')}</span><a href={`/discussions/${d.id}/`} class="permalink" aria-label={`Permanent link to ${d.title}`}># Permanent link</a></div>
+ <h2>{d.title}</h2><Tags ids={d.topics} topics={lib.topics}/>
+ <div class="recording-strip">{d.segments.map(s=><span><strong>{s.recordingId}</strong> · {offset(s.startSeconds)}–{offset(s.endSeconds)} <small>{s.clockTime?`${s.clockTime} (${s.clockConfidence})`:'Recording relative · clock time unknown'}</small></span>)}</div>
+ <div class="prose" set:html={markdown(d.account)}/><h3>Evidence in the discussion</h3><Facts facts={d.facts}/>
+ {d.questions.length>0&&<div class="question-note"><h3>Questions to carry forward</h3><ul>{d.questions.map(q=><li>{q}</li>)}</ul></div>}
+ <p class="conclusion"><strong>Where it stands</strong><br/>{d.conclusions}</p>
+ {(d.articleIds.length>0||d.caseIds.length>0)&&<div class="connected"><span class="tiny-label">CONNECTED LEARNING</span>{d.articleIds.map(id=><a href={`/knowledge/${id}/`}>↗ {lib.articles.find(a=>a.id===id)!.title}</a>)}{d.caseIds.map(id=><a href={`/cases/${id}/`}>↗ {lib.cases.find(c=>c.id===id)!.patientLabel}</a>)}</div>}
+</article>

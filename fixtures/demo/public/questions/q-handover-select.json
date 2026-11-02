@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "q-handover-select",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "multiple-select",
+  "topics": [
+    "communication",
+    "workflows"
+  ],
+  "prompt": "What should remain explicitly unknown in the Case Amber handover?",
+  "explanation": "The recordings never supplied a final diagnosis or outcome. Owner-reported grooming and sample collection were supplied.",
+  "sourceDiscussionIds": [
+    "d-urinary-handover"
+  ],
+  "articleIds": [
+    "a-handover"
+  ],
+  "choices": [
+    {
+      "id": "diagnosis",
+      "text": "Final diagnosis"
+    },
+    {
+      "id": "outcome",
+      "text": "Patient outcome"
+    },
+    {
+      "id": "history",
+      "text": "Whether grooming was reported"
+    },
+    {
+      "id": "sample",
+      "text": "Whether sample collection was described"
+    }
+  ],
+  "correctIds": [
+    "diagnosis",
+    "outcome"
+  ]
+}

@@ -1,0 +1,22 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+const {title='Your learning, connected.',section='Overview',description='A source-linked veterinary learning library.'}=Astro.props;
+const demo=['demo','pipeline-demo'].includes(process.env.LIBRARY_DATASET??'');
+const nav=[['Overview','/','grid'],['Knowledge library','/knowledge/','book'],['Clinical cases','/cases/','case'],['Shift archive','/shifts/','clock'],['Study center','/study/','study']];
+---
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content={description}/><meta name="generator" content={Astro.generator}/><link rel="icon" href="/favicon.svg"/><title>{title} · Fieldnotes</title></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" data-pagefind-ignore>
+ <a href="/" class="brand"><span class="brand-icon"><Icon name="book" size={26}/></span><span>fieldnotes<span class="brand-sub">VETERINARY LEARNING</span></span></a>
+ <div class="nav-caption">YOUR LIBRARY</div><nav aria-label="Main navigation">{nav.map(([label,url,icon])=><a href={url} class:list={['nav-link',{active:section===label}]} aria-current={section===label?'page':undefined}><Icon name={icon}/><span>{label}</span></a>)}</nav>
+ <div class="sidebar-bottom"><span class="tiny-label">LEARN. CONNECT. REMEMBER.</span><p>A little more knowledge.<br/>Every shift.</p><a href="/about/">About this library <span>↗</span></a></div>
+</aside>
+<div class="workspace"><header class="topbar" data-pagefind-ignore><span class="breadcrumb">Your library <span>/</span> <strong>{section}</strong></span><a href="/search/" class="search-link"><Icon name="search" size={18}/><span>Search the library</span><kbd>/</kbd></a></header>
+{demo&&<div class="demo-banner" data-pagefind-ignore><span class="status-dot"></span> Demonstration library · All cases and discussions are fictional.</div>}
+<main id="main" tabindex="-1"><slot/></main>
+<footer data-pagefind-ignore><span>Fieldnotes <span class="footer-dot">·</span> Knowledge that stays with you.</span><span>{demo?'Synthetic development dataset':'Public educational library'} <span class="footer-dot">·</span> No accounts. No tracking.</span></footer>
+</div>
+<script>document.addEventListener('keydown',(e)=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)){e.preventDefault();window.location.href='/search/';}});</script>
+</body></html>

@@ -1,0 +1,5 @@
+---
+import Layout from '../../layouts/Layout.astro';import Discussion from '../../components/Discussion.astro';import {getLibrary} from '../../lib/library';import {dateLabel} from '../../lib/format';
+export async function getStaticPaths(){const lib=await getLibrary();return lib.discussions.map(discussion=>({params:{id:discussion.id},props:{discussion,lib}}));}const {discussion:d,lib}=Astro.props;const shift=lib.shifts.find(s=>s.id===d.shiftId)!;
+---
+<Layout title={d.title} section="Shift archive"><a class="back-link" href={`/shifts/${shift.id}/#${d.id}`}>← View in shift archive · {dateLabel(shift.date)}</a><div class="reading" data-pagefind-body><Discussion discussion={d} library={lib}/></div></Layout>

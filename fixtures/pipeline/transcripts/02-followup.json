@@ -1,0 +1,15 @@
+{
+  "fixtureKey": "followup",
+  "segments": [
+    {
+      "start": 0,
+      "end": 22,
+      "text": "Returning to synthetic case AMBER-TRAINING: another owner now says there was no increased grooming. That contradicts the earlier history. A blood sample was collected, but no results are stated. Diagnosis and outcome are unknown."
+    },
+    {
+      "start": 24,
+      "end": 42,
+      "text": "Returning to the topic of FIP: a teaching discussion is not new evidence for the earlier patient. Do not merge cases just because FIP was mentioned twice."
+    }
+  ]
+}

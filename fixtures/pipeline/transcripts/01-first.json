@@ -1,0 +1,20 @@
+{
+  "fixtureKey": "first",
+  "segments": [
+    {
+      "start": 0,
+      "end": 20,
+      "text": "For synthetic case AMBER-TRAINING, the owner reports repeated litter-box visits and increased grooming. We do not know urine volume. Obstruction is a concern, not confirmed."
+    },
+    {
+      "start": 22,
+      "end": 40,
+      "text": "Separate teaching topic: FIP is on a differential list, not a confirmed diagnosis. We have no test result for that fictional cat."
+    },
+    {
+      "start": 42,
+      "end": 60,
+      "text": "In the classroom pump exercise, the trainer says open the training menu and read the displayed alarm history. The model and exact menu sequence are unknown. This is not a verified instruction for a clinical pump."
+    }
+  ]
+}

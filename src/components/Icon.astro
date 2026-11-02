@@ -1,0 +1,5 @@
+---
+const {name='book',size=22}=Astro.props;
+const paths:Record<string,string>={book:'M3 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-3H3zm18 0h-6a3 3 0 0 0-3 3v14a4 4 0 0 1 4-3h5z',grid:'M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z',case:'M8 6V3h8v3M3 6h18v15H3zm9 4v7m-3-3h6',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',study:'m2 9 10-6 10 6-10 6zm4 3v6l6 3 6-3v-6m4-3v9',search:'m16 16 5 5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',arrow:'M4 12h16m-6-6 6 6-6 6',link:'m10 13 4-4m-6 6-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m4 2 2-2a4 4 0 0 0-6-6l-2 2',leaf:'M20 3C9 2 3 8 5 15s13 7 15-12ZM4 21l10-11',plus:'M12 4v16M4 12h16',check:'m4 12 5 5L20 6'};
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name]||paths.book}/></svg>

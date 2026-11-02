@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "q-history",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "multiple-choice",
+  "topics": [
+    "feline-medicine",
+    "communication"
+  ],
+  "prompt": "In Case Amber, how should increased grooming be recorded?",
+  "explanation": "The grooming detail came from the fictional owner. It was not a measured finding or a confirmed explanation for the urinary concern.",
+  "sourceDiscussionIds": [
+    "d-urinary-history"
+  ],
+  "articleIds": [
+    "a-owner-history"
+  ],
+  "correct": {
+    "id": "reported",
+    "text": "An owner-reported observation"
+  },
+  "distractors": [
+    {
+      "id": "exam",
+      "text": "A finding from the clinician\u2019s examination"
+    },
+    {
+      "id": "diagnosis",
+      "text": "A confirmed diagnosis of urinary obstruction"
+    },
+    {
+      "id": "response",
+      "text": "A response to catheter placement"
+    },
+    {
+      "id": "outcome",
+      "text": "Evidence that the patient recovered"
+    },
+    {
+      "id": "laboratory",
+      "text": "A laboratory finding"
+    },
+    {
+      "id": "causality",
+      "text": "Proof that grooming predicts obstruction"
+    },
+    {
+      "id": "treatment",
+      "text": "An administered treatment"
+    },
+    {
+      "id": "verified",
+      "text": "An externally verified fact about this patient"
+    },
+    {
+      "id": "direct",
+      "text": "Measured urine output"
+    }
+  ]
+}

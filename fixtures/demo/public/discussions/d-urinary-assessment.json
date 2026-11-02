@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "d-urinary-assessment",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-22",
+  "order": 1,
+  "title": "A suspicion is not a completed workup",
+  "topics": [
+    "feline-medicine",
+    "emergency-care",
+    "clinical-reasoning"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-019",
+      "startSeconds": 20,
+      "endSeconds": 254,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "The fictional team explicitly refers back to \u201cthe cat from the earlier litter-box conversation.\u201d That reference supports linking this discussion to Case Amber; a shared topic alone would not. A clinician describes concern about possible urinary obstruction and discusses examining the patient and obtaining diagnostics. The recording contains no examination finding that confirms obstruction.\n\nA blood sample is said to have been collected. No results are read aloud. The extracted case therefore records sample collection as an actual action and testing as discussed, while leaving electrolyte values and kidney measurements unknown. No medication name, dose, catheter placement, or successful urination appears in the discussion.\n\nThe teaching point is about evidence boundaries. A learner repeats \u201cblocked cat,\u201d and the clinician restates that the concern is still a clinical suspicion in the information captured here. The archive retains that correction so a later summary does not accidentally promote the working label to a confirmed diagnosis.",
+  "facts": [
+    {
+      "kind": "clinical-suspicion",
+      "text": "Possible urinary obstruction was discussed; no confirming finding was captured.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    },
+    {
+      "kind": "actual-treatment",
+      "text": "A blood sample was collected in the synthetic scenario; no treatment was recorded.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    },
+    {
+      "kind": "proposed-treatment",
+      "text": "Examination and diagnostic assessment were discussed.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Diagnostic results, medication administration, and catheter placement were not stated.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    }
+  ],
+  "questions": [
+    "Which findings would change the working assessment?"
+  ],
+  "conclusions": "Case link supported by an explicit reference to the earlier patient. Diagnosis unknown.",
+  "articleIds": [
+    "a-urinary-observations"
+  ],
+  "caseIds": [
+    "c-amber"
+  ]
+}

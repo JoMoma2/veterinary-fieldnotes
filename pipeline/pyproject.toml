@@ -1,0 +1,23 @@
+[project]
+name = "vet-fieldnotes-pipeline"
+version = "0.1.0"
+description = "Resumable, local-first veterinary learning pipeline"
+requires-python = ">=3.11,<3.15"
+dependencies = ["httpx>=0.28,<1", "jsonschema>=4.25,<5", "cryptography>=46,<48", "PyYAML>=6,<7"]
+
+[project.optional-dependencies]
+audio = ["faster-whisper>=1.2,<2", "av>=16,<17"]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+vet-pipeline = "vet_pipeline.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["vet_pipeline"]

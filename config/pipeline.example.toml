@@ -1,0 +1,45 @@
+# Copy outside source control. Paths and authorization references must be selected locally.
+[provider]
+kind = "mock" # mock | ollama | openai-compatible
+model = "fixture" # Choose only after benchmarking. No real-model quality claim is made.
+base_url = "http://127.0.0.1:11434" # For compatible APIs use the base ending in /v1
+api_key_env = "VET_AI_API_KEY"
+allow_remote = false
+allow_paid = false
+context_char_limit = 12000
+transcript_char_limit = 24000
+timeout_seconds = 120
+
+[transcription]
+kind = "faster-whisper"
+model = "" # Configure a local model path or tested model name. No automatic model download.
+device = "cpu"
+compute_type = "int8"
+language = "en"
+allow_model_download = false
+
+[retry]
+max_attempts = 3
+base_delay_seconds = 30
+
+[retention]
+enabled = false
+days = 14
+require_remote = true
+
+[backup]
+remote = "" # e.g. gdrive:vet-fieldnotes-encrypted (rclone must be configured separately)
+allow_clinical_remote = false # Separate recording/processing authorization does not imply third-party storage authorization.
+timeout_seconds = 300
+
+[usb]
+roots = [] # e.g. ["/media/YOUR_USER"]. USB mounts only; no arbitrary home scan.
+device_label = "" # Actual hardware configuration required.
+sentinel = "" # Optional relative marker filename, chosen by the owner.
+glob = "**/*" # Extension is checked case-insensitively; filename layout is not assumed.
+stable_seconds = 30
+origin = "authorized-record"
+authorization_ref = "" # Required before import; never published.
+
+[archive]
+timezone = "Unknown until configured" # e.g. America/Detroit. Does not verify device clock time.

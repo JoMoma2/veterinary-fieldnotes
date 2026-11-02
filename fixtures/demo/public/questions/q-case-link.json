@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "q-case-link",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "scenario",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "prompt": "Two recordings discuss FIP, but only one identifies a patient. Should the extraction pipeline merge them into one clinical case?",
+  "explanation": "Topic overlap is useful for updating a knowledge article. Patient continuity requires evidence.",
+  "sourceDiscussionIds": [
+    "d-fip-first",
+    "d-fip-return"
+  ],
+  "articleIds": [
+    "a-fip-reasoning"
+  ],
+  "answer": "No. Add both approved discussions to the FIP article, but keep the generic teaching discussion separate from the clinical case unless new evidence supports the connection."
+}

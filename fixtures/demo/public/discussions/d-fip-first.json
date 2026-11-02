@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "d-fip-first",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-22",
+  "order": 2,
+  "title": "FIP on the differential: keep the question open",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-023",
+      "startSeconds": 6,
+      "endSeconds": 222,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "A separate fictional cat is discussed because the owner has noticed reduced appetite. A clinician mentions feline infectious peritonitis as one possible explanation among others. No diagnostic result is given, and the conversation does not establish that the cat has FIP. There is no basis for merging this patient with the urinary case.\n\nThe learner asks how a condition enters a differential list without becoming the diagnosis. The clinician describes a differential as a question to investigate. The archive records the actual statement of suspicion separately from this educational explanation. It does not manufacture a fever, effusion, laboratory pattern, or test result to make the example resemble a typical case.\n\nAn intended follow-up is to ask what evidence was obtained and whether it supported or weakened the suspicion. The recording ends before those answers. The unknowns remain attached to Case Birch and to the FIP article's source history.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "text": "Reduced appetite was reported in the fictional case.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    },
+    {
+      "kind": "clinical-suspicion",
+      "text": "FIP was mentioned as one differential, without confirmation.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Tests, final diagnosis, treatment, and outcome were not captured.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    },
+    {
+      "kind": "ai-explanation",
+      "text": "A differential diagnosis is a possibility under consideration; this does not establish the patient has that condition.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    }
+  ],
+  "questions": [
+    "What evidence supports the differential?",
+    "Were test results eventually obtained?"
+  ],
+  "conclusions": "FIP remains a suspicion in this example.",
+  "articleIds": [
+    "a-fip-reasoning"
+  ],
+  "caseIds": [
+    "c-birch"
+  ]
+}

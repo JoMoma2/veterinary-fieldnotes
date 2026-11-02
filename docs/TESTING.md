@@ -1,0 +1,50 @@
+# Verification record
+
+Implementation session: 2026-11-02. All clinical examples used in development are synthetic. No paid inference calls or real patient/owner records were used.
+
+| Check | Result | What it verifies |
+|---|---|---|
+| `npm run check` | Passed | Astro/TypeScript and complete schema/reference graph validation |
+| `npm test` | 16 passed | Empty production, demo graph, privacy filtering, approval gates, permanent references, timestamps, exact answer sets, sampled distractors, topic filters, Markdown sanitization |
+| Python pytest | 30 passed | Full workflow, additive updates, contradiction preservation, bounded retries, per-stage resume, post-commit interruption, 105-file batching, mock/remote gates, protocol requests, USB discovery/import stability, quarantine, publication reviews, backup encryption/corruption/restore, upload verification, cleanup gates, editing, recovery deduplication/case continuity |
+| Demo browser suite | 12 passed | Navigation, topic filters, article→discussion→shift anchor links, Pagefind search, case evidence labels, Select All/Deselect All, all five study formats, no visitor storage/inference, mobile widths |
+| Empty production browser suite | 1 passed | All empty sections, search no-match behavior, no demo banner or records |
+| Production static build | Passed | 8 pages, 87 internal routes/anchors, initially empty clinical content |
+| Curated demo static build | Passed | 26 pages, 440 internal routes/anchors; 6 articles, 2 cases, 2 shifts, 8 discussions, 10 questions |
+| Pipeline-generated static build | Passed | 20 pages, 299 internal routes/anchors; 4 articles, 1 case, 1 shift, 6 discussions, 3 valid questions |
+| Synthetic full workflow helper | Passed | Transcript import → consolidation → approval → website export + encrypted backup/restore equivalence |
+| Generated-speech Faster-Whisper | Passed mechanically | Actual WAV decoding and CPU/int8 `tiny.en` inference returned increasing offsets and nonempty transcript; transcription had wording errors |
+| Synthetic benchmark smoke | Passed | Three fixture outputs valid, expected markers captured, no configured forbidden marker; no real-model accuracy inference |
+| systemd unit verification | Passed | Supplied user unit syntax/commands accepted; host reported an unrelated existing spice-vdagent unit warning |
+| Visual QA | Inspected | Desktop 1440px and phone 390px screenshots, notebook-style layout and readable stacked cards |
+
+The static build checker traverses internal links and fragments and rejects source maps, raw WAV output, and a private sentinel string. Dataset projection tests remove withheld discussions/cases, private relationships, and review identities. An additional production-root gate rejects synthetic records.
+
+## Reproduce
+
+```bash
+./scripts/local-node.sh ci
+./scripts/local-node.sh run check
+./scripts/local-node.sh test
+uv sync --project pipeline --python 3.12 --extra dev --frozen
+uv run --project pipeline pytest pipeline/tests
+./scripts/local-node.sh run demo:pipeline
+LIBRARY_DATASET=pipeline-demo ./scripts/local-node.sh run build
+LIBRARY_DATASET=demo ./scripts/local-node.sh run build
+./scripts/local-node.sh run test:e2e
+./scripts/local-node.sh run build
+E2E_EMPTY=1 ./scripts/local-node.sh run test:e2e
+```
+
+Install Playwright Chromium once if absent. Browser tests use built `dist` and a foreground loopback preview. Never change the build during the browser run.
+
+## Important limits
+
+- Mock extraction fixtures are hand-authored expected behavior, not evidence of a real model's ability to extract noisy conversations.
+- Ollama and compatible API request/response contracts are tested through HTTP mock transport. No remote model account was charged. Full inference-model quality and failure behavior need evaluation against the chosen service.
+- The real audio smoke used generated speech, not clinical audio or 12 hours of WAVs. It caught a real PyAV incompatibility; pinning `av>=16,<17` fixed decoding. The tiny model's mistakes demonstrate why candidate-model benchmarking is required.
+- The 105-file test establishes independent job processing/checkpoint behavior; it does not prove two-year scale, 12-hour overnight throughput, or fault tolerance against physical disk/power failure.
+- USB discovery uses mocked lsblk and synthetic temporary WAV files. No actual recorder was attached. Mount behavior, filesystem timestamps, file ordering, codecs, and shift boundaries require hardware tests.
+- Backup upload verification uses a mocked rclone process; local encryption/corruption detection and recovery use real files and cryptography. Google Drive/OAuth/network restoration remain untested until connected.
+- GitHub repository operations are real. Cloudflare deployment is configuration-only because credentials are absent. No service or deletion policy was activated.
+- Privacy approval and medical correctness require authorized review; source-quote validation cannot certify the truth of every generated interpretation.

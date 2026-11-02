@@ -1,0 +1,32 @@
+name: Verify production and synthetic workflow
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check && npm test && npm run build
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+          enable-cache: true
+      - run: uv sync --project pipeline --python 3.12 --extra dev --frozen
+      - run: uv run --project pipeline pytest pipeline/tests
+      - run: npm run demo:pipeline
+      - run: LIBRARY_DATASET=pipeline-demo npm run build
+      - run: LIBRARY_DATASET=demo npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      # Always finish with an empty/approved production build, never deploy the demonstration bundle.
+      - run: npm run build
+      - run: E2E_EMPTY=1 npm run test:e2e

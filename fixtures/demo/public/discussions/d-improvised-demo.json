@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "d-improvised-demo",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-24",
+  "order": 2,
+  "title": "An improvised setup needs its limitations attached",
+  "topics": [
+    "equipment",
+    "clinical-reasoning"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-017",
+      "startSeconds": 11,
+      "endSeconds": 179,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "A fictional learner mentions a temporary prop used to hold unused demonstration tubing during a classroom exercise. The exact material, arrangement, and purpose are incompletely described. The conversation does not say it was used on a patient, and there is no evidence about safety, sterility, or compatibility.\n\nThe educational value is in documenting what was actually said without polishing the improvised idea into an established technique. The archive preserves the classroom context, the missing setup details, and the fact that no outcome was captured. It provides no construction steps.\n\nBefore any educational note could describe clinical use, the missing context would need clarification and the relevant safety evidence would need separate review. Those are open questions, not completed checks. The note remains a limited observation, linked to a general article about documenting practical techniques.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "text": "A temporary tubing prop was mentioned in a fictional classroom exercise.",
+      "sourceDiscussionIds": [
+        "d-improvised-demo"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Materials, configuration, clinical suitability, and outcome were not established.",
+      "sourceDiscussionIds": [
+        "d-improvised-demo"
+      ]
+    }
+  ],
+  "questions": [
+    "Was this exclusively a classroom setup?",
+    "What limitations were described?"
+  ],
+  "conclusions": "Unverified improvisation retained with context and limitations.",
+  "articleIds": [
+    "a-practical-context"
+  ],
+  "caseIds": []
+}

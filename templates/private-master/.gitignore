@@ -1,0 +1,11 @@
+*.wav
+*.WAV
+*.mp3
+*.flac
+*.sqlite*
+*.key
+.env*
+inputs/
+transcripts/
+extractions/
+backups/

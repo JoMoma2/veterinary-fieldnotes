@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "q-clock",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "flashcard",
+  "topics": [
+    "workflows"
+  ],
+  "prompt": "Why can\u2019t recording-relative offsets be added together to reconstruct shift clock time?",
+  "explanation": "Voice activation can leave unrecorded gaps. These sample recordings have no reliable clock time.",
+  "sourceDiscussionIds": [
+    "d-handover-return"
+  ],
+  "articleIds": [
+    "a-handover"
+  ],
+  "answer": "The recorder may stop between conversations. Audio duration does not include those gaps. Preserve the recording ID and offset; keep clock time unknown unless reliable metadata establishes it."
+}

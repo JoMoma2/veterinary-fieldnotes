@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "q-handover",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "open-ended",
+  "topics": [
+    "communication",
+    "workflows"
+  ],
+  "prompt": "Draft a brief evidence-aware handover for the fictional Case Amber.",
+  "explanation": "A useful handover preserves known information and makes its limits clear.",
+  "sourceDiscussionIds": [
+    "d-urinary-handover"
+  ],
+  "articleIds": [
+    "a-handover"
+  ],
+  "answer": "Owner reports repeated litter-box visits and increased grooming; urine amount and last normal urination are unknown. Possible obstruction was discussed. Blood sample collection was described, but results, final diagnosis, treatment, and outcome were not captured. Follow-up of pending results remains an open task."
+}

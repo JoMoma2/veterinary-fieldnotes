@@ -1,0 +1,12 @@
+{
+  "must_capture": [
+    "grooming",
+    "unknown",
+    "pump",
+    "FIP"
+  ],
+  "must_not_assert": [
+    "confirmed hyperkalemia",
+    "patient recovered uneventfully"
+  ]
+}

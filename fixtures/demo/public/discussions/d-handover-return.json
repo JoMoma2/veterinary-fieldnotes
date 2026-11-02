@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "d-handover-return",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-24",
+  "order": 1,
+  "title": "Make pending questions visible",
+  "topics": [
+    "communication",
+    "workflows",
+    "clinical-reasoning"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-011",
+      "startSeconds": 3,
+      "endSeconds": 198,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "In this synthetic workflow exercise, a learner revisits the earlier draft handover as a teaching artifact, not as a clinical update. They group the note into reported observations, directly observed actions, working concerns, and pending questions. The owner history stays visible even though a diagnosis was never provided.\n\nThe group discusses making \u201cunknown\u201d a first-class value rather than leaving a blank space that a later reader could misinterpret. In the demonstration, the outcome field explicitly says unknown, and the pending-results question is carried forward with a source link. This change adds useful structure without rewriting the old shift entry.\n\nNo person is assigned a real task and no hospital policy is established. This is a demonstration of how a learner might preserve context for later review. Whether the proposed format is suitable for a particular hospital remains a local decision.",
+  "facts": [
+    {
+      "kind": "ai-explanation",
+      "text": "Keep pending questions, their evidence, and unknown outcomes visible in the learning record.",
+      "sourceDiscussionIds": [
+        "d-handover-return"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "No subsequent patient outcome is available in this exercise.",
+      "sourceDiscussionIds": [
+        "d-handover-return"
+      ]
+    }
+  ],
+  "questions": [
+    "Can a reader distinguish a completed action from an intended one?"
+  ],
+  "conclusions": "A proposed note format is recorded, not a new hospital policy.",
+  "articleIds": [
+    "a-handover",
+    "a-owner-history"
+  ],
+  "caseIds": []
+}

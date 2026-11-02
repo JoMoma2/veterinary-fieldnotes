@@ -1,0 +1,128 @@
+{
+  "discussions": [
+    {
+      "localId": "followup",
+      "title": "A contradictory history remains unresolved",
+      "topics": [
+        {
+          "id": "feline-medicine",
+          "name": "Feline medicine"
+        },
+        {
+          "id": "clinical-reasoning",
+          "name": "Clinical reasoning"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 0,
+          "end": 22,
+          "text": "Returning to synthetic case AMBER-TRAINING: another owner now says there was no increased grooming. That contradicts the earlier history. A blood sample was collected, but no results are stated. Diagnosis and outcome are unknown."
+        }
+      ],
+      "account": "The speaker explicitly returns to AMBER-TRAINING, which supports connecting the recordings. Another owner denies increased grooming. Keep both owner reports and the contradiction rather than choosing one. A blood sample was collected. No results, diagnosis, or outcome are supplied.",
+      "facts": [
+        {
+          "kind": "owner-report",
+          "text": "Another owner reported no increased grooming, contradicting the earlier history."
+        },
+        {
+          "kind": "direct-observation",
+          "text": "Blood sample collection was described."
+        },
+        {
+          "kind": "unknown",
+          "text": "Results, diagnosis, and outcome remain unknown."
+        }
+      ],
+      "questions": [
+        "Can the conflicting grooming history be clarified?"
+      ],
+      "conclusions": "The missing information remains unknown."
+    },
+    {
+      "localId": "fip-return",
+      "title": "Topic continuity without patient continuity",
+      "topics": [
+        {
+          "id": "feline-medicine",
+          "name": "Feline medicine"
+        },
+        {
+          "id": "clinical-reasoning",
+          "name": "Clinical reasoning"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 24,
+          "end": 42,
+          "text": "Returning to the topic of FIP: a teaching discussion is not new evidence for the earlier patient. Do not merge cases just because FIP was mentioned twice."
+        }
+      ],
+      "account": "The conversation returns to the FIP topic without identifying the earlier cat. It updates the same article while preserving the original discussion. No case connection or new diagnostic result is inferred.",
+      "facts": [
+        {
+          "kind": "ai-explanation",
+          "text": "Repeated FIP discussion does not establish patient continuity."
+        }
+      ],
+      "questions": [],
+      "conclusions": "The missing information remains unknown."
+    }
+  ],
+  "articles": [
+    {
+      "topicKey": "urinary-observations",
+      "title": "Urinary observations",
+      "summary": "Urinary observations \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "followup"
+      ],
+      "bodyAddition": "A second owner denied increased grooming. This contradicts the first report. Preserve both. Blood sample collection was described; results, diagnosis, and outcome are unknown."
+    },
+    {
+      "topicKey": "fip-reasoning",
+      "title": "FIP reasoning",
+      "summary": "FIP reasoning \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "fip-return"
+      ],
+      "bodyAddition": "The later teaching conversation adds topic context, not patient evidence. Do not merge cases based only on the topic."
+    }
+  ],
+  "cases": [
+    {
+      "caseKey": "AMBER-TRAINING",
+      "linkEvidence": "Returning to synthetic case AMBER-TRAINING: another owner now says there was no increased grooming. That contradicts the earlier history. A blood sample was collected, but no results are stated. Diagnosis and outcome are unknown.",
+      "title": "A synthetic urinary concern",
+      "species": "Feline",
+      "discussionIds": [
+        "followup"
+      ],
+      "diagnosis": null,
+      "outcome": null,
+      "uncertainties": [
+        "Diagnosis, test results, and outcome are unknown."
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "uncertainty",
+      "format": "flashcard",
+      "topics": [
+        "clinical-reasoning"
+      ],
+      "prompt": "What happens to contradictory owner reports?",
+      "explanation": "Conflicting sources remain visible until clarified.",
+      "articleIds": [
+        "urinary-observations"
+      ],
+      "sourceDiscussionIds": [
+        "followup"
+      ],
+      "answer": "Preserve both reports with provenance and record the contradiction. Do not choose a version without evidence."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "s-2026-10-24",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "title": "Returning to the unanswered questions",
+  "date": "2026-10-24",
+  "summary": "A second synthetic shift revisits FIP reasoning and develops a more useful handover.",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning",
+    "equipment",
+    "communication"
+  ],
+  "timezone": "America/Detroit",
+  "recordings": [
+    {
+      "id": "r-004",
+      "sequence": 0,
+      "durationSeconds": 260,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-011",
+      "sequence": 1,
+      "durationSeconds": 210,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-017",
+      "sequence": 2,
+      "durationSeconds": 200,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "processing": "complete"
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "d-urinary-history",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-22",
+  "order": 0,
+  "title": "A litter-box history with an easily lost detail",
+  "topics": [
+    "feline-medicine",
+    "communication"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-015",
+      "startSeconds": 12,
+      "endSeconds": 196,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "In this fictional conversation, the owner describes repeated trips to the litter box and more grooming around the hindquarters than usual. They cannot say whether the cat has produced a normal amount of urine. The team distinguishes what the owner saw from what anyone has actually measured. Neither increased grooming nor repeated litter-box visits is converted into a confirmed diagnosis.\n\nThe discussion pauses on the history itself: asking what was seen in the box may be more informative than accepting \u201che cannot pee\u201d as an observed fact. The owner has not tracked the last normal urination. This absence is retained rather than filled with an estimated time. No examination, laboratory value, or treatment is described in this recording.\n\nA learner asks whether grooming should be kept in the case even if another finding later seems more important. The team agrees to preserve it as an owner-reported observation. One fictional case cannot establish a relationship between grooming and obstruction.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "text": "Repeated litter-box visits and increased grooming were reported; urine volume was not known.",
+      "sourceDiscussionIds": [
+        "d-urinary-history"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Time of last normal urination was not established.",
+      "sourceDiscussionIds": [
+        "d-urinary-history"
+      ]
+    }
+  ],
+  "questions": [
+    "What did the owner directly observe in the litter box?",
+    "When was normal urination last witnessed?"
+  ],
+  "conclusions": "History preserved. Diagnostic status remains unresolved.",
+  "articleIds": [
+    "a-urinary-observations",
+    "a-owner-history"
+  ],
+  "caseIds": [
+    "c-amber"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "q-pump",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "open-ended",
+  "topics": [
+    "equipment",
+    "workflows"
+  ],
+  "prompt": "What context is missing from the synthetic pump-alarm discussion?",
+  "explanation": "The entry describes an event, not a validated troubleshooting protocol. Proposed manual review was not confirmed as completed.",
+  "sourceDiscussionIds": [
+    "d-pump-interruption"
+  ],
+  "articleIds": [
+    "a-pump-observations"
+  ],
+  "answer": "Manufacturer, model, settings, exact message, approved response, and final resolution are unknown. Preserve the described tubing position and the message without asserting a proven cause or giving operating instructions."
+}

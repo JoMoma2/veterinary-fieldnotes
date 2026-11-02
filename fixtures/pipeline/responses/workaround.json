@@ -1,0 +1,64 @@
+{
+  "discussions": [
+    {
+      "localId": "workaround",
+      "title": "An unconventional setup without a safety claim",
+      "topics": [
+        {
+          "id": "equipment",
+          "name": "Equipment & techniques"
+        }
+      ],
+      "quotes": [
+        {
+          "start": 0,
+          "end": 22,
+          "text": "In a synthetic classroom exercise, a learner mentions an improvised tubing prop. The material, configuration, and result are not described. No patient use or safety was established."
+        }
+      ],
+      "account": "A learner mentions an improvised tubing prop in a classroom exercise. Materials, configuration, and result are unavailable. Patient use was not stated. The note preserves the practical account with its limitations, without adding construction steps or endorsing safety.",
+      "facts": [
+        {
+          "kind": "direct-observation",
+          "text": "An improvised classroom tubing prop was mentioned."
+        },
+        {
+          "kind": "unknown",
+          "text": "Materials, configuration, clinical suitability, and outcome were not established."
+        }
+      ],
+      "questions": [],
+      "conclusions": "The missing information remains unknown."
+    }
+  ],
+  "articles": [
+    {
+      "topicKey": "practical-context",
+      "title": "Practical techniques and context",
+      "summary": "Practical techniques and context \u2014 source-linked learning, pending review.",
+      "discussionIds": [
+        "workaround"
+      ],
+      "bodyAddition": "Retain the improvised classroom context and missing information. Do not imply that this setup was used on a patient or established as safe."
+    }
+  ],
+  "cases": [],
+  "questions": [
+    {
+      "id": "context",
+      "format": "scenario",
+      "topics": [
+        "equipment"
+      ],
+      "prompt": "How should an incompletely described classroom workaround be recorded?",
+      "explanation": "Preserve practical details without upgrading an anecdote into established guidance.",
+      "articleIds": [
+        "practical-context"
+      ],
+      "sourceDiscussionIds": [
+        "workaround"
+      ],
+      "answer": "Keep the described circumstances, missing information, and unknown outcome. Do not add clinical use, steps, or safety claims."
+    }
+  ]
+}

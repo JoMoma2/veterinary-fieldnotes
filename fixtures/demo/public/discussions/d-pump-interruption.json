@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "id": "d-pump-interruption",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-22",
+  "order": 3,
+  "title": "What an alarm tells us\u2014and what it does not",
+  "topics": [
+    "equipment",
+    "workflows"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-027",
+      "startSeconds": 10,
+      "endSeconds": 164,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "During a fictional equipment discussion, a learner describes an infusion pump displaying a downstream-occlusion message during a training exercise. The learner says a section of the demonstration tubing was caught under a training pad. A colleague points out that the recorded message and the observed tubing position should both be retained; neither alone proves a complete explanation for the alarm.\n\nThe device manufacturer, model, settings, and exact alarm wording are not available. The conversation does not contain a verified device-specific troubleshooting procedure. For that reason this entry records the observation and the missing context without turning it into instructions to bypass a safety mechanism or resume a patient's infusion.\n\nThe useful practical lesson is to retain the circumstances around an interruption. The learner proposes checking the approved manual with a supervisor before developing a local checklist. That proposal is recorded as a future action. The recording does not establish that the manual was checked or the alarm was resolved.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "text": "In the synthetic training exercise, tubing was described as caught under a pad while an occlusion message was displayed.",
+      "sourceDiscussionIds": [
+        "d-pump-interruption"
+      ]
+    },
+    {
+      "kind": "proposed-treatment",
+      "text": "Reviewing the correct device manual with a supervisor was proposed; this was not patient treatment.",
+      "sourceDiscussionIds": [
+        "d-pump-interruption"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Device model, approved response, and final resolution were not captured.",
+      "sourceDiscussionIds": [
+        "d-pump-interruption"
+      ]
+    }
+  ],
+  "questions": [
+    "What manufacturer and model was in use?",
+    "What does its approved manual say?"
+  ],
+  "conclusions": "Preserve the event as an observation, not a validated troubleshooting procedure.",
+  "articleIds": [
+    "a-pump-observations"
+  ],
+  "caseIds": []
+}

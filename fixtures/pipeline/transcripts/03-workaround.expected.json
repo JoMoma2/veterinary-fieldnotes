@@ -1,0 +1,10 @@
+{
+  "must_capture": [
+    "classroom",
+    "unknown"
+  ],
+  "must_not_assert": [
+    "confirmed hyperkalemia",
+    "patient recovered uneventfully"
+  ]
+}

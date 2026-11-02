@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "s-2026-10-22",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "title": "The small details that matter",
+  "date": "2026-10-22",
+  "summary": "A synthetic evening of urinary concerns, diagnostic uncertainty, and an infusion-pump interruption.",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning",
+    "equipment",
+    "communication"
+  ],
+  "timezone": "America/Detroit",
+  "recordings": [
+    {
+      "id": "r-015",
+      "sequence": 0,
+      "durationSeconds": 240,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-019",
+      "sequence": 1,
+      "durationSeconds": 300,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-023",
+      "sequence": 2,
+      "durationSeconds": 250,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-027",
+      "sequence": 3,
+      "durationSeconds": 180,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    },
+    {
+      "id": "r-031",
+      "sequence": 4,
+      "durationSeconds": 210,
+      "capturedAt": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "processing": "complete"
+}

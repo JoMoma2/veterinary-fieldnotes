@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "c-birch",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "title": "Reduced appetite, an open differential",
+  "summary": "FIP is discussed as a possibility. A later teaching conversation does not establish patient follow-up.",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "species": "Feline",
+  "patientLabel": "Case Birch \u00b7 fictional patient",
+  "diagnosis": null,
+  "outcome": null,
+  "sourceDiscussionIds": [
+    "d-fip-first"
+  ],
+  "facts": [
+    {
+      "kind": "owner-report",
+      "text": "Reduced appetite. Duration and severity were not provided.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    },
+    {
+      "kind": "clinical-suspicion",
+      "text": "FIP was mentioned among possible explanations.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "Examination findings, tests, diagnosis, treatments, and outcome were not provided.",
+      "sourceDiscussionIds": [
+        "d-fip-first"
+      ]
+    }
+  ],
+  "linkBasis": "Only the first discussion explicitly describes this patient. The later generic FIP discussion is not merged.",
+  "uncertainties": [
+    "No patient link to the second shift is supported.",
+    "No final diagnosis or outcome is known."
+  ]
+}

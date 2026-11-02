@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "d-urinary-handover",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "shiftId": "s-2026-10-22",
+  "order": 4,
+  "title": "An incomplete outcome is still a useful handover",
+  "topics": [
+    "feline-medicine",
+    "communication",
+    "workflows"
+  ],
+  "segments": [
+    {
+      "recordingId": "r-031",
+      "startSeconds": 14,
+      "endSeconds": 191,
+      "clockTime": null,
+      "clockConfidence": "unknown"
+    }
+  ],
+  "account": "The fictional handover again explicitly identifies the cat from the litter-box discussion. The colleague says that the pending results need to be followed up, but no values or final assessment are included. This is a third source for Case Amber, not a separate case. The patient connection is supported by the direct reference.\n\nThe learner drafts a handover that lists the presenting concern, the owner-reported grooming, the blood sample collection, and the unanswered diagnostic questions. The draft originally implies that the patient improved. A colleague asks where that came from; nobody in the captured discussion has reported improvement. The implication is removed, and outcome is marked unknown.\n\nThe conversation closes with a task to confirm who will check the pending results. An actual accepting clinician is not named in the sample. The archive preserves the gap rather than claiming that a completed handover occurred.",
+  "facts": [
+    {
+      "kind": "unknown",
+      "text": "Results, confirmed diagnosis, clinical response, and outcome remain unknown.",
+      "sourceDiscussionIds": [
+        "d-urinary-handover"
+      ]
+    },
+    {
+      "kind": "ai-explanation",
+      "text": "An unstated outcome must not become a statement of improvement in a generated summary.",
+      "sourceDiscussionIds": [
+        "d-urinary-handover"
+      ]
+    }
+  ],
+  "questions": [
+    "Who accepted follow-up of the pending results?"
+  ],
+  "conclusions": "Three recordings linked; no confirmed diagnosis or known outcome.",
+  "articleIds": [
+    "a-urinary-observations",
+    "a-handover"
+  ],
+  "caseIds": [
+    "c-amber"
+  ]
+}

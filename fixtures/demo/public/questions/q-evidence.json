@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q-evidence",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "multiple-select",
+  "topics": [
+    "feline-medicine",
+    "clinical-reasoning"
+  ],
+  "prompt": "Which statements are supported by the synthetic Case Amber recordings? Select all that apply.",
+  "explanation": "A blood sample collection and the owner\u2019s history were captured. Results and a final diagnosis were not.",
+  "sourceDiscussionIds": [
+    "d-urinary-assessment",
+    "d-urinary-history"
+  ],
+  "articleIds": [
+    "a-urinary-observations"
+  ],
+  "choices": [
+    {
+      "id": "history",
+      "text": "The owner reported repeated litter-box visits"
+    },
+    {
+      "id": "sample",
+      "text": "A blood sample was said to have been collected"
+    },
+    {
+      "id": "confirmed",
+      "text": "Urinary obstruction was confirmed"
+    },
+    {
+      "id": "results",
+      "text": "Electrolyte results were available"
+    }
+  ],
+  "correctIds": [
+    "history",
+    "sample"
+  ]
+}

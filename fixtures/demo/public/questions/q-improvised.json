@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "q-improvised",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "format": "scenario",
+  "topics": [
+    "equipment",
+    "clinical-reasoning"
+  ],
+  "prompt": "A learner describes an improvised classroom tubing prop but omits its materials and outcome. How should the library save it?",
+  "explanation": "Keep practical information together with its limitations. The sample contains no evidence of clinical suitability.",
+  "sourceDiscussionIds": [
+    "d-improvised-demo"
+  ],
+  "articleIds": [
+    "a-practical-context"
+  ],
+  "answer": "Retain the classroom context and what was actually described. Mark materials, configuration, suitability, and outcome unknown. Do not invent construction steps, imply patient use, or label the setup safe."
+}

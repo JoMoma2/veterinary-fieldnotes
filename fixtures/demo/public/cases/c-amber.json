@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "c-amber",
+  "origin": "synthetic",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Synthetic fixture review",
+    "reviewedAt": "2026-10-24T12:00:00Z",
+    "authorizationRef": "synthetic-development-only"
+  },
+  "title": "The cat with repeated litter-box visits",
+  "summary": "Three recordings, one explicitly linked synthetic case, and an outcome that remains unknown.",
+  "topics": [
+    "feline-medicine",
+    "emergency-care",
+    "communication"
+  ],
+  "species": "Feline",
+  "patientLabel": "Case Amber \u00b7 fictional patient",
+  "diagnosis": null,
+  "outcome": null,
+  "sourceDiscussionIds": [
+    "d-urinary-history",
+    "d-urinary-assessment",
+    "d-urinary-handover"
+  ],
+  "facts": [
+    {
+      "kind": "owner-report",
+      "text": "Repeated litter-box visits and increased grooming. Urine amount was not known.",
+      "sourceDiscussionIds": [
+        "d-urinary-history"
+      ]
+    },
+    {
+      "kind": "clinical-suspicion",
+      "text": "Possible urinary obstruction; no confirming finding was recorded.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    },
+    {
+      "kind": "actual-treatment",
+      "text": "A blood sample was collected. No patient treatment was recorded.",
+      "sourceDiscussionIds": [
+        "d-urinary-assessment"
+      ]
+    },
+    {
+      "kind": "unknown",
+      "text": "No diagnostic results, confirmed diagnosis, medications, clinical response, or outcome were captured.",
+      "sourceDiscussionIds": [
+        "d-urinary-handover"
+      ]
+    }
+  ],
+  "linkBasis": "The later recordings explicitly refer to the cat from the earlier litter-box discussion.",
+  "uncertainties": [
+    "Last normal urination is unknown.",
+    "Laboratory results and final diagnosis are unknown.",
+    "Grooming is preserved as an anecdotal observation, not a proven association."
+  ]
+}
