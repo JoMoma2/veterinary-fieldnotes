@@ -2,7 +2,7 @@
 
 | Area | Verified state | Remaining prerequisite |
 |---|---|---|
-| Public website | https://veterinary-fieldnotes.pages.dev — initial native Git build succeeded | Verify the next automatic push deployment and deployed desktop/mobile checks |
+| Public website | https://veterinary-fieldnotes.pages.dev — native Git build and automatic push deployment succeeded | Desktop/mobile public audits passed |
 | Production data | Empty: zero articles, cases, shifts, discussions, or questions; demo data lives in separate fixtures | Actual content requires authorization and content-bound privacy review |
 | Git deployment settings | Public `JoMoma2/veterinary-fieldnotes`, production `main`, Node 24, `LIBRARY_DATASET=production`, `dist`, automatic production deployments enabled | Branch previews are deliberately disabled |
 | Private master synchronization | Real synthetic GitHub push, interrupted-push retry, local archive deletion repair, and fresh-clone recovery passed | Clinical cloud storage remains disabled pending separate authorization |
@@ -21,7 +21,8 @@
 - `docs/validation/remote-durability.json`: synthetic-only GitHub synchronization and loss/recovery drill; private remote commit included for reproducibility.
 - `docs/validation/hardware.json`: read-only hardware and installed-model inventory, without credentials or private configuration.
 - `docs/AI_ENVIRONMENT.md`: detailed compatibility diagnosis, MMM/FCC dependency findings, candidate rationale, and benchmark commands.
-- New browser suite: `E2E_PUBLIC=1 E2E_BASE_URL=https://veterinary-fieldnotes.pages.dev npm run test:e2e`; covers desktop/mobile, empty sections, Pagefind results/no matches, and inaccessible private paths.
+- Verified public deployment: `docs/validation/deployment.json` records the automatic `github:push` deployment and empty production counts.
+- Browser suite: `E2E_PUBLIC=1 E2E_BASE_URL=https://veterinary-fieldnotes.pages.dev npm run test:e2e`; covers desktop/mobile, empty sections, Pagefind results/no matches, and inaccessible private paths.
 
 ## Before the first real recording
 

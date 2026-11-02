@@ -18,7 +18,7 @@ Both are pushed on `main`. The initial GitHub Actions verification passed, inclu
 
 ## Awaiting configuration or external dependencies
 
-- Cloudflare Pages initial native Git deployment succeeded: https://veterinary-fieldnotes.pages.dev. Production is empty, automatic main deployments are enabled, and branch previews are disabled. See docs/OPERATIONAL_READINESS.md for deployment verification.
+- Cloudflare Pages native Git deployment and automatic main-push deployment succeeded: https://veterinary-fieldnotes.pages.dev. Production is empty, automatic main deployments are enabled, and branch previews are disabled. Public desktop/mobile, Pagefind, empty-state, and private-path audits passed. See docs/OPERATIONAL_READINESS.md and docs/validation/deployment.json for evidence.
 - Independent remote backup provider/rclone OAuth. No real or synthetic library backup has been uploaded to a cloud provider by this session.
 - Final extraction and transcription model choice; representative authorized benchmarking. No paid API was called. The tiny audio-smoke model is not a clinical recommendation.
 - Actual recorder in approximately three days: mount matching, authorization reference, file structure, WAV format, reliable timestamps/shift assignment, and throughput tests.

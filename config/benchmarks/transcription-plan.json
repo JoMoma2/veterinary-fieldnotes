@@ -1,12 +1,40 @@
 {
   "schemaVersion": 1,
-  "execution": "Not started. Diagnostics and configuration only; no new binaries, SDKs, drivers, or model downloads are authorized by this plan.",
+  "execution": "Large V3/GPU comparisons are not started. The cached tiny.en CPU synthetic baseline completed. No new binaries, SDKs, drivers, or models were installed.",
   "hardware": "AMD Radeon RX 7900 XTX, 24 GiB; Ryzen 7 7800X3D; 64 GB installed RAM",
   "scheduling": "One benchmark at a time. Check Ollama /api/ps and MMM/FCC activity first. Do not unload another application's model or change its service settings.",
   "candidates": [
-    {"backend":"whisper-cpp","build":"Vulkan","model":"Whisper Large V3 f16 GGML","status":"not installed","priority":1,"reason":"Existing Mesa RADV Vulkan driver works; avoids replacing ROCm or drivers."},
-    {"backend":"whisper-cpp","build":"HIP/ROCm gfx1100","model":"Whisper Large V3 f16 GGML","status":"not installed; HIP SDK/compiler absent","priority":2,"reason":"Compare after an isolated, explicitly approved build environment is available; do not replace Ollama's bundled runtime."},
-    {"backend":"whisper-cpp","build":"Vulkan","model":"Whisper Large V3 q5_0 GGML","status":"not installed","priority":3,"reason":"Compare lower memory usage and terminology accuracy against the f16 baseline."},
-    {"backend":"faster-whisper","build":"CPU int8, four threads","model":"tiny.en","status":"cached; diagnostic baseline only","priority":4,"reason":"Verifies the repeatable audio benchmark mechanically; not a candidate selected for clinical accuracy."}
+    {
+      "backend": "whisper-cpp",
+      "build": "Vulkan",
+      "model": "Whisper Large V3 f16 GGML",
+      "status": "not installed",
+      "priority": 1,
+      "reason": "Existing Mesa RADV Vulkan driver works; avoids replacing ROCm or drivers."
+    },
+    {
+      "backend": "whisper-cpp",
+      "build": "HIP/ROCm gfx1100",
+      "model": "Whisper Large V3 f16 GGML",
+      "status": "not installed; HIP SDK/compiler absent",
+      "priority": 2,
+      "reason": "Compare after an isolated, explicitly approved build environment is available; do not replace Ollama's bundled runtime."
+    },
+    {
+      "backend": "whisper-cpp",
+      "build": "Vulkan",
+      "model": "Whisper Large V3 q5_0 GGML",
+      "status": "not installed",
+      "priority": 3,
+      "reason": "Compare lower memory usage and terminology accuracy against the f16 baseline."
+    },
+    {
+      "backend": "faster-whisper",
+      "build": "CPU int8, four threads",
+      "model": "tiny.en",
+      "status": "cached; diagnostic baseline only",
+      "priority": 4,
+      "reason": "Verifies the repeatable audio benchmark mechanically; not a candidate selected for clinical accuracy."
+    }
   ]
 }

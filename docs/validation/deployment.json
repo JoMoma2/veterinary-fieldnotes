@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-02T11:02:06.844120Z",
+  "url": "https://veterinary-fieldnotes.pages.dev",
+  "project": "veterinary-fieldnotes",
+  "source": "JoMoma2/veterinary-fieldnotes",
+  "branch": "main",
+  "automaticTrigger": "github:push",
+  "verifiedCommit": "d70cf01702556e431e82535565f142142fbec81e",
+  "deploymentId": "6f803c89-e62f-45de-ada2-0324a140ac0f",
+  "status": "success",
+  "previewDeployments": "disabled",
+  "dataset": "production",
+  "recordCounts": {
+    "articles": 0,
+    "cases": 0,
+    "shifts": 0,
+    "discussions": 0,
+    "questions": 0
+  },
+  "browserChecks": {
+    "desktop": true,
+    "mobile": true,
+    "pagefindResultsAndNoMatches": true,
+    "privatePathsUnavailable": true
+  }
+}
