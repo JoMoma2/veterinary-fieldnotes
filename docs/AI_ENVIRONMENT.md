@@ -82,7 +82,7 @@ uv run --project pipeline vet-pipeline --config config/benchmarks/qwen3-30b.toml
 
 This real-model run is **prepared, not executed**. The benchmark records model digest inventory, prompt-contract hash, per-request generation settings, elapsed time, Ollama token/load timing, host CPU/RAM/GPU samples, exact-source validation, terminology/unknown-state screens, targeted retrieval, case count, and preservation of earlier article content. It retains human review fields for semantic completeness, invented details, terminology, linking, and update quality. Copied quotes are excluded from completeness screening. Lexical screens are not certified accuracy scores.
 
-Synthetic audio generation and transcription comparison are independent of the nightly service:
+The corpus generator emits mono 16-bit PCM at 16 kHz for whisper.cpp compatibility. Its resampling is limited to generated test speech; recorder media is never modified. Synthetic audio generation and transcription comparison are independent of the nightly service:
 
 ```bash
 uv run --project pipeline python scripts/generate-benchmark-audio.py --output /PRIVATE/new-synthetic-audio

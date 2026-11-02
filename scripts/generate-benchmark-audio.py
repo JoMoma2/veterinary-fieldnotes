@@ -6,6 +6,7 @@ import ctypes.util
 import json
 import wave
 from pathlib import Path
+from vet_pipeline.synthetic_audio import resample_pcm16_mono
 
 p = argparse.ArgumentParser()
 p.add_argument("--output", required=True, type=Path)
@@ -57,8 +58,8 @@ for id, text, terms in texts:
     with wave.open(str(file), "wb") as wav:
         wav.setnchannels(1)
         wav.setsampwidth(2)
-        wav.setframerate(rate)
-        wav.writeframes(b"".join(samples))
+        wav.setframerate(16000)
+        wav.writeframes(resample_pcm16_mono(b"".join(samples), rate))
     rows.append({"id": id, "file": file.name, "reference": text, "terminology": terms})
 manifest = a.output / "manifest.json"
 manifest.write_text(

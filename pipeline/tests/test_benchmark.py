@@ -74,3 +74,15 @@ def test_audio_scoring_and_cpp_offsets():
                 ]
             }
         )
+
+
+def test_synthetic_corpus_pcm_is_compatible_with_16khz_whisper_cli():
+    from array import array
+    from vet_pipeline.synthetic_audio import resample_pcm16_mono
+
+    source = array("h", [1000] * 22050).tobytes()
+    converted = resample_pcm16_mono(source, 22050)
+    assert len(converted) == 16000 * 2
+    assert all(v == 1000 for v in array("h", converted))
+    with pytest.raises(ValueError):
+        resample_pcm16_mono(b"bad", 22050)
