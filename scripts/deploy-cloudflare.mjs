@@ -4,14 +4,11 @@ const dataset = process.env.LIBRARY_DATASET ?? 'production';
 const info = JSON.parse(await readFile('dist/build-info.json', 'utf8'));
 if (dataset !== 'production' || info.dataset !== 'production')
   throw new Error('Only a production build may be deployed');
-if (!process.env.CLOUDFLARE_API_TOKEN || !process.env.CLOUDFLARE_ACCOUNT_ID)
-  throw new Error('Configure Cloudflare credentials outside source control first');
+// Wrangler uses protected local OAuth for owner commands or environment credentials in CI.
 const result = spawnSync(
   'npm',
   [
     'exec',
-    '--yes',
-    '--package=wrangler@4',
     '--',
     'wrangler',
     'pages',

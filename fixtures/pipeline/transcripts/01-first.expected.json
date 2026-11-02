@@ -8,5 +8,17 @@
   "must_not_assert": [
     "confirmed hyperkalemia",
     "patient recovered uneventfully"
-  ]
+  ],
+  "must_remain_unknown": [
+    "diagnosis",
+    "outcome"
+  ],
+  "unsupported_evidence_kinds": [
+    "confirmed-diagnosis",
+    "actual-treatment"
+  ],
+  "terminology": [
+    "grooming"
+  ],
+  "expected_cases_after": 1
 }

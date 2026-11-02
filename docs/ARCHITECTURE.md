@@ -4,7 +4,7 @@
 
 1. **Application repository (public):** website, pipeline code, schemas, synthetic test fixtures, and explicitly reviewed production exports. No actual recordings or private processing data.
 2. **Local private workspace:** job ledger, copied audio, transcripts, model outputs, quarantined questions, canonical record transactions, and two regenerable local Markdown/JSON projections. Default `~/.local/share/vet-fieldnotes`, created owner-only.
-3. **Private master repository:** a separate initially empty scaffold. Later, authorized permanent records and sanitized processing status may be synchronized. A private GitHub repository is still third-party storage and is not automatically authorized for clinical content.
+3. **Private master repository:** a separate private archive, currently populated only with synthetic durability-test records. Authorized permanent records, recovery manifests, and sanitized processing status can be synchronized. A private GitHub repository is still third-party storage and is not automatically authorized for clinical content.
 4. **Independent encrypted backups:** historical immutable `.vkb` files, optional rclone remote, and a separately retained secret key. No audio or temporary transcripts in backups.
 5. **Public website:** only the dedicated reviewed export root. Builds reject synthetic production records, omit non-public records and inaccessible references, and disable source maps. Review identities/authorization details stay private.
 
@@ -51,4 +51,4 @@ Optional rclone copy uses immutable object naming and verifies downloaded encryp
 
 ## Limits to address before long unattended use
 
-No paid API/model is selected. No exact recorder, GPU, clock reliability, or 12-hour processing speed is assumed. The architecture is tested with 105 independently queued recordings, not two years of accumulated medical material. Retrieval-index rebuilding, full-library validation, and append-only note growth should be measured against a larger realistic library before deployment at scale. No medical fact-check agent or elaborate multi-agent process is required.
+The native Cloudflare Pages production deployment is connected to the public GitHub repository, with production data and branch previews disabled. No paid API/model is selected. No exact recorder, GPU, clock reliability, or 12-hour processing speed is assumed. The architecture is tested with 105 independently queued recordings, not two years of accumulated medical material. Retrieval-index rebuilding, full-library validation, and append-only note growth should be measured against a larger realistic library before deployment at scale. No medical fact-check agent or elaborate multi-agent process is required.

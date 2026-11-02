@@ -1,6 +1,7 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { load } from 'cheerio';
+import { getLibrary } from '../src/lib/library';
 async function files(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
   return (
@@ -42,10 +43,18 @@ console.log(
   `Verified ${htmls.length} HTML pages and ${links} internal links/anchors; no private sentinel, source maps, or audio.`,
 );
 
+const publicLibrary = await getLibrary();
 await writeFile(
   'dist/build-info.json',
   JSON.stringify({
     dataset: process.env.LIBRARY_DATASET ?? 'production',
     builtAt: new Date().toISOString(),
+    commit: process.env.CF_PAGES_COMMIT_SHA ?? process.env.GITHUB_SHA ?? null,
+    recordCounts: Object.fromEntries(
+      ['articles', 'cases', 'shifts', 'discussions', 'questions'].map((k) => [
+        k,
+        publicLibrary[k as keyof typeof publicLibrary].length,
+      ]),
+    ),
   }),
 );

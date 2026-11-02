@@ -12,13 +12,13 @@
 ## Remote repositories
 
 - Public application: https://github.com/JoMoma2/veterinary-fieldnotes
-- Private master scaffold: https://github.com/JoMoma2/veterinary-fieldnotes-master
+- Private master: https://github.com/JoMoma2/veterinary-fieldnotes-master
 
-Both are pushed on `main`. The initial GitHub Actions verification passed, including all three website datasets and both browser suites. The public repository contains application code, synthetic fixtures, and an empty production library. The private repository contains only the README/ignore scaffold. No actual records, credentials, keys, temporary transcripts, or audio were uploaded.
+Both are pushed on `main`. The initial GitHub Actions verification passed, including all three website datasets and both browser suites. The public repository contains application code, synthetic fixtures, and an empty production library. The private repository now also contains exclusively synthetic durability-drill records, sanitized processing status, and an integrity/recovery manifest. Fresh-clone recovery and interrupted synchronization were exercised against GitHub. No actual records, credentials, keys, temporary transcripts, or audio were uploaded.
 
 ## Awaiting configuration or external dependencies
 
-- Cloudflare Pages account connection. Neither API credentials nor local Wrangler OAuth is configured; no live site deployment occurred.
+- Cloudflare Pages initial native Git deployment succeeded: https://veterinary-fieldnotes.pages.dev. Production is empty, automatic main deployments are enabled, and branch previews are disabled. See docs/OPERATIONAL_READINESS.md for deployment verification.
 - Independent remote backup provider/rclone OAuth. No real or synthetic library backup has been uploaded to a cloud provider by this session.
 - Final extraction and transcription model choice; representative authorized benchmarking. No paid API was called. The tiny audio-smoke model is not a clinical recommendation.
 - Actual recorder in approximately three days: mount matching, authorization reference, file structure, WAV format, reliable timestamps/shift assignment, and throughput tests.
@@ -27,4 +27,4 @@ Both are pushed on `main`. The initial GitHub Actions verification passed, inclu
 
 ## Next recommended work
 
-Connect the empty production site to free Cloudflare Pages, then benchmark candidates and test the real recorder in a separate authorized local workspace. Measure an entire shift before enabling unattended operation. Use this foundation to evaluate quality and reliability; do not assume production readiness for unattended clinical processing from the synthetic tests alone.
+Verify public deployment and benchmark candidates in isolation, then test the real recorder in a separate authorized local workspace. Measure an entire shift before enabling unattended operation. Use this foundation to evaluate quality and reliability; do not assume production readiness for unattended clinical processing from the synthetic tests alone.

@@ -1,16 +1,49 @@
 from __future__ import annotations
-import json, subprocess
+import json
+import os
+import re
+import shutil
+import subprocess
 from pathlib import Path
-from .library import current, write_library
-from .util import write_json, lock
+from urllib.parse import urlparse
+
+from .library import current, materialize, validate_library, write_library
+from .recovery import verify_snapshot
+from .util import load_json, write_json, lock
 
 
-def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
-    # This path is a separately initialized private checkout. No audio, transcripts, keys, or credentials are copied.
-    if not (checkout / ".git").exists():
-        raise ValueError("Initialize the private master checkout first")
+def _git(checkout, *args, check=True):
+    return subprocess.run(
+        ["git", *args],
+        cwd=checkout,
+        check=check,
+        capture_output=True,
+        text=True,
+        timeout=90,
+    )
+
+
+def _verify_private(checkout):
+    # Verify the actual push remote, not GH_REPO or gh's inferred default repository.
+    remote = _git(checkout, "remote", "get-url", "--push", "origin").stdout.strip()
+    if remote.startswith("git@github.com:"):
+        name = remote.removeprefix("git@github.com:").removesuffix(".git")
+    else:
+        url = urlparse(remote)
+        if (
+            url.scheme != "https"
+            or url.hostname != "github.com"
+            or url.username
+            or url.password
+        ):
+            raise ValueError(
+                "Master origin must be a credential-free GitHub repository URL"
+            )
+        name = url.path.strip("/").removesuffix(".git")
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", name):
+        raise ValueError("Invalid master GitHub repository")
     repo = subprocess.run(
-        ["gh", "repo", "view", "--json", "visibility"],
+        ["gh", "repo", "view", name, "--json", "visibility"],
         cwd=checkout,
         check=True,
         capture_output=True,
@@ -21,8 +54,18 @@ def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
         raise ValueError(
             "Master synchronization requires a verified private GitHub repository"
         )
+    return name
+
+
+def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
+    checkout = checkout.resolve()
+    if not (checkout / ".git").exists():
+        raise ValueError("Initialize the private master checkout first")
+    repository = _verify_private(checkout)
+    if _git(checkout, "branch", "--show-current").stdout.strip() != "main":
+        raise ValueError("Master synchronization requires the main branch")
     with lock(store.root):
-        lib = current(store)
+        lib = validate_library(current(store))
         real = any(
             e["origin"] != "synthetic"
             for group, values in lib.items()
@@ -33,62 +76,106 @@ def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
             raise ValueError(
                 "Private repository storage of clinical material requires explicit authorization"
             )
-        target = checkout / "archive"
-        # Historical snapshots in Git remain restorable; current projection is refreshed in full.
-        import shutil
-
-        staged = checkout / ".archive-staged"
+        # A lost/empty local database must not replace a populated remote archive.
+        tracked = _git(
+            checkout, "ls-tree", "-r", "--name-only", "HEAD", "archive", check=False
+        )
+        incoming = {
+            f"archive/{group}/{e['id']}{'.md' if group == 'articles' else '.json'}"
+            for group, entries in lib.items()
+            if group != "topics"
+            for e in entries
+        }
+        old_records = {
+            p
+            for p in tracked.stdout.splitlines()
+            if len(Path(p).parts) == 3
+            and Path(p).parts[1]
+            in ["articles", "cases", "shifts", "discussions", "questions"]
+        }
+        if old_records - incoming:
+            raise ValueError(
+                "Local archive is missing committed records; recover from remote before synchronizing"
+            )
+        unrelated = [
+            p
+            for p in _git(
+                checkout, "diff", "--cached", "--name-only"
+            ).stdout.splitlines()
+            if not (p.startswith("archive/") or p == "processing-status.json")
+        ]
+        if unrelated:
+            raise ValueError("Unrelated staged changes must be committed separately")
+        snapshot = materialize(store)
+        if snapshot is None:
+            raise ValueError("No completed knowledge to synchronize")
+        target, staged, previous = (
+            checkout / name
+            for name in ["archive", ".archive-staged", ".archive-previous"]
+        )
+        if any(p.is_symlink() for p in [target, staged, previous]):
+            raise ValueError("Master archive directories must not be symlinks")
         if staged.exists():
             shutil.rmtree(staged)
         write_library(staged, lib)
+        write_json(staged / "manifest.json", load_json(snapshot / "manifest.json"))
+        verify_snapshot(staged)
+        if previous.exists():
+            shutil.rmtree(previous)
         if target.exists():
-            shutil.rmtree(target)
-        staged.rename(target)
+            os.replace(target, previous)
+        try:
+            os.replace(staged, target)
+        except BaseException:
+            if previous.exists():
+                os.replace(previous, target)
+            raise
         write_json(
             checkout / "processing-status.json",
             [
-                {
-                    "id": j["id"],
-                    "sha256": j["sha256"],
-                    "stage": j["stage"],
-                    "attempts": j["attempts"],
-                    "error": j["error"],
-                }
+                {key: j[key] for key in ["id", "sha256", "stage", "attempts", "error"]}
                 for j in store.jobs()
             ],
         )
-        subprocess.run(
-            ["git", "add", "--", "archive", "processing-status.json"],
-            cwd=checkout,
-            check=True,
-            timeout=30,
-        )
-        changed = subprocess.run(
-            ["git", "diff", "--cached", "--quiet"], cwd=checkout, timeout=30
+        _git(checkout, "add", "--", "archive", "processing-status.json")
+        changed = _git(
+            checkout,
+            "diff",
+            "--cached",
+            "--quiet",
+            "--",
+            "archive",
+            "processing-status.json",
+            check=False,
         ).returncode
         if changed == 1:
-            subprocess.run(
-                [
-                    "git",
-                    "commit",
-                    "-m",
-                    "Save authorized knowledge snapshot",
-                    "--",
-                    "archive",
-                    "processing-status.json",
-                ],
-                cwd=checkout,
-                check=True,
-                timeout=30,
+            _git(
+                checkout,
+                "commit",
+                "-m",
+                "Save authorized knowledge snapshot",
+                "--",
+                "archive",
+                "processing-status.json",
             )
         elif changed != 0:
             raise RuntimeError("Unable to inspect staged master changes")
+        commit = _git(checkout, "rev-parse", "HEAD").stdout.strip()
+        verified = False
         if push:
-            subprocess.run(
-                ["git", "push", "origin", "main"],
-                cwd=checkout,
-                check=True,
-                timeout=90,
-                capture_output=True,
-            )
-        return {"updated": changed == 1, "pushed": push}
+            _git(checkout, "push", "origin", "main")
+            remote_head = _git(
+                checkout, "ls-remote", "origin", "refs/heads/main"
+            ).stdout.split()
+            if not remote_head or remote_head[0] != commit:
+                raise RuntimeError("Remote master commit verification failed")
+            verified = True
+        if previous.exists():
+            shutil.rmtree(previous)
+        return {
+            "updated": changed == 1,
+            "pushed": push,
+            "remote_verified": verified,
+            "commit": commit,
+            "repository": repository,
+        }

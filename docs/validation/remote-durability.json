@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-02T10:34:32.857229Z",
+  "syntheticOnly": true,
+  "repository": "JoMoma2/veterinary-fieldnotes-master",
+  "remoteCommit": "ba423559e06ffdd0cb33e746132804bc73cdd236",
+  "counts": {
+    "topics": 3,
+    "articles": 4,
+    "cases": 1,
+    "shifts": 1,
+    "discussions": 6,
+    "questions": 3
+  },
+  "checks": {
+    "verifiedGitHubPush": true,
+    "interruptedPushResumed": true,
+    "accidentalCheckoutDeletionRepaired": true,
+    "freshCloneWithoutSourceWorkspaceRecovered": true,
+    "duplicateDetectionRecovered": true,
+    "caseContinuityManifestRecovered": true,
+    "encryptedBackupRestored": true
+  },
+  "independentProviderBackup": "Not configured; encrypted backup used in this drill is local. A GitHub clone proves off-computer storage, not a second-provider backup.",
+  "keyCustody": "Drill-only key remains in the protected work directory. No key or audio was uploaded."
+}

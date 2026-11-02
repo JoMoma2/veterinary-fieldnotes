@@ -2,7 +2,7 @@
 
 A local-first veterinary learning system: authorized recordings become source-linked discussions, case records, additive knowledge notes, and pre-generated study questions. Private processing and public publication are separate.
 
-**Current state:** a working static website, resumable Python pipeline, synthetic end-to-end workflow, tested encrypted backup/restore, and configurable USB/systemd, GitHub, and Cloudflare integrations. Production starts with **zero** articles, cases, shifts, discussions, or questions. No live inference, cloud clinical upload, recorder deletion, or background service is enabled.
+**Current state:** a working static website, resumable Python pipeline, synthetic end-to-end workflow, tested encrypted backup/restore, and configurable USB/systemd, GitHub, and Cloudflare integrations. Production starts with **zero** articles, cases, shifts, discussions, or questions. No cloud clinical upload, recorder deletion, or background service is enabled. The empty production website is live at https://veterinary-fieldnotes.pages.dev; the private GitHub archive contains synthetic durability-test records only.
 
 ## Open the website
 
@@ -127,4 +127,4 @@ The initial empty-production assertion is intentional; adapt it when genuinely a
 
 ## Continue development
 
-Read [AGENTS.md](AGENTS.md), [architecture decisions](docs/ARCHITECTURE.md), and [current status](docs/STATUS.md). Next: connect Cloudflare, benchmark candidate local extraction/transcription models on authorized material, configure recorder matching when the hardware arrives, and dry-run USB import and service operation. Real-model factual accuracy, 12-hour throughput, recorder clock behavior, and long-term unattended reliability remain to be measured. No 90% capture guarantee is made.
+Read [AGENTS.md](AGENTS.md), [architecture decisions](docs/ARCHITECTURE.md), and [current status](docs/STATUS.md). Next: inspect the [operational readiness report](docs/OPERATIONAL_READINESS.md), benchmark candidate local extraction/transcription models on authorized material, configure recorder matching when the hardware arrives, and dry-run USB import and service operation. Real-model factual accuracy, 12-hour throughput, recorder clock behavior, and long-term unattended reliability remain to be measured. No 90% capture guarantee is made.

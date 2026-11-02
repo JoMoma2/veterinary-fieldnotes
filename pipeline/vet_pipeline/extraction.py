@@ -96,6 +96,7 @@ PROMPT = """You extract a detailed veterinary learning archive from authorized t
 class Provider:
     def __init__(self, cfg):
         self.cfg = cfg
+        self.last_metrics = {}
 
     def extract(self, transcript, context, origin):
         authorize_provider(self.cfg, origin)
@@ -148,8 +149,15 @@ class Provider:
                 "messages": messages,
                 "stream": False,
                 "format": SCHEMA,
-                "options": {"temperature": 0},
+                "options": {
+                    "temperature": 0,
+                    "num_ctx": p["context_window"],
+                    "num_predict": p["max_output_tokens"],
+                },
+                "keep_alive": p["keep_alive"],
             }
+            if p["thinking"] is not None:
+                body["think"] = p["thinking"]
         else:
             import os
 
@@ -173,6 +181,21 @@ class Provider:
             if r.status_code >= 400:
                 raise RuntimeError(f"Inference HTTP status {r.status_code}")
             v = r.json()
+        if p["kind"] == "ollama":
+            self.last_metrics = {
+                k: v.get(k)
+                for k in [
+                    "total_duration",
+                    "load_duration",
+                    "prompt_eval_count",
+                    "prompt_eval_duration",
+                    "eval_count",
+                    "eval_duration",
+                    "done_reason",
+                ]
+            }
+        else:
+            self.last_metrics = {"usage": v.get("usage")}
         content = (
             v["message"]["content"]
             if p["kind"] == "ollama"

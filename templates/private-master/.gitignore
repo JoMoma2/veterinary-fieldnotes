@@ -9,3 +9,5 @@ inputs/
 transcripts/
 extractions/
 backups/
+.archive-staged/
+.archive-previous/

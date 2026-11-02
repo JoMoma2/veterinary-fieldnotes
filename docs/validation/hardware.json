@@ -1,0 +1,163 @@
+{
+  "os": "Ubuntu 26.04.1 LTS",
+  "kernel": "7.0.0-38-generic",
+  "cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+  "logicalCpus": 16,
+  "ramTotalBytes": 65411096576,
+  "ramAvailableBytes": 51285852160,
+  "diskFreeBytes": 1797954891776,
+  "gpus": [
+    {
+      "card": "card1",
+      "vendor": "0x1002",
+      "device": "0x744c",
+      "vramTotalBytes": 25753026560,
+      "vramUsedBytes": 1050710016,
+      "busyPercent": 1,
+      "driver": "amdgpu"
+    },
+    {
+      "card": "card2",
+      "vendor": "0x1002",
+      "device": "0x164e",
+      "vramTotalBytes": 536870912,
+      "vramUsedBytes": 16662528,
+      "busyPercent": 0,
+      "driver": "amdgpu"
+    }
+  ],
+  "systemRocmSdkPresent": false,
+  "tools": {
+    "rocminfo": false,
+    "hipcc": false,
+    "vulkaninfo": true,
+    "cmake": false,
+    "ninja": false,
+    "whisper-cli": false
+  },
+  "ollama": {
+    "version": "0.34.0",
+    "models": [
+      {
+        "name": "llama2:7b",
+        "digest": "78e26419b4469263f75331927a00a0284ef6544c1975b826b15abdaef17bb962",
+        "size": 3826793677,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "7B",
+          "quantization_level": "Q4_0",
+          "context_length": 4096,
+          "embedding_length": 4096
+        }
+      },
+      {
+        "name": "llama2:latest",
+        "digest": "78e26419b4469263f75331927a00a0284ef6544c1975b826b15abdaef17bb962",
+        "size": 3826793677,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "7B",
+          "quantization_level": "Q4_0",
+          "context_length": 4096,
+          "embedding_length": 4096
+        }
+      },
+      {
+        "name": "llama3.2:latest",
+        "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+        "size": 2019393189,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "3.2B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 131072,
+          "embedding_length": 3072
+        }
+      },
+      {
+        "name": "phi3:mini",
+        "digest": "4f222292793889a9a40a020799cfd28d53f3e01af25d48e06c5e708610fc47e9",
+        "size": 2176178913,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "phi3",
+          "families": [
+            "phi3"
+          ],
+          "parameter_size": "3.8B",
+          "quantization_level": "Q4_0",
+          "context_length": 131072,
+          "embedding_length": 3072
+        }
+      },
+      {
+        "name": "tinyllama:latest",
+        "digest": "2644915ede352ea7bdfaff0bfac0be74c719d5d5202acb63a6fb095b52f394a4",
+        "size": 637700138,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "1B",
+          "quantization_level": "Q4_0",
+          "context_length": 2048,
+          "embedding_length": 2048
+        }
+      },
+      {
+        "name": "llama3:latest",
+        "digest": "365c0bd3c000a25d28ddbf732fe1c6add414de7275464c4e4d1c3b5fcb5d8ad1",
+        "size": 4661224676,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "8.0B",
+          "quantization_level": "Q4_0",
+          "context_length": 8192,
+          "embedding_length": 4096
+        }
+      },
+      {
+        "name": "qwen3:30b",
+        "digest": "ad815644918f0eaab341c12b67837cc6dd4562342cdaf118f83d5d554cb37226",
+        "size": 18556699314,
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen3moe",
+          "families": [
+            "qwen3moe"
+          ],
+          "parameter_size": "30.5B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 262144,
+          "embedding_length": 2048
+        }
+      }
+    ],
+    "loaded": []
+  }
+}

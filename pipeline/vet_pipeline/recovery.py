@@ -1,8 +1,28 @@
 from __future__ import annotations
 import json
+import hashlib
 from pathlib import Path
 from .library import read_library, validate_library, materialize
 from .util import load_json, lock, now
+
+
+def verify_snapshot(source: Path):
+    lib = validate_library(read_library(source))
+    manifest = load_json(source / "manifest.json")
+    actual = hashlib.sha256(
+        json.dumps(lib, sort_keys=True, ensure_ascii=False).encode()
+    ).hexdigest()
+    if manifest.get("contentHash") != actual:
+        raise ValueError(
+            "Recovery snapshot content does not match its integrity manifest"
+        )
+    recording_ids = {r["id"] for shift in lib["shifts"] for r in shift["recordings"]}
+    if set(manifest.get("applied", [])) != recording_ids:
+        raise ValueError("Recovery snapshot is missing completed-recording checkpoints")
+    cases = {c["id"] for c in lib["cases"]}
+    if not set(manifest.get("caseKeys", {}).values()) <= cases:
+        raise ValueError("Recovery snapshot has invalid case continuity references")
+    return lib, manifest
 
 
 def recover_library(store, source: Path):
@@ -12,8 +32,7 @@ def recover_library(store, source: Path):
             or store.db.execute("SELECT COUNT(*) FROM library_records").fetchone()[0]
         ):
             raise ValueError("Recover into a new, empty workspace")
-        lib = validate_library(read_library(source))
-        manifest = load_json(source / "manifest.json")
+        lib, manifest = verify_snapshot(source)
         with store.db:
             for group, entries in lib.items():
                 for e in entries:

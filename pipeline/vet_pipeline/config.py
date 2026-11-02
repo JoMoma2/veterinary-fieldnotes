@@ -13,6 +13,10 @@ DEFAULT = {
         "allow_paid": False,
         "timeout_seconds": 120,
         "context_char_limit": 12000,
+        "context_window": 8192,
+        "max_output_tokens": 4096,
+        "thinking": None,
+        "keep_alive": "0",
         "transcript_char_limit": 24000,
     },
     "transcription": {

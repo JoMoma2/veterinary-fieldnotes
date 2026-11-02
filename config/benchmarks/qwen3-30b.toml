@@ -1,0 +1,14 @@
+# Existing model. Request-only settings; does not alter Ollama/MMM/FCC configuration.
+[provider]
+kind = "ollama"
+model = "qwen3:30b"
+base_url = "http://127.0.0.1:11434"
+allow_remote = false
+allow_paid = false
+timeout_seconds = 300
+context_window = 8192
+max_output_tokens = 4096
+thinking = false
+keep_alive = "0"
+context_char_limit = 6000
+transcript_char_limit = 12000

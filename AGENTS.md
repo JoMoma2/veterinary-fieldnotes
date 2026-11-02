@@ -16,7 +16,7 @@ Build and maintain a low-intervention veterinary knowledge acquisition system th
 
 ## Checkout and architecture
 
-Application: `/home/quinten/vet-knowledge-library`; separate private scaffold: `/home/quinten/vet-knowledge-master`.
+Application: `/home/quinten/vet-knowledge-library`; separate private master checkout: `/home/quinten/vet-knowledge-master`.
 
 Public app uses Astro 7.4.4 + strict TypeScript + shared CSS + small vanilla browser scripts. Full-text Pagefind indexes the built HTML. The notebook visual style is in `src/styles/global.css`, not scattered styling abstractions. `src/lib/schemas.ts` defines version-1 Zod contracts; `npm run schemas` exports JSON Schema to `schemas/` for Python.
 
@@ -48,17 +48,19 @@ Astro auto-backgrounds in detected agent contexts. Playwright's server uses `--i
 
 ## Current development status
 
-The website, synthetic processing/consolidation workflow, quote/reference validation, encrypted backup/recovery, and independent failure handling are implemented and tested. Production has no articles/cases/shifts/discussions/questions. GitHub repositories were created under JoMoma2; consult `docs/STATUS.md` for publication/CI status. Cloudflare credentials, rclone authorization, actual recorder configuration, and final model selection remain absent. No systemd service is installed or enabled, no real clinical data was processed, and no paid API was called.
+The website, synthetic processing/consolidation workflow, quote/reference validation, encrypted backup/recovery, and independent failure handling are implemented and tested. Production has no articles/cases/shifts/discussions/questions. GitHub repositories were created under JoMoma2; consult `docs/STATUS.md` for publication/CI status. Cloudflare Pages is deployed at https://veterinary-fieldnotes.pages.dev with native public GitHub integration, production dataset, and branch previews disabled. Wrangler OAuth and Codex Cloudflare MCP are authenticated; 19 Cloudflare skills are installed in ~/.agents/skills. The private master now contains only synthetic remote-durability test records and recovery manifests. rclone authorization, recorder configuration, and final model selection remain absent. No systemd service is installed or enabled, no real clinical data was processed, and no paid API was called.
 
-Latest local verification: 16 TypeScript unit tests, 35 Python tests including a 105-file batch, 12 populated-demo browser tests, 1 empty-production browser test, type checking, all three dataset builds, internal links/anchors, safe encrypted restoration, and genuine local Faster-Whisper inference on generated speech. See `docs/TESTING.md`. Update counts if adding tests.
+Latest local verification: 16 TypeScript unit tests, 45 Python tests including a 105-file batch, 12 populated-demo browser tests, 1 empty-production browser test, 4 desktop/mobile production-audit tests, type checking, all three dataset builds, internal links/anchors, safe encrypted restoration, and genuine local Faster-Whisper inference on generated speech. See `docs/TESTING.md`. Update counts if adding tests.
 
 ## Next priorities / limitations
 
-1. Connect free Cloudflare Pages to the public repository with production-only dataset settings; no credentials are currently configured.
-2. Benchmark actual candidate extraction/transcription models locally and on authorized representative transcripts. Mock output does not establish AI accuracy. Tiny speech-smoke model made wording errors and is not a clinical recommendation.
+1. Keep the native Cloudflare Pages deployment on the production dataset; confirm automatic pushes and use the production browser audit after deployment. See docs/OPERATIONAL_READINESS.md for current evidence.
+2. Read docs/AI_ENVIRONMENT.md before any local AI changes. CPU is Ryzen 7 7800X3D; GPU is RX 7900 XTX 24 GiB; Ollama bundled ROCm 7.2 acceleration works. MMM explicitly depends on qwen3:30b; FCC is active. No driver/SDK/service/model/config changes without authorization. Benchmark actual candidate extraction/transcription models locally and on authorized representative transcripts. Mock output does not establish AI accuracy. Tiny speech-smoke model made wording errors and is not a clinical recommendation.
 3. Test recorder mounts, timestamps, PCM/WAV behavior, voice-activation gaps, and correct shift assignment when hardware arrives. The current watcher groups by import date unless overridden; automatic overnight/multi-shift classification is unverified.
 4. Dry-run the user systemd service and test a complete real authorized shift before enabling timers or retention. Confirm user-manager availability after logout.
 5. Measure full-library validation, retrieval rebuilding, append-only note growth, memory, and 12-hour workload throughput at realistic scale before claiming years of unattended readiness.
 6. Preserve ID stability and backward data compatibility. Introduce explicit migrations for future schema/ledger changes. Initial tests assert production is empty; replace that initial-state assertion deliberately when approved production records are added.
 
 Do not claim cloud integration is live or real-model medical accuracy is established just because adapter tests pass. Do not rerun successful model stages after an upload failure. Keep documentation and these handoff instructions current.
+
+Current benchmark preparation: config/benchmarks contains per-request Ollama and Large V3/Vulkan/HIP plans. The sequential benchmark now exercises retrieval and safe updates, records host resource sampling and lexical/type screens, and still requires human semantic review. Only mock extraction and cached tiny.en synthetic audio were run; no new model downloads or paid calls. Private Git synchronization now includes an integrity/recovery manifest, verifies the actual push remote is private, refuses missing-record deletions, and verifies the pushed commit.

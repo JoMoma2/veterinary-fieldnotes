@@ -123,7 +123,7 @@ The nightly importer never grants publication approval. Successful private proce
 
 ## GitHub
 
-Two repositories are prepared: `veterinary-fieldnotes` (public) and `veterinary-fieldnotes-master` (private). The initial private scaffold contains no records. Run setup for another account as needed:
+Two repositories are prepared: `veterinary-fieldnotes` (public) and `veterinary-fieldnotes-master` (private). The private archive now contains synthetic durability-test records only. Synchronization includes an integrity/recovery manifest and verifies the remote commit. It refuses to replace committed records with an empty/incomplete local archive. Run setup for another account as needed:
 
 ```bash
 gh auth login
@@ -153,7 +153,7 @@ No paid service is needed for the static website. Connect the public repository 
 
 Set the same production dataset for preview builds. Do not attach a private master repository or add private workspace content/secrets to build contexts. Native Pages Git integration rebuilds on approved-content commits. `wrangler.toml` and `_headers` are supplied. CI verifies production, demo, and pipeline behavior without deploying demonstration output.
 
-Alternatively, after creating the free Pages project, configure `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and optional `CLOUDFLARE_PROJECT_NAME` outside source control. Then `npm run build && npm run deploy`. The deployment helper refuses a non-production build, even if the shell dataset is changed afterward. It does not create a paid resource. Do not add tokens to command arguments, repository files, or logs. No Cloudflare account is connected by default.
+Alternatively, after creating the free Pages project, configure `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, and optional `CLOUDFLARE_PROJECT_NAME` outside source control. Then `npm run build && npm run deploy`. The deployment helper refuses a non-production build, even if the shell dataset is changed afterward. It does not create a paid resource. Do not add tokens to command arguments, repository files, or logs. This installation is now connected with protected local Wrangler OAuth. The production Pages site is https://veterinary-fieldnotes.pages.dev; native Git builds need no long-lived token stored in GitHub.
 
 ## Encrypted backups, remote storage, and restore
 
@@ -207,3 +207,7 @@ systemctl --user enable --now vet-fieldnotes.timer
 ```
 
 The timer checks every two minutes after the prior service finishes; file locks stop overlapping runs. This polling approach tolerates missed mount events without recorder-specific udev assumptions. No service was activated during implementation. Disable with `systemctl --user disable --now vet-fieldnotes.timer`.
+
+## Current local AI compatibility and benchmarks
+
+Read [AI_ENVIRONMENT.md](AI_ENVIRONMENT.md) before changing local AI tooling. The existing Ollama installation already accelerates on the 7900 XTX through bundled ROCm. There is no system HIP compiler. Preserve MMM/FCC dependencies and use the project-specific request settings in `config/benchmarks`. No model download or driver/SDK change is part of benchmark execution. Use `scripts/remote-durability-drill.py` with a new protected work directory to repeat the synthetic GitHub recovery exercise. It never publishes to the website or enables clinical storage.

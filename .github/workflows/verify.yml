@@ -31,3 +31,4 @@ jobs:
       # Always finish with an empty/approved production build, never deploy the demonstration bundle.
       - run: npm run build
       - run: E2E_EMPTY=1 npm run test:e2e
+      - run: E2E_PUBLIC=1 npm run test:e2e
