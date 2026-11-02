@@ -11,6 +11,11 @@ from vet_pipeline.synthetic_audio import resample_pcm16_mono
 p = argparse.ArgumentParser()
 p.add_argument("--output", required=True, type=Path)
 p.add_argument("--corpus", choices=["basic", "pipeline"], default="basic")
+p.add_argument(
+    "--timed",
+    action="store_true",
+    help="Synthesize source utterances separately with known buffer boundaries",
+)
 a = p.parse_args()
 if a.output.exists():
     raise SystemExit("Choose a new directory; existing audio is never overwritten")
@@ -37,6 +42,7 @@ def callback(data, count, events):
 
 
 lib.espeak_SetSynthCallback(callback)
+utterances = {}
 texts = [
     (
         "history",
@@ -57,20 +63,48 @@ if a.corpus == "pipeline":
         if file.name.endswith(".expected.json"):
             continue
         original = json.loads(file.read_text())
-        texts.append((file.stem, " ".join(s["text"] for s in original["segments"]), []))
+        expected = file.with_suffix(".expected.json")
+        terms = (
+            json.loads(expected.read_text()).get("terminology", [])
+            if expected.exists()
+            else []
+        )
+        texts.append(
+            (file.stem, " ".join(s["text"] for s in original["segments"]), terms)
+        )
+        utterances[file.stem] = [s["text"] for s in original["segments"]]
 rows = []
 for id, text, terms in texts:
-    samples.clear()
-    encoded = text.encode()
-    lib.espeak_Synth(ctypes.c_char_p(encoded), len(encoded) + 1, 0, 1, 0, 1, None, None)
-    lib.espeak_Synchronize()
+    pcm = bytearray()
+    boundaries = []
+    for part in utterances.get(id, [text]) if a.timed else [text]:
+        samples.clear()
+        encoded = part.encode()
+        lib.espeak_Synth(
+            ctypes.c_char_p(encoded), len(encoded) + 1, 0, 1, 0, 1, None, None
+        )
+        lib.espeak_Synchronize()
+        chunk = resample_pcm16_mono(b"".join(samples), rate)
+        start = len(pcm) / 32000
+        pcm.extend(chunk)
+        boundaries.append({"start": start, "end": len(pcm) / 32000, "text": part})
+        if a.timed:
+            pcm.extend(b"\0\0" * 8000)
     file = a.output / f"{id}.wav"
     with wave.open(str(file), "wb") as wav:
         wav.setnchannels(1)
         wav.setsampwidth(2)
         wav.setframerate(16000)
-        wav.writeframes(resample_pcm16_mono(b"".join(samples), rate))
-    rows.append({"id": id, "file": file.name, "reference": text, "terminology": terms})
+        wav.writeframes(pcm)
+    rows.append(
+        {
+            "id": id,
+            "file": file.name,
+            "reference": text,
+            "terminology": terms,
+            "referenceSegments": boundaries if a.timed else [],
+        }
+    )
 manifest = a.output / "manifest.json"
 manifest.write_text(
     json.dumps(

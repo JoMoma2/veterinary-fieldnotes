@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 DEFAULT = {
     "provider": {
         "kind": "mock",
+        "extraction_protocol": "grounded-v2",
         "model": "fixture",
         "base_url": "http://127.0.0.1:11434",
         "api_key_env": "VET_AI_API_KEY",
@@ -15,6 +16,8 @@ DEFAULT = {
         "context_char_limit": 12000,
         "context_window": 8192,
         "max_output_tokens": 4096,
+        "repeat_penalty": 1.0,
+        "presence_penalty": 0.0,
         "thinking": None,
         "keep_alive": "0",
         "transcript_char_limit": 24000,
@@ -75,6 +78,8 @@ def config(path: Path | None = None):
     if out["retry"]["base_delay_seconds"] < 0 or out["retention"]["days"] < 0:
         raise ValueError("Negative retry or retention interval")
     t = out["transcription"]
+    if out["provider"]["extraction_protocol"] not in ["legacy", "grounded-v2"]:
+        raise ValueError("Unknown extraction protocol")
     if t["kind"] not in ["faster-whisper", "whisper-cpp"]:
         raise ValueError("Unknown transcription backend")
     if not 1 <= t["threads"] <= 16 or t["timeout_seconds"] <= 0 or t["gpu_device"] < 0:

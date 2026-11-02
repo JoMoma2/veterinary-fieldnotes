@@ -1,0 +1,75 @@
+{
+  "facts": [
+    {
+      "id": "06-ambiguous-f1",
+      "segment": 0,
+      "quote": "a different dog, not case CEDAR-TRAINING.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f2",
+      "segment": 0,
+      "quote": "maybe Addison's disease",
+      "kinds": [
+        "clinical-suspicion"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f3",
+      "segment": 0,
+      "quote": "the patient link and speaker are unclear.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f4",
+      "segment": 0,
+      "quote": "No confirmed diagnosis, results, or outcome are provided.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f5",
+      "segment": 1,
+      "quote": "a learner used a rolled towel as a positioning prop on a stuffed animal.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f6",
+      "segment": 1,
+      "quote": "It helped keep the mannequin still.",
+      "kinds": [
+        "direct-observation",
+        "outcome"
+      ]
+    },
+    {
+      "id": "06-ambiguous-f7",
+      "segment": 1,
+      "quote": "No patient use or clinical safety was established.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    }
+  ],
+  "must_remain_unknown": [
+    "diagnosis",
+    "outcome"
+  ],
+  "expected_cases_after": 3,
+  "expected_discussions": 2,
+  "expected_case_sources": {},
+  "terminology": [
+    "Addison's",
+    "positioning",
+    "mannequin"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "facts": [
+    {
+      "id": "07-known-outcome-f1",
+      "segment": 0,
+      "quote": "the clinician explicitly confirms urinary obstruction.",
+      "kinds": [
+        "confirmed-diagnosis"
+      ]
+    },
+    {
+      "id": "07-known-outcome-f2",
+      "segment": 0,
+      "quote": "A urinary catheter was placed.",
+      "kinds": [
+        "actual-treatment"
+      ]
+    },
+    {
+      "id": "07-known-outcome-f3",
+      "segment": 0,
+      "quote": "The recorded outcome is discharge from hospital.",
+      "kinds": [
+        "outcome"
+      ]
+    },
+    {
+      "id": "07-known-outcome-f4",
+      "segment": 0,
+      "quote": "Recovery after discharge was not discussed.",
+      "kinds": [
+        "unknown"
+      ]
+    }
+  ],
+  "expected_discussions": 1,
+  "expected_case_sources": {
+    "ELM-TRAINING": [
+      0
+    ]
+  },
+  "expected_cases_after": 4,
+  "terminology": [
+    "catheter",
+    "obstruction"
+  ]
+}

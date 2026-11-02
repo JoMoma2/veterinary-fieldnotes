@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, re
+import json, re, time
 from pathlib import Path
 import httpx
 from jsonschema import Draft202012Validator
@@ -103,11 +103,16 @@ PROMPT += """ Critical field rules: caseKey is a verbatim source token with orig
 PROMPT += """ Retrieved context is prior knowledge, NOT the current recording. Never copy its discussion records, case records, IDs, or linkEvidence into the current output. Generate new localIds for current discussions. cases must be empty if the CURRENT transcript contains no explicit patient/case key. For each current case, linkEvidence must quote the ENTIRE current segment containing that exact caseKey, retaining continuation words such as Returning or same. Article topicKey must reuse the retrieved article's topicKey when describing the same topic, rather than renaming it. Do not attach unrelated subjects to a case."""
 
 
+class OutputLimitError(ValueError):
+    """The provider reached its explicitly configured output budget."""
+
+
 class Provider:
     def __init__(self, cfg):
         self.cfg = cfg
         self.last_metrics = {}
         self.last_content = None
+        self.last_quality = {}
 
     def extract(self, transcript, context, origin):
         authorize_provider(self.cfg, origin)
@@ -148,8 +153,17 @@ class Provider:
             },
             ensure_ascii=False,
         )
+        response_schema = SCHEMA
+        prompt = PROMPT
+        grounded = p["extraction_protocol"] == "grounded-v2"
+        if grounded:
+            from . import grounded as protocol
+
+            response_schema, content = protocol.request(transcript, context, KIND)
+            prompt = protocol.PROMPT
+            payload = json.dumps(content, ensure_ascii=False)
         messages = [
-            {"role": "system", "content": PROMPT},
+            {"role": "system", "content": prompt},
             {"role": "user", "content": payload},
         ]
         kwargs = {}
@@ -160,11 +174,13 @@ class Provider:
                 "model": p["model"],
                 "messages": messages,
                 "stream": False,
-                "format": SCHEMA,
+                "format": response_schema,
                 "options": {
                     "temperature": 0,
                     "num_ctx": p["context_window"],
                     "num_predict": p["max_output_tokens"],
+                    "repeat_penalty": p["repeat_penalty"],
+                    "presence_penalty": p["presence_penalty"],
                 },
                 "keep_alive": p["keep_alive"],
             }
@@ -184,7 +200,7 @@ class Provider:
                 "temperature": 0,
                 "response_format": {"type": "json_object"},
             }
-            messages[0]["content"] += "\nOutput schema: " + json.dumps(SCHEMA)
+            messages[0]["content"] += "\nOutput schema: " + json.dumps(response_schema)
         # No response bodies in logs: errors may contain private transcript excerpts or credentials.
         with httpx.Client(
             timeout=p["timeout_seconds"], follow_redirects=False, trust_env=False
@@ -214,7 +230,14 @@ class Provider:
             else v["choices"][0]["message"]["content"]
         )
         self.last_content = content
-        return json.loads(content)
+        if p["kind"] == "ollama" and v.get("done_reason") == "length":
+            raise OutputLimitError(
+                "Model output hit its token limit; reduce chunk size or increase the bounded output budget"
+            )
+        data = json.loads(content)
+        if grounded:
+            data, self.last_quality = protocol.project(data, transcript, context, KIND)
+        return data
 
 
 def validate_extraction(data, t):
@@ -245,7 +268,15 @@ def validate_extraction(data, t):
         if not re.fullmatch(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", a["topicKey"]):
             raise ValueError("Invalid article topic key")
     for c in data["cases"]:
-        if c["linkEvidence"] not in text or c["caseKey"] not in c["linkEvidence"]:
+        from .grounded import source_map
+
+        anonymous = any(
+            c["caseKey"] == "unlinked-" + token and c["linkEvidence"] == segment["text"]
+            for token, segment in source_map(t).items()
+        )
+        if c["linkEvidence"] not in text or (
+            not anonymous and c["caseKey"] not in c["linkEvidence"]
+        ):
             raise ValueError("Case connection lacks explicit verbatim evidence")
     return data
 
@@ -270,33 +301,117 @@ def chunks(t, limit):
     return [{**t, "segments": g} for g in groups]
 
 
-def extract_recording(store, job, t, cfg, context):
-    outputs = []
-    for index, chunk in enumerate(chunks(t, cfg["provider"]["transcript_char_limit"])):
-        file = store.root / "extractions" / job["id"] / f"{index:04d}.json"
-        if file.exists():
-            data = load_json(file)
-        else:
-            data = Provider(cfg).extract(chunk, context, job["origin"])
-            validate_extraction(data, chunk)
-            write_json(file, data)
-        validate_extraction(data, chunk)
-        # Chunk-local IDs become globally unique without altering original offsets.
-        data = json.loads(json.dumps(data))
-        mapping = {
-            d["localId"]: f"c{index}-{d['localId']}" for d in data["discussions"]
-        }
-        for d in data["discussions"]:
-            d["localId"] = mapping[d["localId"]]
-        for item in data["articles"] + data["cases"]:
-            item["discussionIds"] = [mapping[x] for x in item["discussionIds"]]
-        for q in data["questions"]:
-            q["sourceDiscussionIds"] = [
-                mapping.get(x, x) for x in q.get("sourceDiscussionIds", [])
-            ]
-            q["id"] = f"c{index}-{q.get('id', 'invalid')}"
-        outputs.append(data)
+def prefix_output(data, prefix):
+    data = json.loads(json.dumps(data))
+    mapping = {d["localId"]: f"{prefix}-{d['localId']}" for d in data["discussions"]}
+    for d in data["discussions"]:
+        d["localId"] = mapping[d["localId"]]
+    for item in data["articles"] + data["cases"]:
+        item["discussionIds"] = [mapping[x] for x in item["discussionIds"]]
+    for q in data["questions"]:
+        q["sourceDiscussionIds"] = [
+            mapping.get(x, x) for x in q.get("sourceDiscussionIds", [])
+        ]
+        q["id"] = f"{prefix}-{q.get('id', 'invalid')}"
+    return data
+
+
+def combine_outputs(outputs):
     return {
         k: [v for output in outputs for v in output[k]]
         for k in ["discussions", "articles", "cases", "questions"]
     }
+
+
+def with_topics(context, data):
+    # Only a bounded naming index, never prior clinical claims, enters the next call.
+    by_key = {x["topicKey"]: x for x in context if x.get("kind") == "article"}
+    for a in data["articles"]:
+        by_key[a["topicKey"]] = {
+            "id": "a-" + a["topicKey"],
+            "kind": "article",
+            "topicKey": a["topicKey"],
+            "title": a["title"],
+        }
+    return list(by_key.values())[-16:]
+
+
+def extract_chunk(store, job, chunk, cfg, context, key, depth=0):
+    file = store.root / "extractions" / job["id"] / f"{key}.json"
+    split = file.with_suffix(".split.json")
+    if file.exists():
+        data = load_json(file)
+        validate_extraction(data, chunk)
+        return data
+    if not split.exists():
+        provider = Provider(cfg)
+        started = time.monotonic()
+        try:
+            data = provider.extract(chunk, context, job["origin"])
+            validate_extraction(data, chunk)
+        except OutputLimitError:
+            if depth >= 2 or len(chunk["segments"]) < 2:
+                raise
+            midpoint = len(chunk["segments"]) // 2
+            write_json(
+                split,
+                {"splitAt": midpoint, "reason": "output-token-limit", "maxDepth": 2},
+            )
+            write_json(
+                store.root / "quality" / job["id"] / f"{key}-limit.json",
+                {
+                    "event": "output-limit-split",
+                    "elapsedSeconds": round(time.monotonic() - started, 3),
+                    "providerMetrics": provider.last_metrics,
+                },
+            )
+        else:
+            if provider.last_quality:
+                write_json(
+                    store.root / "quality" / job["id"] / f"{key}.json",
+                    {
+                        **provider.last_quality,
+                        "model": cfg["provider"]["model"],
+                        "elapsedSeconds": round(time.monotonic() - started, 3),
+                        "providerMetrics": provider.last_metrics,
+                    },
+                )
+            write_json(file, data)
+            return data
+    midpoint = load_json(split)["splitAt"]
+    if not 0 < midpoint < len(chunk["segments"]):
+        raise ValueError("Invalid extraction split checkpoint")
+    left = {**chunk, "segments": chunk["segments"][:midpoint]}
+    right = {**chunk, "segments": chunk["segments"][midpoint:]}
+    first = extract_chunk(store, job, left, cfg, context, key + "-a", depth + 1)
+    second = extract_chunk(
+        store, job, right, cfg, with_topics(context, first), key + "-b", depth + 1
+    )
+    data = combine_outputs([prefix_output(first, "a"), prefix_output(second, "b")])
+    validate_extraction(data, chunk)
+    write_json(file, data)
+    return data
+
+
+def extract_recording(store, job, t, cfg, context):
+    outputs = []
+    limit = cfg["provider"]["transcript_char_limit"]
+    if (
+        cfg["provider"]["kind"] != "mock"
+        and cfg["provider"]["extraction_protocol"] == "grounded-v2"
+    ):
+        available = (
+            cfg["provider"]["context_window"]
+            - cfg["provider"]["max_output_tokens"]
+            - 1800
+        )
+        if available < 500:
+            raise ValueError(
+                "Insufficient context budget for extraction schema and bounded output"
+            )
+        limit = min(limit, 6000, available * 2)
+    for index, chunk in enumerate(chunks(t, limit)):
+        data = extract_chunk(store, job, chunk, cfg, context, f"{index:04d}")
+        context = with_topics(context, data)
+        outputs.append(prefix_output(data, f"c{index}"))
+    return combine_outputs(outputs)

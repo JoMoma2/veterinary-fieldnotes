@@ -532,7 +532,7 @@ def test_both_provider_protocols_use_structured_requests_without_paid_calls(
         "Client",
         lambda **kw: original(transport=httpx.MockTransport(handle), **kw),
     )
-    cfg["provider"].update(kind="ollama", model="candidate")
+    cfg["provider"].update(kind="ollama", model="candidate", extraction_protocol="legacy")
     assert Provider(cfg).extract(t, [], "synthetic") == response
     monkeypatch.setenv("VET_AI_API_KEY", "test-only")
     cfg["provider"].update(

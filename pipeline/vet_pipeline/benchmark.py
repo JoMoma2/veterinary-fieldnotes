@@ -11,6 +11,7 @@ from .ingest import ingest, transcript_valid
 from .library import current, commit, retrieve
 from .store import Store
 from .util import load_json, write_json, now, digest_file
+from .quality import fact_screen, review_markdown
 
 
 def score_output(data, gold):
@@ -56,6 +57,14 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
         raise ValueError(
             "Authorized benchmark requires a recording/processing authorization reference"
         )
+    from .util import REPO
+
+    if origin == "authorized-record" and (
+        output.resolve() == REPO or REPO in output.resolve().parents
+    ):
+        raise ValueError(
+            "Real benchmark reports must remain outside the public application repository"
+        )
     hardware = inventory()
     rows = []
     with tempfile.TemporaryDirectory(prefix="vet-benchmark-") as tmp:
@@ -98,6 +107,10 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
                             output=data,
                             providerMetrics=provider.last_metrics,
                             inferenceSeconds=round(inference_seconds, 3),
+                            extractionQuality=provider.last_quality,
+                            wireOutput=json.loads(provider.last_content)
+                            if provider.last_content
+                            else None,
                         )
                         validate_extraction(data, t)
                         commit(store, store.get(job_id), t, data)
@@ -131,6 +144,7 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
                             },
                             output=data,
                             **score_output(data, gold),
+                            factScreen=fact_screen(data, gold, t),
                         )
                     except Exception as e:
                         row.update(valid=False, error=type(e).__name__)
@@ -160,7 +174,14 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
         "model": cfg["provider"]["model"],
         "generation": {
             k: cfg["provider"][k]
-            for k in ["context_window", "max_output_tokens", "thinking", "keep_alive"]
+            for k in [
+                "context_window",
+                "max_output_tokens",
+                "thinking",
+                "keep_alive",
+                "repeat_penalty",
+                "presence_penalty",
+            ]
         },
         "promptContractSha256": hashlib.sha256(
             (
@@ -168,10 +189,23 @@ def benchmark(cfg, inputs, output, origin="synthetic", authorization_ref=""):
             ).encode()
         ).hexdigest(),
         "schemaIncludedInPrompt": True,
+        "extractionProtocol": "mock-fixture-v1"
+        if cfg["provider"]["kind"] == "mock"
+        else cfg["provider"]["extraction_protocol"],
         "hardware": hardware,
         "origin": origin,
         "warning": "Screening metrics are not clinical accuracy scores. Human review is required. No 90% capture claim is implied. Results include private model output; keep authorized-record reports outside the public repository.",
         "results": rows,
     }
+    if report["extractionProtocol"] == "grounded-v2":
+        from .grounded import PROMPT as grounded_prompt
+
+        # Include projector/schema implementation: prompt text alone is not the contract.
+        from . import grounded
+
+        report["promptContractSha256"] = hashlib.sha256(
+            (grounded_prompt + Path(grounded.__file__).read_text()).encode()
+        ).hexdigest()
     write_json(output, report)
+    review_markdown(report, output.with_suffix(".md"))
     return report

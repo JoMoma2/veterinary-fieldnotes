@@ -32,6 +32,54 @@ def word_error_rate(reference, hypothesis):
     return previous[-1] / len(expected)
 
 
+def utterance_alignment(reference_segments, transcript):
+    tokens, owners = [], []
+    for segment in transcript["segments"]:
+        part = words(segment["text"])
+        tokens.extend(part)
+        owners.extend([segment] * len(part))
+    aligned = []
+    for ref in reference_segments:
+        phrase = words(ref["text"])[:6]
+        matches = (
+            [
+                i
+                for i in range(len(tokens) - len(phrase) + 1)
+                if tokens[i : i + len(phrase)] == phrase
+            ]
+            if phrase
+            else []
+        )
+        if len(matches) == 1:
+            start = owners[matches[0]]["start"]
+            aligned.append(
+                {
+                    "referenceStart": ref["start"],
+                    "hypothesisSegmentStart": start,
+                    "startErrorSeconds": start - ref["start"],
+                }
+            )
+        else:
+            aligned.append(
+                {
+                    "referenceStart": ref["start"],
+                    "startErrorSeconds": None,
+                    "reason": "Opening phrase did not match uniquely",
+                }
+            )
+    errors = [
+        abs(v["startErrorSeconds"])
+        for v in aligned
+        if v["startErrorSeconds"] is not None
+    ]
+    return {
+        "method": "Coarse phrase-matched segment starts versus known synthetic utterance-buffer starts; not word-level or ER alignment accuracy.",
+        "utterances": aligned,
+        "meanAbsoluteStartErrorSeconds": sum(errors) / len(errors) if errors else None,
+        "maxAbsoluteStartErrorSeconds": max(errors) if errors else None,
+    }
+
+
 def benchmark_audio(
     manifest: Path,
     output: Path,
@@ -50,6 +98,12 @@ def benchmark_audio(
     if origin == "authorized-record" and not authorization_ref:
         raise ValueError(
             "Real audio benchmark requires a recording/processing authorization reference"
+        )
+    from .util import REPO
+
+    if origin == "authorized-record" and REPO in output.resolve().parents:
+        raise ValueError(
+            "Real audio benchmark reports must remain outside the public application repository"
         )
     if backend not in ["faster-whisper", "whisper-cpp"]:
         raise ValueError("Unknown transcription benchmark backend")
@@ -141,6 +195,9 @@ def benchmark_audio(
                         for term in item.get("terminology", [])
                         if term.lower() not in text.lower()
                     ],
+                    utteranceAlignment=utterance_alignment(
+                        item.get("referenceSegments", []), transcript
+                    ),
                 )
             except Exception as e:
                 row.update(

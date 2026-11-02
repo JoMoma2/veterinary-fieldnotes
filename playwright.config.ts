@@ -5,16 +5,19 @@ export default defineConfig({
     ? 'public.spec.ts'
     : process.env.E2E_EMPTY
       ? 'empty.spec.ts'
-      : 'app.spec.ts',
-  projects: process.env.E2E_PUBLIC
-    ? [
-        { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
-        {
-          name: 'mobile',
-          use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true },
-        },
-      ]
-    : undefined,
+      : process.env.E2E_PIPELINE
+        ? 'pipeline.spec.ts'
+        : 'app.spec.ts',
+  projects:
+    process.env.E2E_PUBLIC || process.env.E2E_PIPELINE
+      ? [
+          { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
+          {
+            name: 'mobile',
+            use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true },
+          },
+        ]
+      : undefined,
   fullyParallel: true,
   use: {
     baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:4321',

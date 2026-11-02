@@ -20,5 +20,78 @@
   "terminology": [
     "grooming"
   ],
-  "expected_cases_after": 1
+  "expected_cases_after": 1,
+  "facts": [
+    {
+      "id": "01-first-f1",
+      "segment": 0,
+      "quote": "repeated litter-box visits and increased grooming",
+      "kinds": [
+        "owner-report"
+      ]
+    },
+    {
+      "id": "01-first-f2",
+      "segment": 0,
+      "quote": "We do not know urine volume.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "01-first-f3",
+      "segment": 0,
+      "quote": "Obstruction is a concern, not confirmed.",
+      "kinds": [
+        "clinical-suspicion"
+      ]
+    },
+    {
+      "id": "01-first-f4",
+      "segment": 1,
+      "quote": "FIP is on a differential list, not a confirmed diagnosis.",
+      "kinds": [
+        "clinical-suspicion"
+      ]
+    },
+    {
+      "id": "01-first-f5",
+      "segment": 1,
+      "quote": "We have no test result for that fictional cat.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "01-first-f6",
+      "segment": 2,
+      "quote": "open the training menu and read the displayed alarm history.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "01-first-f7",
+      "segment": 2,
+      "quote": "The model and exact menu sequence are unknown.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "01-first-f8",
+      "segment": 2,
+      "quote": "This is not a verified instruction for a clinical pump.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    }
+  ],
+  "expected_discussions": 3,
+  "expected_case_sources": {
+    "AMBER-TRAINING": [
+      0
+    ]
+  }
 }

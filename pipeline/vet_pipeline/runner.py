@@ -2,11 +2,12 @@ from __future__ import annotations
 import json, time
 from .util import load_json, now, write_json, lock
 from .ingest import transcribe
-from .extraction import extract_recording
+from .extraction import extract_recording, OutputLimitError
 from .library import retrieve, commit, materialize
 
 
 def run(store, cfg, force_retry=False):
+    run_start = time.monotonic()
     results = []
     with lock(store.root):
         for old in store.jobs():
@@ -17,9 +18,13 @@ def run(store, cfg, force_retry=False):
                 not force_retry and job["retry_after"] > time.time()
             ):
                 continue
+            started = time.monotonic()
+            timings = {}
             try:
                 if job["stage"] == "transcribe":
+                    stage_start = time.monotonic()
                     transcribe(store, job, cfg)
+                    timings["transcription"] = round(time.monotonic() - stage_start, 3)
                     store.update(
                         job["id"],
                         stage="extract",
@@ -30,21 +35,28 @@ def run(store, cfg, force_retry=False):
                     job = store.get(job["id"])
                 t = load_json(store.root / "transcripts" / f"{job['id']}.json")
                 if job["stage"] == "extract":
+                    stage_start = time.monotonic()
+                    context = retrieve(store, t, cfg["provider"]["context_char_limit"])
+                    timings["retrieval"] = round(time.monotonic() - stage_start, 3)
+                    stage_start = time.monotonic()
                     data = extract_recording(
                         store,
                         job,
                         t,
                         cfg,
-                        retrieve(store, t, cfg["provider"]["context_char_limit"]),
+                        context,
                     )
+                    timings["extraction"] = round(time.monotonic() - stage_start, 3)
                     write_json(store.root / "extractions" / f"{job['id']}.json", data)
                     store.update(
                         job["id"], stage="commit", attempts=0, error=None, retry_after=0
                     )
                     job = store.get(job["id"])
                 if job["stage"] == "commit":
+                    stage_start = time.monotonic()
                     data = load_json(store.root / "extractions" / f"{job['id']}.json")
                     commit(store, job, t, data, cfg["archive"]["timezone"])
+                    timings["commit"] = round(time.monotonic() - stage_start, 3)
                     store.update(
                         job["id"],
                         stage="done",
@@ -54,6 +66,25 @@ def run(store, cfg, force_retry=False):
                         completed_at=now(),
                     )
                 result = {"job": job["id"], "status": "done"}
+                quality = [
+                    load_json(p)
+                    for p in (store.root / "quality" / job["id"]).glob("*.json")
+                ]
+                if quality:
+                    result["quality"] = {
+                        "classifiedSources": sum(
+                            q.get("classifiedSources", 0) for q in quality
+                        ),
+                        "unclassifiedSources": sum(
+                            q.get("unclassifiedSources", 0) for q in quality
+                        ),
+                        "warnings": sum(len(q.get("warnings", [])) for q in quality),
+                        "repairs": sum(len(q.get("repairs", [])) for q in quality),
+                    }
+                    result["quality"]["reviewRequired"] = bool(
+                        result["quality"]["unclassifiedSources"]
+                        or result["quality"]["warnings"]
+                    )
             except Exception as error:
                 attempts = job["attempts"] + 1
                 # Exception class only in durable logs: model/server error text may contain clinical data.
@@ -71,19 +102,33 @@ def run(store, cfg, force_retry=False):
                     "attempt": attempts,
                     "error": type(error).__name__,
                 }
-                if type(error) is ValueError:
+                if type(error) is ValueError or isinstance(error, OutputLimitError):
                     result["reason"] = str(error)
                 elif isinstance(error, TimeoutError):
                     result["reason"] = (
                         "Operation timed out; retry is bounded and completed stages are preserved."
                     )
+            result["timingSeconds"] = {
+                **timings,
+                "total": round(time.monotonic() - started, 3),
+            }
             results.append(result)
             logfile = store.root / "events.jsonl"
             with logfile.open("a") as f:
                 f.write(json.dumps({"at": now(), **result}) + "\n")
                 f.flush()
         try:
+            stage_start = time.monotonic()
             materialize(store)
+            write_json(
+                store.root / "last-run-metrics.json",
+                {
+                    "at": now(),
+                    "wallSeconds": round(time.monotonic() - run_start, 3),
+                    "projectionSeconds": round(time.monotonic() - stage_start, 3),
+                    "jobsAttempted": len(results),
+                },
+            )
         except Exception as error:
             results.append(
                 {

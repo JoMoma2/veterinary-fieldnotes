@@ -1,0 +1,133 @@
+{
+  "facts": [
+    {
+      "id": "04-medication-f1",
+      "segment": 0,
+      "quote": "the owner reports vomiting twice and drinking less water.",
+      "kinds": [
+        "owner-report"
+      ]
+    },
+    {
+      "id": "04-medication-f2",
+      "segment": 0,
+      "quote": "The clinician observes pale mucous membranes.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "04-medication-f3",
+      "segment": 0,
+      "quote": "A lactate result of 4.2 was read aloud",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "04-medication-f4",
+      "segment": 0,
+      "quote": "the units were not stated.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "04-medication-f5",
+      "segment": 1,
+      "quote": "intravenous fluids were started.",
+      "kinds": [
+        "actual-treatment"
+      ]
+    },
+    {
+      "id": "04-medication-f6",
+      "segment": 1,
+      "quote": "A clinician proposed norepinephrine if hypotension persisted",
+      "kinds": [
+        "proposed-treatment"
+      ]
+    },
+    {
+      "id": "04-medication-f7",
+      "segment": 1,
+      "quote": "no administration was documented.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "04-medication-f8",
+      "segment": 1,
+      "quote": "Maropitant and buprenorphine were mentioned as options, not documented administrations.",
+      "kinds": [
+        "proposed-treatment"
+      ]
+    },
+    {
+      "id": "04-medication-f9",
+      "segment": 1,
+      "quote": "Doses were not provided.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "04-medication-f10",
+      "segment": 2,
+      "quote": "ECG and CBC were discussed.",
+      "kinds": [
+        "direct-observation",
+        "proposed-treatment"
+      ]
+    },
+    {
+      "id": "04-medication-f11",
+      "segment": 2,
+      "quote": "ALT and BUN values were not available.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "04-medication-f12",
+      "segment": 2,
+      "quote": "No diagnosis or outcome was established.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "04-medication-f13",
+      "segment": 2,
+      "quote": "incomplete information limited their reasoning.",
+      "kinds": [
+        "direct-observation",
+        "unknown"
+      ]
+    }
+  ],
+  "must_remain_unknown": [
+    "diagnosis",
+    "outcome"
+  ],
+  "expected_cases_after": 2,
+  "expected_discussions": 1,
+  "expected_case_sources": {
+    "CEDAR-TRAINING": [
+      0,
+      1,
+      2
+    ]
+  },
+  "terminology": [
+    "norepinephrine",
+    "maropitant",
+    "buprenorphine",
+    "ECG",
+    "CBC",
+    "ALT",
+    "BUN",
+    "lactate"
+  ]
+}

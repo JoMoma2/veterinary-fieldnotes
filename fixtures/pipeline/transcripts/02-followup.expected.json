@@ -19,5 +19,73 @@
   "terminology": [
     "grooming"
   ],
-  "expected_cases_after": 1
+  "expected_cases_after": 1,
+  "facts": [
+    {
+      "id": "02-followup-f1",
+      "segment": 0,
+      "quote": "another owner now says there was no increased grooming.",
+      "kinds": [
+        "owner-report"
+      ]
+    },
+    {
+      "id": "02-followup-f2",
+      "segment": 0,
+      "quote": "That contradicts the earlier history.",
+      "kinds": [
+        "direct-observation",
+        "unknown"
+      ]
+    },
+    {
+      "id": "02-followup-f3",
+      "segment": 0,
+      "quote": "A blood sample was collected",
+      "kinds": [
+        "direct-observation",
+        "actual-treatment"
+      ]
+    },
+    {
+      "id": "02-followup-f4",
+      "segment": 0,
+      "quote": "no results are stated.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "02-followup-f5",
+      "segment": 0,
+      "quote": "Diagnosis and outcome are unknown.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "02-followup-f6",
+      "segment": 1,
+      "quote": "a teaching discussion is not new evidence for the earlier patient.",
+      "kinds": [
+        "direct-observation",
+        "unknown"
+      ]
+    },
+    {
+      "id": "02-followup-f7",
+      "segment": 1,
+      "quote": "Do not merge cases just because FIP was mentioned twice.",
+      "kinds": [
+        "direct-observation",
+        "unknown"
+      ]
+    }
+  ],
+  "expected_discussions": 2,
+  "expected_case_sources": {
+    "AMBER-TRAINING": [
+      0
+    ]
+  }
 }

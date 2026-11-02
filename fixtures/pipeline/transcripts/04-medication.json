@@ -1,0 +1,19 @@
+{
+  "segments": [
+    {
+      "start": 0,
+      "end": 24,
+      "text": "For fictional dog case CEDAR-TRAINING, the owner reports vomiting twice and drinking less water. The clinician observes pale mucous membranes. A lactate result of 4.2 was read aloud; the units were not stated."
+    },
+    {
+      "start": 26,
+      "end": 50,
+      "text": "In this fictional scenario, intravenous fluids were started. A clinician proposed norepinephrine if hypotension persisted; no administration was documented. Maropitant and buprenorphine were mentioned as options, not documented administrations. Doses were not provided."
+    },
+    {
+      "start": 52,
+      "end": 76,
+      "text": "ECG and CBC were discussed. ALT and BUN values were not available. No diagnosis or outcome was established. The clinician explained that incomplete information limited their reasoning."
+    }
+  ]
+}

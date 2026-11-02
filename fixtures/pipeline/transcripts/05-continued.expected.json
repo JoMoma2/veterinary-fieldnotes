@@ -1,0 +1,98 @@
+{
+  "facts": [
+    {
+      "id": "05-continued-f1",
+      "segment": 0,
+      "quote": "the second owner reports normal drinking",
+      "kinds": [
+        "owner-report"
+      ]
+    },
+    {
+      "id": "05-continued-f2",
+      "segment": 0,
+      "quote": "contradicting the earlier account of drinking less water.",
+      "kinds": [
+        "direct-observation",
+        "unknown",
+        "owner-report"
+      ]
+    },
+    {
+      "id": "05-continued-f3",
+      "segment": 0,
+      "quote": "systolic blood pressure of 105 mmHg.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "05-continued-f4",
+      "segment": 0,
+      "quote": "fluids had continued.",
+      "kinds": [
+        "actual-treatment",
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "05-continued-f5",
+      "segment": 0,
+      "quote": "No vasopressor was recorded.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "05-continued-f6",
+      "segment": 0,
+      "quote": "Outcome remains unknown.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "05-continued-f7",
+      "segment": 1,
+      "quote": "first identify the probe connector, then check that the cable is not trapped beneath the cart.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "05-continued-f8",
+      "segment": 1,
+      "quote": "The trainer did not identify the machine model.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "05-continued-f9",
+      "segment": 1,
+      "quote": "not a verified operating procedure for a clinical machine.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    }
+  ],
+  "must_remain_unknown": [
+    "diagnosis",
+    "outcome"
+  ],
+  "expected_cases_after": 2,
+  "expected_discussions": 2,
+  "expected_case_sources": {
+    "CEDAR-TRAINING": [
+      0
+    ]
+  },
+  "terminology": [
+    "systolic",
+    "ultrasound",
+    "vasopressor"
+  ]
+}

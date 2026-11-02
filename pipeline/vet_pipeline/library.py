@@ -345,10 +345,37 @@ def commit(store, job, t, extracted, timezone_name="Unknown until configured"):
             if d["id"] in sources:
                 d["articleIds"] = unique_add(d["articleIds"], [aid])
     for c in extracted["cases"]:
-        scope = job["shift_id"] + ":" + c["caseKey"]
-        cid = manifest["caseKeys"].get(scope)
-        if cid is not None and not re.search(
-            r"\b(returning|same|earlier|continuing|previous)\b", c["linkEvidence"], re.I
+        from .grounded import case_identity
+
+        original_scope = job["shift_id"] + ":" + c["caseKey"]
+        scope = job["shift_id"] + ":label:" + case_identity(c["caseKey"])
+        if c["caseKey"].startswith("unlinked-e-"):
+            # Programmatic anonymous anchors must never connect patients across files.
+            scope += ":" + job["id"]
+        cid = manifest["caseKeys"].get(scope) or manifest["caseKeys"].get(
+            original_scope
+        )
+        if cid is None and not c["caseKey"].startswith("unlinked-e-"):
+            # Recover pre-v2 labels without changing already published case IDs.
+            prefix = job["shift_id"] + ":"
+            for old_key, old_id in manifest["caseKeys"].items():
+                if (
+                    old_key.startswith(prefix)
+                    and ":" not in old_key[len(prefix) :]
+                    and case_identity(old_key[len(prefix) :])
+                    == case_identity(c["caseKey"])
+                ):
+                    cid = old_id
+                    break
+        from .grounded import association_denied
+
+        if cid is not None and (
+            association_denied(c["linkEvidence"])
+            or not re.search(
+                r"\b(returning|same|earlier|continuing|previous)\b",
+                c["linkEvidence"],
+                re.I,
+            )
         ):
             # Reused labels alone do not establish continuation; preserve a separate candidate case.
             scope += ":" + job["id"]
@@ -386,6 +413,7 @@ def commit(store, job, t, extracted, timezone_name="Unknown until configured"):
             lib["cases"].append(case)
         else:
             case = next(v for v in lib["cases"] if v["id"] == cid)
+            manifest["caseKeys"][scope] = cid
             case["facts"] += evidence
             case["sourceDiscussionIds"] = unique_add(
                 case["sourceDiscussionIds"], sources

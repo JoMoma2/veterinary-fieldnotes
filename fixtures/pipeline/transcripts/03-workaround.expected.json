@@ -18,5 +18,34 @@
   "terminology": [
     "classroom"
   ],
-  "expected_cases_after": 1
+  "expected_cases_after": 1,
+  "facts": [
+    {
+      "id": "03-workaround-f1",
+      "segment": 0,
+      "quote": "a learner mentions an improvised tubing prop.",
+      "kinds": [
+        "direct-observation"
+      ]
+    },
+    {
+      "id": "03-workaround-f2",
+      "segment": 0,
+      "quote": "The material, configuration, and result are not described.",
+      "kinds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "03-workaround-f3",
+      "segment": 0,
+      "quote": "No patient use or safety was established.",
+      "kinds": [
+        "unknown",
+        "direct-observation"
+      ]
+    }
+  ],
+  "expected_discussions": 1,
+  "expected_case_sources": {}
 }
