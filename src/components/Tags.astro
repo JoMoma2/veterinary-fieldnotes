@@ -1,5 +1,19 @@
 ---
-import type {Topic} from '../lib/schemas';
-const {ids,topics}=Astro.props as {ids:string[];topics:Topic[]};
+import type { Topic } from '../lib/schemas';
+const { ids, topics } = Astro.props as { ids: string[]; topics: Topic[] };
 ---
-<div class="tags">{ids.map(id=>{const t=topics.find(t=>t.id===id);return t&&<a class:list={['tag',t.color]} href={`/knowledge/?topic=${id}`}>{t.name}</a>})}</div>
+
+<div class="tags">
+  {
+    ids.map((id) => {
+      const t = topics.find((t) => t.id === id);
+      return (
+        t && (
+          <a class:list={['tag', t.color]} href={`/knowledge/?topic=${id}`}>
+            {t.name}
+          </a>
+        )
+      );
+    })
+  }
+</div>

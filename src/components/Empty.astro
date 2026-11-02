@@ -1,5 +1,14 @@
 ---
 import Icon from './Icon.astro';
-const {title='Room for what comes next',message='Your approved learning will appear here.',icon='book'}=Astro.props;
+const {
+  title = 'Room for what comes next',
+  message = 'Your approved learning will appear here.',
+  icon = 'book',
+} = Astro.props;
 ---
-<div class="empty-state"><span class="empty-icon"><Icon name={icon} size={32}/></span><h2>{title}</h2><p>{message}</p><a class="text-link" href="/about/">How the library grows →</a></div>
+
+<div class="empty-state">
+  <span class="empty-icon"><Icon name={icon} size={32} /></span><h2>{title}</h2><p>{message}</p><a
+    class="text-link"
+    href="/about/">How the library grows →</a>
+</div>

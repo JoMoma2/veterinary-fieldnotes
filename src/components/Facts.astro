@@ -1,6 +1,20 @@
 ---
-import {labels} from '../lib/format';
-import type {Fact} from '../lib/schemas';
-const {facts}=Astro.props as {facts:Fact[]};
+import { labels } from '../lib/format';
+import type { Fact } from '../lib/schemas';
+const { facts } = Astro.props as { facts: Fact[] };
 ---
-<div class="facts">{facts.map(f=><div class:list={['fact',{'fact-unknown':f.kind==='unknown'}]}><span class="evidence-label">{labels[f.kind]}</span><p>{f.text}</p>{f.externalUrl&&<a href={f.externalUrl} rel="noreferrer">External reference ↗</a>}</div>)}</div>
+
+<div class="facts">
+  {
+    facts.map((f) => (
+      <div class:list={['fact', { 'fact-unknown': f.kind === 'unknown' }]}>
+        <p>{f.text}</p>
+        {f.externalUrl && (
+          <a href={f.externalUrl} rel="noreferrer">
+            External reference ↗
+          </a>
+        )}
+      </div>
+    ))
+  }
+</div>

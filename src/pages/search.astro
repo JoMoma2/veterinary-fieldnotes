@@ -1,19 +1,117 @@
 ---
-import Layout from '../layouts/Layout.astro';import Icon from '../components/Icon.astro';import {getLibrary} from '../lib/library';
-const lib=await getLibrary();
-const fallback=[...lib.articles.map(a=>({url:`/knowledge/${a.id}/`,title:a.title,text:a.summary+' '+a.body})),...lib.cases.map(c=>({url:`/cases/${c.id}/`,title:c.title,text:c.summary+' '+c.facts.map(f=>f.text).join(' ')})),...lib.discussions.map(d=>({url:`/discussions/${d.id}/`,title:d.title,text:d.account}))];
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { getLibrary } from '../lib/library';
+const lib = await getLibrary();
+const fallback = [
+  ...lib.articles.map((a) => ({
+    url: `/knowledge/${a.id}/`,
+    title: a.title,
+    text: a.summary + ' ' + a.body,
+  })),
+  ...lib.cases.map((c) => ({
+    url: `/cases/${c.id}/`,
+    title: c.title,
+    text: c.summary + ' ' + c.facts.map((f) => f.text).join(' '),
+  })),
+  ...lib.discussions.map((d) => ({
+    url: `/discussions/${d.id}/`,
+    title: d.title,
+    text: d.account,
+  })),
+];
 ---
-<Layout title="Search" section="Search"><div class="reading-heading"><span class="eyebrow">FIND THE THREAD</span><h1>Search your library.</h1><p class="lead">Find knowledge, cases, and the conversations that connect them.</p><label class="search-input"><Icon name="search"/><span class="sr-only">Search the library</span><input id="search-query" type="search" placeholder="A topic, a question, a detail…" autocomplete="off"/></label><p class="muted" id="search-status" role="status">Start typing to explore the published library.</p><div id="search-results"></div></div><noscript><p class="notice">Search needs JavaScript. You can browse the library sections using the navigation.</p></noscript></Layout>
-<script id="search-fallback" type="application/json" set:html={JSON.stringify(fallback).replace(/</g,'\\u003c')}/>
+
+<Layout title="Search" section="Search"
+  ><div class="reading-heading">
+    <span class="eyebrow">FIND THE THREAD</span><h1>Search your library.</h1><p class="lead">
+      Find knowledge, cases, and the conversations that connect them.
+    </p><label class="search-input"
+      ><Icon name="search" /><span class="sr-only">Search the library</span><input
+        id="search-query"
+        type="search"
+        placeholder="A topic, a question, a detail…"
+        autocomplete="off"
+      /></label
+    ><p class="muted" id="search-status" role="status">
+      Start typing to explore the published library.
+    </p><div id="search-results"></div>
+  </div><noscript
+    ><p class="notice">
+      Search needs JavaScript. You can browse the library sections using the navigation.
+    </p></noscript
+  ></Layout
+>
+<script
+  id="search-fallback"
+  type="application/json"
+  set:html={JSON.stringify(fallback).replace(/</g, '\\u003c')}
+/>
 <script>
-type Hit={url:string;meta:{title?:string};excerpt:string};type Pagefind={search:(q:string)=>Promise<{results:{data:()=>Promise<Hit>}[]}>};
-const input=document.querySelector<HTMLInputElement>('#search-query')!;const results=document.getElementById('search-results')!;const status=document.getElementById('search-status')!;
-const fallback: {url:string;title:string;text:string}[]=JSON.parse(document.getElementById('search-fallback')!.textContent!);
-let engine:Promise<Pagefind|null>|undefined;let generation=0;let timeout:ReturnType<typeof setTimeout>;
-async function search(){const current=++generation;const query=input.value.trim();results.replaceChildren();if(!query){status.textContent='Start typing to explore the published library.';return;}
-status.textContent='Searching…';const pagefindPath='/pagefind/pagefind.js';engine??=import(/* @vite-ignore */ pagefindPath).catch(()=>null);const pf=await engine;let hits:Hit[]=[];
-try{if(pf){const r=await pf.search(query);hits=await Promise.all(r.results.slice(0,30).map(r=>r.data()));}else{const words=query.toLowerCase().split(/\s+/);hits=fallback.filter(r=>words.every(w=>(r.title+' '+r.text).toLowerCase().includes(w))).map(r=>({url:r.url,meta:{title:r.title},excerpt:r.text.slice(0,220)}));}}catch{if(current===generation)status.textContent='Search is temporarily unavailable. Please try again.';return;}
-if(current!==generation)return;status.textContent=hits.length?`${hits.length} result${hits.length===1?'':'s'}${pf?'':' · development search'}`:'No matching results. Try a broader term.';
-for(const hit of hits){const a=document.createElement('a');a.href=hit.url;a.className='search-result';const h=document.createElement('h2');h.textContent=hit.meta.title??'Library entry';const p=document.createElement('p');const parsed=new DOMParser().parseFromString(hit.excerpt,'text/html');p.textContent=parsed.body.textContent;a.append(h,p);results.append(a);}}
-input.addEventListener('input',()=>{generation++;clearTimeout(timeout);timeout=setTimeout(search,180);});const q=new URLSearchParams(location.search).get('q');if(q){input.value=q;search();}
+  type Hit = { url: string; meta: { title?: string }; excerpt: string };
+  type Pagefind = { search: (q: string) => Promise<{ results: { data: () => Promise<Hit> }[] }> };
+  const input = document.querySelector<HTMLInputElement>('#search-query')!;
+  const results = document.getElementById('search-results')!;
+  const status = document.getElementById('search-status')!;
+  const fallback: { url: string; title: string; text: string }[] = JSON.parse(
+    document.getElementById('search-fallback')!.textContent!,
+  );
+  let engine: Promise<Pagefind | null> | undefined;
+  let generation = 0;
+  let timeout: ReturnType<typeof setTimeout>;
+  async function search() {
+    const current = ++generation;
+    const query = input.value.trim();
+    results.replaceChildren();
+    if (!query) {
+      status.textContent = 'Start typing to explore the published library.';
+      return;
+    }
+    status.textContent = 'Searching…';
+    const pagefindPath = '/pagefind/pagefind.js';
+    engine ??= import(/* @vite-ignore */ pagefindPath).catch(() => null);
+    const pf = await engine;
+    let hits: Hit[] = [];
+    try {
+      if (pf) {
+        const r = await pf.search(query);
+        hits = await Promise.all(r.results.slice(0, 30).map((r) => r.data()));
+      } else {
+        const words = query.toLowerCase().split(/\s+/);
+        hits = fallback
+          .filter((r) => words.every((w) => (r.title + ' ' + r.text).toLowerCase().includes(w)))
+          .map((r) => ({ url: r.url, meta: { title: r.title }, excerpt: r.text.slice(0, 220) }));
+      }
+    } catch {
+      if (current === generation)
+        status.textContent = 'Search is temporarily unavailable. Please try again.';
+      return;
+    }
+    if (current !== generation) return;
+    status.textContent = hits.length
+      ? `${hits.length} result${hits.length === 1 ? '' : 's'}${pf ? '' : ' · development search'}`
+      : 'No matching results. Try a broader term.';
+    for (const hit of hits) {
+      const a = document.createElement('a');
+      a.href = hit.url;
+      a.className = 'search-result';
+      const h = document.createElement('h2');
+      h.textContent = hit.meta.title ?? 'Library entry';
+      const p = document.createElement('p');
+      const parsed = new DOMParser().parseFromString(hit.excerpt, 'text/html');
+      p.textContent = parsed.body.textContent;
+      a.append(h, p);
+      results.append(a);
+    }
+  }
+  input.addEventListener('input', () => {
+    generation++;
+    clearTimeout(timeout);
+    timeout = setTimeout(search, 180);
+  });
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) {
+    input.value = q;
+    search();
+  }
 </script>

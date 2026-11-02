@@ -17,23 +17,26 @@
     "test:e2e": "playwright test",
     "demo": "LIBRARY_DATASET=demo astro dev --host 127.0.0.1",
     "demo:pipeline": "uv run --project pipeline python scripts/demo-workflow.py",
-    "deploy": "node scripts/deploy-cloudflare.mjs"
+    "deploy": "node scripts/deploy-cloudflare.mjs",
+    "format": "prettier --write src scripts/*.ts scripts/*.mjs tests *.ts *.mjs"
   },
   "dependencies": {
     "astro": "7.4.4",
-    "zod": "4.6.7",
     "gray-matter": "^4.0.3",
     "marked": "^17.0.0",
-    "sanitize-html": "^2.17.0"
+    "sanitize-html": "^2.17.0",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
-    "typescript": "^5.9.3",
-    "tsx": "^4.21.0",
+    "@playwright/test": "1.64.1",
     "@types/node": "^24.0.0",
     "@types/sanitize-html": "^2.16.0",
-    "@playwright/test": "1.64.1",
+    "cheerio": "^1.1.2",
     "pagefind": "1.6.0",
-    "cheerio": "^1.1.2"
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^0.14.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

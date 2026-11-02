@@ -1,4 +1,43 @@
 ---
-import Layout from '../../layouts/Layout.astro';import Empty from '../../components/Empty.astro';import {getLibrary} from '../../lib/library';import {dateLabel} from '../../lib/format';const lib=await getLibrary();const shifts=[...lib.shifts].sort((a,b)=>b.date.localeCompare(a.date));
+import Layout from '../../layouts/Layout.astro';
+import Empty from '../../components/Empty.astro';
+import { getLibrary } from '../../lib/library';
+import { dateLabel } from '../../lib/format';
+const lib = await getLibrary();
+const shifts = [...lib.shifts].sort((a, b) => b.date.localeCompare(a.date));
 ---
-<Layout title="Shift archive" section="Shift archive"><div class="page-heading"><div><span class="eyebrow">RETURN TO THE CONVERSATION</span><h1>Shift archive</h1><p>Detailed learning records, one discussion at a time.</p></div><span class="count-badge">{shifts.length} shifts</span></div>{shifts.length?<div class="shift-list">{shifts.map(s=><a href={`/shifts/${s.id}/`} class="shift-card"><span class="eyebrow">{dateLabel(s.date)}</span><h2>{s.title}</h2><p>{s.summary}</p><div class="card-foot"><span>{lib.discussions.filter(d=>d.shiftId===s.id).length} discussions · {s.recordings.length} recordings · {s.processing}</span><span>Open archive →</span></div></a>)}</div>:<Empty title="Every shift has a place" message="No shift archives have been published. Future entries will preserve detailed discussions, recording references, and timestamp uncertainty." icon="clock"/>}</Layout>
+
+<Layout title="Shift archive" section="Shift archive"
+  ><div class="page-heading">
+    <div>
+      <span class="eyebrow">RETURN TO THE CONVERSATION</span><h1>Shift archive</h1><p>
+        Detailed learning records, one discussion at a time.
+      </p>
+    </div><span class="count-badge">{shifts.length} shifts</span>
+  </div>{
+    shifts.length ? (
+      <div class="shift-list">
+        {shifts.map((s) => (
+          <a href={`/shifts/${s.id}/`} class="shift-card">
+            <span class="eyebrow">{dateLabel(s.date)}</span>
+            <h2>{s.title}</h2>
+            <p>{s.summary}</p>
+            <div class="card-foot">
+              <span>
+                {lib.discussions.filter((d) => d.shiftId === s.id).length} discussions ·{' '}
+                {s.recordings.length} recordings · {s.processing}
+              </span>
+              <span>Open archive →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <Empty
+        title="Every shift has a place"
+        message="No shift archives have been published. Future entries will preserve detailed discussions, recording references, and timestamp uncertainty."
+        icon="clock"
+      />
+    )
+  }</Layout
+>

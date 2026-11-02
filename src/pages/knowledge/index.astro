@@ -1,10 +1,80 @@
 ---
-import Layout from '../../layouts/Layout.astro';import ArticleCard from '../../components/ArticleCard.astro';import Empty from '../../components/Empty.astro';import {getLibrary} from '../../lib/library';
-const lib=await getLibrary();
+import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Empty from '../../components/Empty.astro';
+import { getLibrary } from '../../lib/library';
+const lib = await getLibrary();
 ---
-<Layout title="Knowledge library" section="Knowledge library"><div class="page-heading"><div><span class="eyebrow">A GROWING BODY OF UNDERSTANDING</span><h1>Knowledge library</h1><p>Medical knowledge, practical lessons, and questions worth returning to.</p></div><span class="count-badge">{lib.articles.length} articles</span></div><div class="filter-bar" role="group" aria-label="Filter articles by topic"><button class="filter active" data-topic="all" aria-pressed="true">All topics</button>{lib.topics.map(t=><button class="filter" data-topic={t.id} aria-pressed="false">{t.name}</button>)}</div>{lib.articles.length?<><p id="filter-count" class="muted" aria-live="polite">{lib.articles.length} articles</p><div class="article-grid">{lib.articles.map(a=><ArticleCard article={a} topics={lib.topics}/>)}</div><p id="no-matches" class="panel" hidden>No articles in this topic yet. Try another topic.</p></>:<Empty title="A place for everything you learn" message="No knowledge articles have been published. Approved notes will appear here with links to their source discussions."/>}</Layout>
+
+<Layout title="Knowledge library" section="Knowledge library"
+  ><div class="page-heading">
+    <div>
+      <span class="eyebrow">A GROWING BODY OF UNDERSTANDING</span><h1>Knowledge library</h1><p>
+        Medical knowledge, practical lessons, and questions worth returning to.
+      </p>
+    </div><span class="count-badge">{lib.articles.length} articles</span>
+  </div><div class="filter-bar" role="group" aria-label="Filter articles by topic">
+    <button class="filter active" data-topic="all" aria-pressed="true">All topics</button>{
+      lib.topics.map((t) => (
+        <button class="filter" data-topic={t.id} aria-pressed="false">
+          {t.name}
+        </button>
+      ))
+    }
+  </div>{
+    lib.articles.length ? (
+      <>
+        <>
+          <p id="filter-count" class="muted" aria-live="polite">
+            {lib.articles.length} articles
+          </p>
+          <div class="article-grid">
+            {lib.articles.map((a) => (
+              <ArticleCard article={a} topics={lib.topics} />
+            ))}
+          </div>
+          <p id="no-matches" class="panel" hidden>
+            No articles in this topic yet. Try another topic.
+          </p>
+        </>
+      </>
+    ) : (
+      <Empty
+        title="A place for everything you learn"
+        message="No knowledge articles have been published. Approved notes will appear here with links to their source discussions."
+      />
+    )
+  }</Layout
+>
 <script>
-const buttons=document.querySelectorAll<HTMLButtonElement>('[data-topic]');
-function filter(topic:string){let count=0;document.querySelectorAll<HTMLElement>('[data-filter-topics]').forEach(el=>{el.hidden=topic!=='all'&&!el.dataset.filterTopics!.split(' ').includes(topic);if(!el.hidden)count++;});buttons.forEach(b=>{const active=b.dataset.topic===topic;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});const label=document.getElementById('filter-count');if(label)label.textContent=`${count} article${count===1?'':'s'}`;const empty=document.getElementById('no-matches');if(empty)empty.hidden=count>0;}
-buttons.forEach(b=>b.addEventListener('click',()=>{const t=b.dataset.topic!;filter(t);history.replaceState(null,'',t==='all'?'/knowledge/':`?topic=${encodeURIComponent(t)}`);}));const initial=new URLSearchParams(location.search).get('topic');if(initial&&Array.from(buttons).some(b=>b.dataset.topic===initial))filter(initial);
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-topic]');
+  function filter(topic: string) {
+    let count = 0;
+    document.querySelectorAll<HTMLElement>('[data-filter-topics]').forEach((el) => {
+      el.hidden = topic !== 'all' && !el.dataset.filterTopics!.split(' ').includes(topic);
+      if (!el.hidden) count++;
+    });
+    buttons.forEach((b) => {
+      const active = b.dataset.topic === topic;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const label = document.getElementById('filter-count');
+    if (label) label.textContent = `${count} article${count === 1 ? '' : 's'}`;
+    const empty = document.getElementById('no-matches');
+    if (empty) empty.hidden = count > 0;
+  }
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const t = b.dataset.topic!;
+      filter(t);
+      history.replaceState(
+        null,
+        '',
+        t === 'all' ? '/knowledge/' : `?topic=${encodeURIComponent(t)}`,
+      );
+    }),
+  );
+  const initial = new URLSearchParams(location.search).get('topic');
+  if (initial && Array.from(buttons).some((b) => b.dataset.topic === initial)) filter(initial);
 </script>
