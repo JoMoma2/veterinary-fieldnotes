@@ -50,7 +50,7 @@ Astro auto-backgrounds in detected agent contexts. Playwright's server uses `--i
 
 The website, synthetic processing/consolidation workflow, quote/reference validation, encrypted backup/recovery, and independent failure handling are implemented and tested. Production has no articles/cases/shifts/discussions/questions. GitHub repositories were created under JoMoma2; consult `docs/STATUS.md` for publication/CI status. Cloudflare credentials, rclone authorization, actual recorder configuration, and final model selection remain absent. No systemd service is installed or enabled, no real clinical data was processed, and no paid API was called.
 
-Latest local verification: 16 TypeScript unit tests, 34 Python tests including a 105-file batch, 12 populated-demo browser tests, 1 empty-production browser test, type checking, all three dataset builds, internal links/anchors, safe encrypted restoration, and genuine local Faster-Whisper inference on generated speech. See `docs/TESTING.md`. Update counts if adding tests.
+Latest local verification: 16 TypeScript unit tests, 35 Python tests including a 105-file batch, 12 populated-demo browser tests, 1 empty-production browser test, type checking, all three dataset builds, internal links/anchors, safe encrypted restoration, and genuine local Faster-Whisper inference on generated speech. See `docs/TESTING.md`. Update counts if adding tests.
 
 ## Next priorities / limitations
 

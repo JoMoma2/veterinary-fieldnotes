@@ -37,7 +37,7 @@ Case keys must occur verbatim in a grounded transcript quote. Automatic continua
 
 ## Publication
 
-Approvals bind a reviewer, timestamp, authorization reference, privacy review, record ID, and SHA256 of the exact record. A subsequent change makes that approval stale. The synthetic-only approval command refuses real records. Actual publication requires a manually completed approval file and explicit `--allow-clinical`.
+Suggested category names and descriptions require their own approval, so private topic suggestions cannot leak through a public category registry. Approvals bind a reviewer, timestamp, authorization reference, privacy review, record ID, and SHA256 of the exact record. A subsequent change makes that approval stale. The synthetic-only approval command refuses real records. Actual publication requires a manually completed approval file and explicit `--allow-clinical`.
 
 The exporter copies only approved records, prunes unavailable references, excludes cases/questions with no approved discussion, and removes recording metadata that has no public discussion. The site repeats filtering and generates backlinks. Arbitrary free text is not automatically de-identified: review must include titles, accounts, facts, Markdown, timestamps, and identifying combinations. Removing names alone is insufficient. A hidden source link in approved Markdown fails internal-link verification if it points to an unavailable route.
 

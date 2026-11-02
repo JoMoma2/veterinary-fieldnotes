@@ -99,7 +99,7 @@ uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE apply-edit
 uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE review-template /PRIVATE/review.json
 ```
 
-For each approved entry in the review file, the authorized reviewer must verify content, authorization, sufficient de-identification including combinations of details, and medical interpretation; then set `approved=true`, `privacyReviewed=true`, reviewer, ISO timestamp, and an actual `authorizationRef`. The supplied hash binds that exact record. Keep this review file private. It is not included in the public export. Any content change requires new review.
+Suggested category names/descriptions are reviewed entries too; categories referenced by published records must be approved. For each approved entry in the review file, the authorized reviewer must verify content, authorization, sufficient de-identification including combinations of details, and medical interpretation; then set `approved=true`, `privacyReviewed=true`, reviewer, ISO timestamp, and an actual `authorizationRef`. The supplied hash binds that exact record. Keep this review file private. It is not included in the public export. Any content change requires new review.
 
 For synthetic testing only:
 

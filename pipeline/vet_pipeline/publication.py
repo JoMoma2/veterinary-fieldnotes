@@ -32,7 +32,6 @@ def review_template(store, output):
                 "authorizationRef": "",
             }
             for group, entries in data.items()
-            if group != "topics"
             for e in entries
         ],
     }
@@ -69,15 +68,16 @@ def export(store, review_path: Path, target: Path, allow_clinical=False):
             raise ValueError("Unsupported review version")
         approvals = {(v["kind"], v["id"]): v for v in review["entries"]}
         output = {k: [] for k in GROUPS}
-        output["topics"] = copy.deepcopy(lib["topics"])
         for group, entries in lib.items():
-            if group == "topics":
-                continue
             for e in entries:
                 approval = approvals.get((group, e["id"]))
                 if not approval or not approval.get("approved"):
                     continue
-                if e["origin"] != "synthetic" and not allow_clinical:
+                if (
+                    group != "topics"
+                    and e["origin"] != "synthetic"
+                    and not allow_clinical
+                ):
                     raise ValueError(
                         "Clinical publication requires explicit --allow-clinical after authorized privacy review"
                     )
@@ -91,6 +91,9 @@ def export(store, review_path: Path, target: Path, allow_clinical=False):
                         "Approval lacks required authorization/privacy review"
                     )
                 e = copy.deepcopy(e)
+                if group == "topics":
+                    output[group].append(e)
+                    continue
                 # Audit identities and authorization details remain in the private review file.
                 e["publication"] = {
                     "status": "approved",

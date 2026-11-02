@@ -695,3 +695,24 @@ def test_quarantine_write_failure_does_not_commit_away_invalid_question(
     monkeypatch.setattr(module, "write_json", original)
     assert run(store, cfg, True)[0]["status"] == "done"
     assert (store.root / "quarantine" / f"{first}-questions.json").exists()
+
+
+def test_unreviewed_topic_suggestions_never_leak_through_public_registry(
+    store, cfg, first, tmp_path
+):
+    run(store, cfg)
+    row = store.db.execute(
+        "SELECT id,data FROM library_records WHERE kind='topics' LIMIT 1"
+    ).fetchone()
+    data = json.loads(row["data"])
+    data["name"] = "PRIVATE_TEST_SENTINEL"
+    with store.db:
+        store.db.execute(
+            "UPDATE library_records SET data=? WHERE kind='topics' AND id=?",
+            (json.dumps(data), row["id"]),
+        )
+    review = tmp_path / "review"
+    review_template(store, review)
+    target = tmp_path / "public"
+    assert export(store, review, target)["topics"] == 0
+    assert "PRIVATE_TEST_SENTINEL" not in (target / "topics.json").read_text()

@@ -6,7 +6,7 @@ Implementation session: 2026-11-02. All clinical examples used in development ar
 |---|---|---|
 | `npm run check` | Passed | Astro/TypeScript and complete schema/reference graph validation |
 | `npm test` | 16 passed | Empty production, demo graph, privacy filtering, approval gates, permanent references, timestamps, exact answer sets, sampled distractors, topic filters, Markdown sanitization |
-| Python pytest | 34 passed | Full workflow, additive updates, contradiction preservation, bounded retries, per-stage resume, post-commit interruption, 105-file batching, mock/remote gates, protocol requests, USB discovery/import stability, quarantine, publication reviews, backup encryption/corruption/restore, key mismatch and quarantine disk-failure holds, upload verification, cleanup gates, editing, recovery deduplication/case continuity |
+| Python pytest | 35 passed | Full workflow, additive updates, contradiction preservation, bounded retries, per-stage resume, post-commit interruption, 105-file batching, mock/remote gates, protocol requests, USB discovery/import stability, quarantine, publication reviews, backup encryption/corruption/restore, key mismatch and quarantine disk-failure holds, upload verification, cleanup gates, editing, recovery deduplication/case continuity |
 | Demo browser suite | 12 passed | Navigation, topic filters, article→discussion→shift anchor links, Pagefind search, case evidence labels, Select All/Deselect All, all five study formats, no visitor storage/inference, mobile widths |
 | Empty production browser suite | 1 passed | All empty sections, search no-match behavior, no demo banner or records |
 | Production static build | Passed | 8 pages, 87 internal routes/anchors, initially empty clinical content |
