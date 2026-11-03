@@ -13,6 +13,7 @@ p.add_argument("--checkout", required=True, type=Path)
 p.add_argument("--allow-clinical", action="store_true")
 p.add_argument("--push", action="store_true")
 a = p.parse_args()
+a.checkout = a.checkout.expanduser().resolve()
 visibility = subprocess.run(
     ["gh", "repo", "view", "--json", "visibility"],
     cwd=a.checkout,

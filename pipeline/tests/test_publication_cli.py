@@ -13,6 +13,7 @@ from vet_pipeline.util import REPO
 def test_publisher_uses_production_toolchain_only_for_public_checkout(tmp_path, monkeypatch, visibility):
     checkout = tmp_path / "public-checkout"
     checkout.mkdir()
+    monkeypatch.chdir(tmp_path)
     calls = []
     exports = []
 
@@ -31,7 +32,7 @@ def test_publisher_uses_production_toolchain_only_for_public_checkout(tmp_path, 
     monkeypatch.setattr("vet_pipeline.publication.export", export)
     monkeypatch.setenv("LIBRARY_DATASET", "demo")
     monkeypatch.setattr("sys.argv", ["publish-approved.py", "--workspace", str(tmp_path / "private-workspace"),
-                                   "--review", str(tmp_path / "approval.json"), "--checkout", str(checkout), "--push"])
+                                   "--review", str(tmp_path / "approval.json"), "--checkout", "public-checkout", "--push"])
     if visibility == "PRIVATE":
         with pytest.raises(SystemExit, match="separate public"):
             runpy.run_path(str(REPO / "scripts/publish-approved.py"), run_name="__main__")
