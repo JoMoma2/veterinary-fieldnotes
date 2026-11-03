@@ -184,6 +184,13 @@ def transcribe_session(root, config_path):
             raise ValueError(
                 "Immutable ASR transcript/settings changed; use reference.json for corrections or a new evaluation"
             )
+        # Recover interruption between the durable ASR metadata and draft creation.
+        # An existing corrected reference is never replaced.
+        if not (root / "reference.json").exists():
+            write_json(root / "reference.json", {
+                "referenceStatus": "draft-not-corrected",
+                "segments": load_json(root / "transcript.json")["segments"],
+            })
         return {"cached": True, "transcript": str(root / "transcript.json")}
     store = Store(root / "transcription-workspace")
     try:
@@ -291,6 +298,7 @@ def extract_session(root, config_path, input_kind="asr"):
         record = {
             **identity,
             "seconds": round(time.monotonic() - started, 3),
+            "timingScope": "this processing invocation; prior checkpointed work excluded",
             "results": processing,
             "jobsDone": all(j["stage"] == "done" for j in store.jobs()),
             "recordCounts": {k: len(v) for k, v in library.items()},
@@ -401,7 +409,7 @@ def report_session(root):
         finally:
             store.close()
         sections += [
-            f"<section><h2>{esc(meta['model'])} — {esc(meta['input'])}</h2><p>Run: {esc(result.parent.name)}<br>Input SHA256: {esc(meta['inputSha256'])}</p><p>{esc(meta['seconds'])} seconds; {esc(meta['recordCounts'])}. Processing complete: {esc(meta['jobsDone'])}.</p>"
+            f"<section><h2>{esc(meta['model'])} — {esc(meta['input'])}</h2><p>Run: {esc(result.parent.name)}<br>Input SHA256: {esc(meta['inputSha256'])}</p><p>{esc(meta['seconds'])} seconds in this recorded processing invocation (prior checkpointed work excluded); {esc(meta['recordCounts'])}. Processing complete: {esc(meta['jobsDone'])}.</p>"
         ]
         for d in sorted(
             library["discussions"],

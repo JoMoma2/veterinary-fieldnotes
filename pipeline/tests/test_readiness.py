@@ -318,6 +318,9 @@ def test_reference_versions_and_asr_integrity_are_separate(tmp_path, monkeypatch
         },
     )
     transcribe_session(root, None)
+    (root / "reference.json").unlink()
+    assert transcribe_session(root, None)["cached"]
+    assert (root / "reference.json").is_file()
     with pytest.raises(ValueError, match="manually-corrected"):
         input_transcript(root, "reference")
     ref = load_json(root / "reference.json")

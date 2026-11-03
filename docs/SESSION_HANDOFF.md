@@ -111,3 +111,9 @@ uv run --project pipeline --extra evaluation python scripts/evaluate-recording.p
 uv run --project pipeline --extra evaluation python scripts/evaluate-recording.py report "$pilot_root"
 xdg-open "$pilot_root/review.html"
 ```
+
+## Verification addendum
+
+Milestone **ab11b16** was committed/pushed to public `main`; [GitHub Actions run 41551661479](https://github.com/JoMoma2/veterinary-fieldnotes/actions/runs/41551661479) passed the full production/mock/demo/browser workflow. Cloudflare's native Git deployment updated `build-info.json` to that exact commit with dataset `production` and all five record counts zero. Four live public desktop/mobile/search/privacy browser tests passed against https://veterinary-fieldnotes.pages.dev (not only a local build). Logs remain `/tmp/fieldnotes-live-browser.log`; earlier local checks in `/tmp/fieldnotes-*.log` are disposable.
+
+A final small recovery fix recreates only a missing draft reference after an interruption between ASR metadata and template creation, preserving any existing corrected reference. Its regression test passes within the same92-test suite. Reports explicitly label timing as the recorded invocation, excluding earlier checkpointed work. The final follow-up commit's CI/deployment should be checked by its `git log` SHA; the session final report records that result. No inference/preview/background benchmark is left running, and the final local dist is empty production. Ollama `/api/ps` showed no benchmark model loaded. Independent backup credentials remain an owner setup task, as confirmed by the user.
