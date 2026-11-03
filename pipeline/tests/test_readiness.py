@@ -185,6 +185,12 @@ def test_eval_config_refuses_remote_and_local_proxy_routes(tmp_path):
         )
         with pytest.raises(ValueError, match="only local"):
             local_config(f)
+    f.write_text('[provider]\nkind="ollama"\nmodel="qwen3:30b"\n'
+                 '[github]\nenabled=true\ncheckout="/private/master"\nallow_clinical=true\n'
+                 '[backup]\nallow_clinical_remote=true\n')
+    isolated = local_config(f)
+    assert not isolated["github"]["enabled"]
+    assert not isolated["backup"]["allow_clinical_remote"]
 
 
 def test_cloud_backed_model_is_refused_before_receiving_private_text(cfg, monkeypatch):

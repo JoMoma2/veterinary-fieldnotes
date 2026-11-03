@@ -123,6 +123,8 @@ The nightly importer never grants publication approval. Successful private proce
 
 ## GitHub
 
+Current storage: **private GitHub primary remote, local secondary copy, Cloudflare approved public hosting**. Independent cloud backup is deferred and optional; no rclone credentials or encryption key are needed for this path.
+
 Two repositories are prepared: `veterinary-fieldnotes` (public) and `veterinary-fieldnotes-master` (private). The private archive now contains synthetic durability-test records only. Synchronization includes an integrity/recovery manifest and verifies the remote commit. It refuses to replace committed records with an empty/incomplete local archive. Run setup for another account as needed:
 
 ```bash
@@ -140,7 +142,50 @@ uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
   --config /PRIVATE/pipeline.toml sync-master --checkout /PATH/vet-knowledge-master
 ```
 
-`--push` sends the prepared commit. Actual clinical cloud synchronization also requires config `backup.allow_clinical_remote=true` **and** `--allow-clinical`. The helper verifies private remote visibility and copies permanent content plus sanitized processing status only. It never copies the database, raw audio, temporary transcripts, or credentials. First use synthetic data to test it. Do not treat this repository as the independent backup.
+`--push` sends the prepared commit. Actual clinical cloud synchronization also requires config `backup.allow_clinical_remote=true` **and** `--allow-clinical`. The helper verifies private remote visibility and copies permanent content plus sanitized processing status only. It never copies the database, raw audio, temporary transcripts, or credentials. First use synthetic data to test it. This is the primary remote archive under the current storage plan; Cloudflare holds only the approved public subset.
+
+### Private master synchronization
+
+Use a dedicated private `main`-branch checkout, with working owner Git/`gh` authentication. Do not put raw audio, temporary transcripts, credentials or the SQLite ledger in it. Copy settings into the existing private pipeline TOML (do not duplicate TOML sections):
+
+```toml
+[github]
+enabled = true
+checkout = "/home/quinten/vet-knowledge-master"
+allow_clinical = false
+retry_seconds = 60
+max_retry_seconds = 3600
+verify_interval_seconds = 3600
+
+[backup]
+remote = ""
+allow_clinical_remote = false
+```
+
+These settings permit synthetic synchronization only. After separately authorizing clinical GitHub storage, the owner must deliberately set **both** `github.allow_clinical=true` and legacy-named `backup.allow_clinical_remote=true`. The latter name does not require an independent backup account. Publication permission remains separate. No clinical storage permission is enabled by the examples or this project update.
+
+With synchronization configured, both `run` and `nightly` process local recordings first, then commit/push completed canonical knowledge and verify the exact remote commit:
+
+```bash
+uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
+  --config ~/.config/vet-fieldnotes/pipeline.toml run
+# Or process queued work and configured recorder mounts; no backup key required:
+uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
+  --config ~/.config/vet-fieldnotes/pipeline.toml nightly
+```
+
+`WORKSPACE/master-sync/state.json` records pending status, snapshot hash, attempts, next retry time and verified commit; `master-sync/events.jsonl` records class-only errors without Git stderr/credentials. A push failure leaves the local canonical library, inference checkpoints and any prepared Git commit intact. Subsequent invocations retry with no new recordings and no repeated inference. Each invocation makes at most one attempt; delays start at60s and cap at1h, remaining pending across long outages. Unchanged successful snapshots are reverified hourly; new knowledge is synchronized immediately. Processing errors in one recording do not prevent successful records from being synchronized. Pending sync returns nonzero so scheduler/operator logs expose it; future timer invocations continue retries. No automatic service is activated here.
+
+For an immediate operator retry, bypassing the waiting interval:
+
+```bash
+uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
+  --config ~/.config/vet-fieldnotes/pipeline.toml sync-master \
+  --checkout /home/quinten/vet-knowledge-master --push
+# Add --allow-clinical only after authorization, alongside the config storage gate.
+```
+
+Use one active canonical workspace/writer per master checkout. On authentication/visibility/branch conflicts, inspect local configuration and reconcile deliberately; the system never force-pushes, resets history, or erases local work to fix a rejected push. Recovery remains `git clone` the private master, validate its `archive` manifest and run `recover-library --source /PATH/CLONE/archive` into a new workspace. Existing synthetic fresh-clone and lost-local-data tests cover this path. The private pilot evaluation tool explicitly disables all synchronization even if the supplied config enables it.
 
 ## Cloudflare Pages
 
@@ -157,6 +202,8 @@ Alternatively, after creating the free Pages project, configure `CLOUDFLARE_API_
 
 ## Encrypted backups, remote storage, and restore
 
+**Optional future path.** These tools remain available, but are not a normal-processing or operational-readiness requirement. Leave `backup.remote` empty and omit `nightly --key/--backup-directory` unless deliberately opting in.
+
 Create a key once, outside the repositories. Keep a separate secure copy of the key; the encrypted backup cannot be recovered without it.
 
 ```bash
@@ -167,7 +214,7 @@ uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE backup \
 
 Backups contain permanent library content, case continuity mapping, and hashes needed for completed-recording deduplication. No raw audio or temporary transcripts are included. Each version has a unique filename and authenticated encryption. Creation verifies decryption and every file hash before recording success.
 
-Install/configure rclone with a separately authorized provider (`rclone config`, select Google Drive or another provider). OAuth remains in rclone's local protected configuration. Set `backup.remote="gdrive:vet-fieldnotes-encrypted"`; then run `upload`. rclone copies immutable encrypted files and the application verifies remote bytes. There is no remote delete, mirror, or historical pruning. A failed upload only consumes its own bounded retry budget. After fixing a persistent upload failure, run `retry-upload BACKUP_ARTIFACT_ID` to reset only its upload attempt limit. Do not delete/recreate the recording job.
+If opting into independent backups later, install/configure rclone with a separately authorized provider (`rclone config`, select Google Drive or another provider). OAuth remains in rclone's local protected configuration. Set `backup.remote="gdrive:vet-fieldnotes-encrypted"`; then run `upload`. rclone copies immutable encrypted files and the application verifies remote bytes. There is no remote delete, mirror, or historical pruning. A failed upload only consumes its own bounded retry budget. After fixing a persistent upload failure, run `retry-upload BACKUP_ARTIFACT_ID` to reset only its upload attempt limit. Do not delete/recreate the recording job.
 
 Restore into a new folder:
 
@@ -193,18 +240,20 @@ uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
   --config ~/.config/vet-fieldnotes/pipeline.toml scan --source /MOUNT/RECORDER --date YYYY-MM-DD
 ```
 
-The nightly command discovers configured mounts, scans independent files, resumes queued work even if the recorder was removed, optionally creates/uploads backups, and runs the configured retention policy (disabled by default). Grouping defaults to import date; pass an explicit date when an overnight shift belongs to the prior day. Recorder clock policy and automatic shift-boundary heuristics await actual hardware testing. A single continuously connected recorder may contain multiple shifts; no claim of automatic inference of those boundaries is made.
+The nightly command discovers configured mounts, scans independent files, resumes queued work even if the recorder was removed, synchronizes completed knowledge to configured private GitHub, optionally creates/uploads encrypted backups, and runs the configured retention policy (disabled by default). Grouping defaults to import date; pass an explicit date when an overnight shift belongs to the prior day. Recorder clock policy and automatic shift-boundary heuristics await actual hardware testing. A single continuously connected recorder may contain multiple shifts; no claim of automatic inference of those boundaries is made.
 
-Review `automation/vet-fieldnotes.service` and `.timer`. Adapt the checkout path if necessary (`%h/vet-knowledge-library` matches this host), create the private workspace and backup directories, preload the selected transcription model, and provide any provider key in the owner-only optional environment file. A user systemd service depends on an active user manager; lingering through logout requires an intentional system policy decision. To install after testing:
+Review `automation/vet-fieldnotes.service` and `.timer`. Adapt the checkout path if necessary (`%h/vet-knowledge-library` matches this host), create the private workspace and configured master checkout, preload the selected transcription model, and provide any provider key in the owner-only optional environment file. A user systemd service depends on an active user manager; lingering through logout requires an intentional system policy decision. To install after testing:
 
 ```bash
-mkdir -p ~/.config/systemd/user ~/.local/share/vet-fieldnotes ~/.local/share/vet-fieldnotes-backups
+mkdir -p ~/.config/systemd/user ~/.local/share/vet-fieldnotes
 cp automation/vet-fieldnotes.{service,timer} ~/.config/systemd/user/
 systemctl --user daemon-reload
 systemctl --user start vet-fieldnotes.service    # inspect first; no timer yet
 journalctl --user -u vet-fieldnotes.service
 systemctl --user enable --now vet-fieldnotes.timer
 ```
+
+The service template uses no backup-key arguments. To opt into optional encrypted backups later, explicitly add those arguments and their writable backup directory in a user unit override; no such override is required for GitHub/local operation.
 
 The timer checks every two minutes after the prior service finishes; file locks stop overlapping runs. This polling approach tolerates missed mount events without recorder-specific udev assumptions. No service was activated during implementation. Disable with `systemctl --user disable --now vet-fieldnotes.timer`.
 

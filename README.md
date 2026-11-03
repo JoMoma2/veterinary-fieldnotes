@@ -99,7 +99,8 @@ Configured recorder / transcript import
  → one configured extraction model + targeted local retrieval
  → structured, quote-grounded validation
  → transactional private library commit + portable Markdown/JSON projection
- → encrypted versioned backup / separately authorized remote saving
+ → private GitHub commit/push with durable retry state (when configured)
+ → optional encrypted versioned backup
  → explicit content-bound authorization and privacy review
  → filtered public export → website rebuild/deployment
 ```
@@ -131,4 +132,7 @@ Read [AGENTS.md](AGENTS.md), [architecture decisions](docs/ARCHITECTURE.md), and
 
 Local GPU transcription setup, measured Qwen3 limitations and authorized real-audio benchmark instructions are in [docs/LOCAL_AI_BENCHMARKS.md](docs/LOCAL_AI_BENCHMARKS.md). Continue from [docs/SESSION_HANDOFF.md](docs/SESSION_HANDOFF.md). Large V3 and the complete local synthetic WAV pipeline now work. Grounded source accounts, case/article updates and recall cards are implemented; clinical-quality validation on real authorized audio remains unfinished.
 
-For the first **private, authorized 5–15 minute recording**, follow [FIRST_RECORDING.md](docs/FIRST_RECORDING.md). It provides copy/format inspection, local conversion, Large V3 transcription, identical-input Qwen3/Qwen3.5 comparison, corrected-reference evaluation and an offline audio-linked review page. These tools reject Git-contained workspaces and external/cloud-backed inference. Independent backup authentication, synthetic restoration and off-machine key custody are covered in [INDEPENDENT_BACKUP.md](docs/INDEPENDENT_BACKUP.md); no independent provider is configured yet.
+For the first **private, authorized 5–15 minute recording**, follow [FIRST_RECORDING.md](docs/FIRST_RECORDING.md). It provides copy/format inspection, local conversion, Large V3 transcription, identical-input Qwen3/Qwen3.5 comparison, corrected-reference evaluation and an offline audio-linked review page. These tools reject Git-contained workspaces and external/cloud-backed inference. Current storage is **private GitHub primary remote + local secondary copy + Cloudflare approved public hosting**. Independent-provider backups are deferred and do not block processing. Optional encrypted backup/restoration tools remain documented in [INDEPENDENT_BACKUP.md](docs/INDEPENDENT_BACKUP.md).
+
+
+Private GitHub synchronization is configured in `[github]` of the private pipeline TOML; see [OPERATIONS.md](docs/OPERATIONS.md#private-master-synchronization). When enabled, `run` and `nightly` commit/push completed knowledge, verify the remote commit, and persist pending failures with capped retry delays. A failed push never resets completed transcription/extraction or removes local results. Clinical storage still needs both explicit authorization gates. The private real-recording evaluation tool deliberately keeps all synchronization disabled.

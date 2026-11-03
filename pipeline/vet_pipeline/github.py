@@ -4,12 +4,14 @@ import os
 import re
 import shutil
 import subprocess
+import hashlib
+import time
 from pathlib import Path
 from urllib.parse import urlparse
 
 from .library import current, materialize, validate_library, write_library
 from .recovery import verify_snapshot
-from .util import load_json, write_json, lock
+from .util import load_json, write_json, lock, now
 
 
 def _git(checkout, *args, check=True):
@@ -179,3 +181,60 @@ def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
             "commit": commit,
             "repository": repository,
         }
+
+
+def sync_pending_master(store, cfg, *, force=False, checkout=None, allow_clinical=None):
+    """One durable push attempt per invocation; retry pending work across restarts.
+
+    Network failures never reset recording stages. Backoff is capped, not a busy
+    retry loop or a permanent abandonment after a temporary Internet outage.
+    """
+    settings = cfg["github"]
+    if not settings["enabled"] and not force:
+        return {"status": "disabled", "pending": False}
+    checkout = Path(checkout or settings["checkout"]).expanduser().resolve()
+    clinical = settings["allow_clinical"] if allow_clinical is None else allow_clinical
+    directory = store.root / "master-sync"
+    statefile = directory / "state.json"
+    with lock(directory):
+        with lock(store.root):
+            library = current(store)
+            if not any(library[k] for k in library if k != "topics"):
+                return {"status": "idle", "pending": False}
+            fingerprint = hashlib.sha256(json.dumps(
+                {"library": library, "checkout": str(checkout), "allowClinical": clinical,
+                 "storageAuthorized": cfg["backup"]["allow_clinical_remote"]},
+                sort_keys=True, ensure_ascii=False,
+            ).encode()).hexdigest()
+        prior = load_json(statefile) if statefile.exists() else {}
+        same = prior.get("snapshotSha256") == fingerprint
+        clock = time.time()
+        if same and not force and prior.get("retryAfter", 0) > clock:
+            return {**prior, "status": "deferred" if prior.get("pending") else "verified"}
+        attempts = prior.get("attempts", 0) if same else 0
+        state = {
+            "snapshotSha256": fingerprint, "checkout": str(checkout),
+            "status": "pending", "pending": True, "attempts": attempts + 1,
+            "retryAfter": clock + min(settings["max_retry_seconds"],
+                settings["retry_seconds"] * 2 ** min(attempts, 10)),
+            "lastAttemptAt": now(),
+        }
+        # Persist before any remote call. SIGINT/power loss leaves a retryable intent.
+        write_json(statefile, state)
+        try:
+            result = sync_master(store, checkout, cfg, allow_clinical=clinical, push=True)
+        except Exception as error:
+            state.update(status="failed", error=type(error).__name__)
+        else:
+            state.update(result, status="verified", pending=False, attempts=0,
+                         retryAfter=time.time() + settings["verify_interval_seconds"],
+                         lastSuccessAt=now())
+        write_json(statefile, state)
+        # Class-only errors: Git stderr may include private paths or credentials.
+        with (directory / "events.jsonl").open("a") as log:
+            log.write(json.dumps({"at": now(), "status": state["status"],
+                                  "error": state.get("error"),
+                                  "commit": state.get("commit")}) + "\n")
+            log.flush()
+            os.fsync(log.fileno())
+        return state

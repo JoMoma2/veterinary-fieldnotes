@@ -1,4 +1,6 @@
-# Independent encrypted backup setup
+# Optional independent encrypted backup setup
+
+**Deferred by owner decision.** Normal operation uses private GitHub as primary remote knowledge storage, the local computer as secondary copy, and Cloudflare for approved public content. No independent-provider account, encryption key or rclone credentials are required for processing or GitHub synchronization. The instructions below preserve optional future functionality; do not configure or enable it automatically.
 
 The existing backup format and immutable version uploads are retained. Rclone v1.75.2 is installed user-locally at `~/.local/share/vet-fieldnotes-tools/rclone`, with its release checksum verified. No remote account or automatic clinical upload is enabled.
 

@@ -22,13 +22,23 @@ allow_model_download = false
 max_attempts = 3
 base_delay_seconds = 30
 
+# GitHub is primary remote knowledge storage; enable after verifying the private checkout.
+# No Google Drive/rclone credentials or encryption key are needed for GitHub sync.
+[github]
+enabled = false
+checkout = "" # e.g. "/home/YOUR_USER/vet-knowledge-master"; dedicated main-branch checkout
+allow_clinical = false # Requires separate storage authorization AND backup.allow_clinical_remote.
+retry_seconds = 60
+max_retry_seconds = 3600
+verify_interval_seconds = 3600
+
 [retention]
 enabled = false
 days = 14
 require_remote = true
 
 [backup]
-remote = "" # e.g. gdrive:vet-fieldnotes-encrypted (rclone must be configured separately)
+remote = "" # Optional future independent provider; leave empty for normal GitHub/local operation.
 allow_clinical_remote = false # Separate recording/processing authorization does not imply third-party storage authorization.
 timeout_seconds = 300
 

@@ -94,6 +94,12 @@ def main():
             isinstance(x, dict) and x.get("status") == "failed" for x in result
         ):
             return 1
+        if isinstance(result, dict) and (
+            result.get("master_sync", {}).get("pending")
+            or (args.command == "sync-master" and result.get("pending"))
+            or any(x.get("status") == "failed" for x in result.get("processing", []))
+        ):
+            return 1
         if args.command == "nightly" and (
             any(j["stage"] != "done" for j in store.jobs())
             or result.get("backup_error")
@@ -145,7 +151,12 @@ def dispatch(a, store, cfg):
                     )
         return result
     if a.command == "run":
-        return run(store, cfg, a.force_retry)
+        processing = run(store, cfg, a.force_retry)
+        if cfg["github"]["enabled"]:
+            from .github import sync_pending_master
+
+            return {"processing": processing, "master_sync": sync_pending_master(store, cfg)}
+        return processing
     if a.command == "status":
         return [dict(j) for j in store.jobs()]
     if a.command == "retry":
@@ -203,6 +214,10 @@ def dispatch(a, store, cfg):
         if a.command == "scan":
             return imported
         result = {"imports": imported, "processing": run(store, cfg)}
+        if cfg["github"]["enabled"]:
+            from .github import sync_pending_master
+
+            result["master_sync"] = sync_pending_master(store, cfg)
         if a.key and a.backup_directory:
             try:
                 result["backup"] = str(
@@ -220,7 +235,11 @@ def dispatch(a, store, cfg):
         }
         return result
     if a.command == "sync-master":
-        from .github import sync_master
+        from .github import sync_master, sync_pending_master
+
+        if a.push:
+            return sync_pending_master(store, cfg, force=True, checkout=a.checkout,
+                                       allow_clinical=a.allow_clinical)
 
         return sync_master(store, a.checkout, cfg, a.allow_clinical, a.push)
     if a.command == "benchmark":

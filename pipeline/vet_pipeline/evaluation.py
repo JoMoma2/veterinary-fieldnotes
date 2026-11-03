@@ -64,6 +64,7 @@ def local_config(path):
     cfg["provider"].update(allow_remote=False, allow_paid=False)
     cfg["transcription"]["allow_model_download"] = False
     cfg["backup"].update(remote="", allow_clinical_remote=False)
+    cfg["github"]["enabled"] = False
     cfg["retention"]["enabled"] = False
     cfg["usb"]["roots"] = []
     return cfg

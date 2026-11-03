@@ -40,6 +40,14 @@ DEFAULT = {
     },
     "archive": {"timezone": "Unknown until configured"},
     "retry": {"max_attempts": 3, "base_delay_seconds": 30},
+    "github": {
+        "enabled": False,
+        "checkout": "",
+        "allow_clinical": False,
+        "retry_seconds": 60,
+        "max_retry_seconds": 3600,
+        "verify_interval_seconds": 3600,
+    },
     "retention": {"enabled": False, "days": 14, "require_remote": True},
     "backup": {
         "remote": "",
@@ -88,6 +96,12 @@ def config(path: Path | None = None):
     if out["retry"]["base_delay_seconds"] < 0 or out["retention"]["days"] < 0:
         raise ValueError("Negative retry or retention interval")
     t = out["transcription"]
+    g = out["github"]
+    if (g["enabled"] and not g["checkout"]) or not (
+        1 <= g["retry_seconds"] <= g["max_retry_seconds"]
+        and g["verify_interval_seconds"] >= 1
+    ):
+        raise ValueError("Invalid private GitHub synchronization settings")
     p = out["provider"]
     if (
         p["context_window"] < 512

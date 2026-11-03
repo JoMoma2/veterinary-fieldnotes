@@ -19,7 +19,7 @@ Both are pushed on `main`. The initial GitHub Actions verification passed, inclu
 ## Awaiting configuration or external dependencies
 
 - Cloudflare Pages native Git deployment and automatic main-push deployment succeeded: https://veterinary-fieldnotes.pages.dev. Production is empty, automatic main deployments are enabled, and branch previews are disabled. Public desktop/mobile, Pagefind, empty-state, and private-path audits passed. See docs/OPERATIONAL_READINESS.md and docs/validation/deployment.json for evidence.
-- Independent remote backup provider/rclone OAuth. No real or synthetic library backup has been uploaded to a cloud provider by this session.
+- Independent provider/rclone OAuth is deferred and optional, not an operational blocker. Current strategy: private GitHub primary remote + local secondary + Cloudflare approved hosting.
 - Final extraction and transcription model choice; representative authorized benchmarking. No paid API was called. The tiny audio-smoke model is not a clinical recommendation.
 - Actual recorder in approximately three days: mount matching, authorization reference, file structure, WAV format, reliable timestamps/shift assignment, and throughput tests.
 - Review of actual capture, processing, cloud storage, and public publication permissions before handling real material.
@@ -28,3 +28,6 @@ Both are pushed on `main`. The initial GitHub Actions verification passed, inclu
 ## Next recommended work
 
 Verify public deployment and benchmark candidates in isolation, then test the real recorder in a separate authorized local workspace. Measure an entire shift before enabling unattended operation. Use this foundation to evaluate quality and reliability; do not assume production readiness for unattended clinical processing from the synthetic tests alone.
+
+
+GitHub/local policy update: optional `[github]` synchronization now runs after normal `run`/`nightly` processing with persistent pending/error/backoff state, exact remote verification and retry without inference. Independent-backup credentials/keys are not required; encrypted backup/restoration remains available. The service template does not request a backup key and remains uninstalled/disabled. Clinical GitHub uploads still need both explicit storage gates, while public approvals remain separate.

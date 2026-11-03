@@ -155,3 +155,97 @@ def test_clinical_sync_still_needs_both_authorization_gates(
     cfg["backup"]["allow_clinical_remote"] = True
     with pytest.raises(ValueError, match="explicit authorization"):
         github.sync_master(store, checkout[0], cfg)
+
+
+def test_pending_push_survives_restart_and_retries_without_inference(
+    store, cfg, first, checkout, monkeypatch
+):
+    from vet_pipeline.extraction import Provider
+    from vet_pipeline.cli import dispatch, main
+    from types import SimpleNamespace
+    from vet_pipeline.util import load_json
+
+    run(store, cfg)
+    expected = current(store)
+    cfg["github"].update(enabled=True, checkout=str(checkout[0]))
+    original = github._git
+    clock = [1000]
+    monkeypatch.setattr(github.time, "time", lambda: clock[0])
+
+    def offline(path, *args, **kw):
+        if args[0] == "push":
+            raise TimeoutError("sensitive stderr must not be logged")
+        return original(path, *args, **kw)
+
+    monkeypatch.setattr(github, "_git", offline)
+    private_config = store.root / "sync.toml"
+    private_config.write_text('[github]\nenabled=true\ncheckout=' + json.dumps(str(checkout[0])) + '\n')
+    monkeypatch.setattr("sys.argv", ["vet-pipeline", "--workspace", str(store.root),
+                                   "--config", str(private_config), "run"])
+    assert main() == 1
+    failed = load_json(store.root / "master-sync/state.json")
+    assert failed["pending"] and failed["error"] == "TimeoutError"
+    committed = git(checkout[0], "rev-parse", "HEAD").stdout
+    assert "sensitive stderr" not in (store.root / "master-sync/events.jsonl").read_text()
+    assert github.sync_pending_master(store, cfg)["status"] == "deferred"
+    assert current(store) == expected and store.get(first)["stage"] == "done"
+    monkeypatch.setattr(github, "_git", original)
+    monkeypatch.setattr(Provider, "extract", lambda *a: pytest.fail("inference repeated"))
+    clock[0] = failed["retryAfter"] + 1
+    fresh = Store(store.root)
+    try:
+        result = dispatch(SimpleNamespace(command="run", force_retry=False), fresh, cfg)
+        assert result["processing"] == []
+        assert result["master_sync"]["remote_verified"]
+        assert not load_json(store.root / "master-sync/state.json")["pending"]
+    finally:
+        fresh.close()
+    assert git(checkout[0], "rev-parse", "HEAD").stdout == committed
+
+
+def test_nightly_github_storage_needs_no_independent_backup_credentials(
+    store, cfg, first, checkout, monkeypatch
+):
+    from vet_pipeline.cli import dispatch
+    from types import SimpleNamespace
+
+    cfg["github"].update(enabled=True, checkout=str(checkout[0]))
+    monkeypatch.setattr("vet_pipeline.automation.discover", lambda cfg: [])
+    result = dispatch(SimpleNamespace(command="nightly", date="2026-10-22",
+                                     key=None, backup_directory=None), store, cfg)
+    assert result["master_sync"]["remote_verified"]
+    assert not cfg["backup"]["remote"] and "backup_error" not in result
+    assert store.get(first)["stage"] == "done"
+    assert not store.db.execute("SELECT * FROM artifacts").fetchall()
+    assert result["cleanup"]["deleted"] is False
+
+
+def test_new_knowledge_is_synced_even_during_previous_success_cache(
+    store, cfg, first, checkout
+):
+    run(store, cfg)
+    cfg["github"].update(enabled=True, checkout=str(checkout[0]))
+    previous = github.sync_pending_master(store, cfg)
+    ingest(store, REPO / "fixtures/pipeline/transcripts/02-followup.json",
+           "s-2026-10-22", "2026-10-22", "synthetic", "test")
+    run(store, cfg)
+    updated = github.sync_pending_master(store, cfg)
+    assert updated["remote_verified"] and updated["commit"] != previous["commit"]
+    assert verify_snapshot(checkout[0] / "archive")[0] == current(store)
+
+
+def test_automatic_clinical_sync_does_not_bypass_explicit_authorization(
+    store, cfg, first, checkout
+):
+    run(store, cfg)
+    row = store.db.execute("SELECT kind,id,data FROM library_records WHERE kind='articles' LIMIT 1").fetchone()
+    record = json.loads(row["data"])
+    record["origin"] = "authorized-record"
+    with store.db:
+        store.db.execute("UPDATE library_records SET data=? WHERE kind=? AND id=?",
+                         (json.dumps(record), row["kind"], row["id"]))
+    before = git(checkout[0], "rev-parse", "HEAD").stdout
+    cfg["github"].update(enabled=True, checkout=str(checkout[0]), allow_clinical=True)
+    blocked = github.sync_pending_master(store, cfg)
+    assert blocked["pending"] and blocked["error"] == "ValueError"
+    assert git(checkout[0], "rev-parse", "HEAD").stdout == before
