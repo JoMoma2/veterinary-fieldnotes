@@ -21,8 +21,8 @@ jobs:
         with:
           version: '0.12.23'
           enable-cache: true
-      - run: uv sync --project pipeline --python 3.12 --extra dev --frozen
-      - run: uv run --project pipeline pytest pipeline/tests
+      - run: uv sync --project pipeline --python 3.12 --extra dev --extra evaluation --frozen
+      - run: uv run --project pipeline --extra evaluation pytest pipeline/tests
       - run: npm run demo:pipeline
       - run: LIBRARY_DATASET=pipeline-demo npm run build
       - run: npx playwright install --with-deps chromium

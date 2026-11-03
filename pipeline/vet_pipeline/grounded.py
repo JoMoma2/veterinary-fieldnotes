@@ -20,6 +20,9 @@ unrelated teaching separate. Example grouping only: case history e-a plus explic
 same-case treatment e-b belong together; separate equipment teaching e-c does not.
 For every meaningful discussion, select supplied source IDs and preserve all important
 observations, diagnostics, reasoning, instructions, workarounds, unknowns and contradictions.
+Missing-result/unknown-diagnosis statements are useful evidence, not filler. Include
+explicit case/topic boundary sources with the discussion they introduce, without
+inventing context or treating a fragment as a clinical finding.
 The application preserves detailed source wording; do not paraphrase clinical facts.
 Each fact.quote MUST be an exact substring of its
 single cited source.text, including punctuation and capitalization. Use several facts
@@ -203,6 +206,19 @@ def request(transcript, context, kinds):
     return schema, payload
 
 
+def unknown_clauses(text):
+    subjects = r"(?:diagnosis|results?|outcomes?|doses?|units|information)"
+    patterns = [
+        rf"\bno\s+(?:confirmed\s+|test\s+)?{subjects}(?:(?:,\s*(?:(?:or|and)\s+)?|\s+(?:or|and)\s+){subjects})*\s+(?:(?:is|are|was|were)\s+)?(?:stated|provided|available|established|recorded|known)\b[.!]?",
+        rf"\b{subjects}(?:\s+and\s+{subjects})?\s+(?:is|are|remain|remains)\s+unknown\b[.!]?",
+    ]
+    return list(
+        dict.fromkeys(
+            m.group() for pattern in patterns for m in re.finditer(pattern, text, re.I)
+        )
+    )
+
+
 def project(raw, transcript, context, kinds):
     schema, _ = request(transcript, context, kinds)
     Draft202012Validator(schema).validate(raw)
@@ -210,6 +226,8 @@ def project(raw, transcript, context, kinds):
     topics = request(transcript, context, kinds)[1]["existing_topics"]
     result = {k: [] for k in ["discussions", "articles", "cases", "questions"]}
     covered = set()
+    cited = set()
+    deterministic_unknowns = 0
     warnings = []
     repairs = []
     for index, lesson in enumerate(raw["discussions"]):
@@ -362,6 +380,7 @@ def project(raw, transcript, context, kinds):
                 }
             )
             covered.update(f["source"] for f in lesson["facts"])
+            cited.update(lesson["sources"])
             if lesson["isCase"]:
                 label = lesson["caseLabel"]
                 if any(association_denied(s["text"]) for s in selected):
@@ -447,6 +466,8 @@ def project(raw, transcript, context, kinds):
     for token, segment in sources.items():
         if token in covered:
             continue
+        explicit_unknowns = unknown_clauses(segment["text"])
+        deterministic_unknowns += bool(explicit_unknowns)
         result["discussions"].append(
             {
                 "localId": "unclassified-" + token,
@@ -457,9 +478,11 @@ def project(raw, transcript, context, kinds):
                 "quotes": [{k: segment[k] for k in ["start", "end", "text"]}],
                 "account": "The model did not produce a grounded discussion for this excerpt. Preserved verbatim for review:\n\n"
                 + segment["text"],
-                "facts": [],
+                "facts": [
+                    {"kind": "unknown", "text": text} for text in explicit_unknowns
+                ],
                 "questions": [],
-                "conclusions": "Requires review; no clinical interpretation or case association was inferred.",
+                "conclusions": "Requires context review; only literal missing-information clauses, if present, were labeled. No patient or case association was inferred.",
             }
         )
     result["discussions"].sort(key=lambda d: min(q["start"] for q in d["quotes"]))
@@ -468,6 +491,9 @@ def project(raw, transcript, context, kinds):
         "inputSources": len(sources),
         "classifiedSources": len(covered),
         "unclassifiedSources": len(sources) - len(covered),
+        "omittedSources": len(sources) - len(cited),
+        "contextOnlySources": len(cited - covered),
+        "deterministicUnknownSources": deterministic_unknowns,
         "warnings": warnings,
         "repairs": repairs,
     }

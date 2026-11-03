@@ -971,6 +971,7 @@ dependencies = [
     { name = "httpx" },
     { name = "jsonschema" },
     { name = "pyyaml" },
+    { name = "tokenizers" },
 ]
 
 [package.optional-dependencies]
@@ -981,15 +982,20 @@ audio = [
 dev = [
     { name = "pytest" },
 ]
+evaluation = [
+    { name = "av" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "av", marker = "extra == 'audio'", specifier = ">=16,<17" },
+    { name = "av", marker = "extra == 'evaluation'", specifier = ">=16,<17" },
     { name = "cryptography", specifier = ">=46,<48" },
     { name = "faster-whisper", marker = "extra == 'audio'", specifier = ">=1.2,<2" },
     { name = "httpx", specifier = ">=0.28,<1" },
     { name = "jsonschema", specifier = ">=4.25,<5" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8,<10" },
     { name = "pyyaml", specifier = ">=6,<7" },
+    { name = "tokenizers", specifier = ">=0.23,<0.24" },
 ]
-provides-extras = ["audio", "dev"]
+provides-extras = ["audio", "dev", "evaluation"]

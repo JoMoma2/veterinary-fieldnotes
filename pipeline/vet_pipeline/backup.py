@@ -7,6 +7,9 @@ from .util import atomic_write, digest_file, load_json, write_json, now, lock
 
 
 def create_key(path: Path):
+    from .private import private_path
+
+    path = private_path(path)
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "wb") as f:
@@ -22,6 +25,9 @@ def cipher(keyfile):
 
 
 def create_backup(store, keyfile: Path, destination: Path):
+    from .private import private_path
+
+    destination = private_path(destination)
     with lock(store.root):
         materialize(store)
         root = current_root(store)
@@ -128,6 +134,9 @@ def inspect_backup(file: Path, keyfile: Path):
 
 
 def restore(file, keyfile, target):
+    from .private import private_path
+
+    target = private_path(target)
     if target.exists():
         raise ValueError(
             "Restore destination must not exist; never overwrite a working library"
@@ -152,8 +161,13 @@ def upload_backups(store, cfg):
         raise ValueError("Configure an rclone remote first")
     if (
         any(j["origin"] != "synthetic" for j in store.jobs())
-        and not p["allow_clinical_remote"]
-    ):
+        or any(
+            e.get("origin") != "synthetic"
+            for group, entries in current(store).items()
+            if group != "topics"
+            for e in entries
+        )
+    ) and not p["allow_clinical_remote"]:
         raise ValueError("Clinical cloud storage is not authorized")
     results = []
     for a in store.db.execute(
@@ -167,14 +181,14 @@ def upload_backups(store, cfg):
                 raise ValueError("Local backup was corrupted")
             dest = remote.rstrip("/") + "/" + file.name
             subprocess.run(
-                ["rclone", "copyto", "--immutable", str(file), dest],
+                rclone_command(cfg, ["copyto", "--immutable", str(file), dest]),
                 check=True,
                 timeout=p["timeout_seconds"],
                 capture_output=True,
             )
             # Download encrypted bytes and verify SHA256. This also works for remotes without hash support.
             r = subprocess.run(
-                ["rclone", "cat", dest],
+                rclone_command(cfg, ["cat", dest]),
                 check=True,
                 timeout=p["timeout_seconds"],
                 capture_output=True,
@@ -280,3 +294,90 @@ def retry_upload(store, id):
         raise ValueError("Unknown backup artifact")
     with store.db:
         store.db.execute("UPDATE artifacts SET attempts=0,error=NULL WHERE id=?", (id,))
+
+
+def remote_storage_type(cfg):
+    """Identify known cloud adapters without printing/decrypting configuration secrets.
+
+    Unknown, encrypted, alias and local configurations cannot establish that the
+    destination is independent. A successful transfer alone is insufficient.
+    """
+    import configparser
+
+    remote = cfg["backup"]["remote"]
+    if remote.startswith(":"):
+        return remote.split(":", 2)[1].split(",", 1)[0]
+    path = cfg["backup"].get("config_file")
+    if not path:
+        return "unknown"
+    parser = configparser.ConfigParser(interpolation=None)
+    try:
+        parser.read(Path(path).expanduser())
+        return parser.get(remote.split(":", 1)[0], "type", fallback="unknown")
+    except (configparser.Error, OSError):
+        return "unknown"
+
+
+def rclone_command(cfg, args):
+    settings = cfg["backup"]
+    command = [str(Path(settings.get("executable", "rclone")).expanduser())]
+    if settings.get("config_file"):
+        path = Path(settings["config_file"]).expanduser()
+        if not path.is_file() or path.stat().st_mode & 0o077:
+            raise ValueError(
+                "rclone config must exist outside Git with owner-only permissions"
+            )
+        from .private import private_path
+
+        private_path(path)
+        command += ["--config", str(path)]
+    return command + args
+
+
+def fetch_backup(cfg, name, keyfile, destination, expected_sha256=None):
+    """Retrieve one immutable encrypted version, authenticate/decrypt and validate it.
+
+    No sync/delete operation and no overwrite of any local working data.
+    """
+    from .private import private_path
+
+    destination = private_path(destination)
+    if destination.exists():
+        raise ValueError("Backup download destination must not exist")
+    if (
+        Path(name).name != name
+        or not name.startswith("backup-")
+        or not name.endswith(".vkb")
+    ):
+        raise ValueError("Select an exact versioned backup filename, not a remote path")
+    remote = cfg["backup"]["remote"]
+    if not remote:
+        raise ValueError("Configure an independently authenticated backup remote first")
+    destination.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    temporary = destination.with_name(
+        destination.name + ".download-" + uuid.uuid4().hex
+    )
+    try:
+        subprocess.run(
+            rclone_command(
+                cfg,
+                [
+                    "copyto",
+                    "--immutable",
+                    remote.rstrip("/") + "/" + name,
+                    str(temporary),
+                ],
+            ),
+            check=True,
+            timeout=cfg["backup"]["timeout_seconds"],
+            capture_output=True,
+        )
+        if expected_sha256 and digest_file(temporary) != expected_sha256:
+            raise ValueError(
+                "Downloaded backup hash differs from the recorded artifact"
+            )
+        inspect_backup(temporary, Path(keyfile))
+        os.rename(temporary, destination)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return destination

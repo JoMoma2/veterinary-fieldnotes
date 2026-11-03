@@ -1,0 +1,115 @@
+{
+  "dataset": "synthetic-only",
+  "date": "2026-11-02",
+  "scope": "readiness-r3; one targeted same-saved-ASR comparison, not controlled semantic validation",
+  "longRecording": {
+    "audioSeconds": 374,
+    "priorExtractionSeconds": 199.387,
+    "extractionSeconds": 125.581,
+    "wallExtractionAndProjectionSeconds": 125.983,
+    "previousClassifiedSources": 158,
+    "previousUnclassifiedSources": 14,
+    "classifiedSources": 161,
+    "unclassifiedSources": 11,
+    "deterministicUnknownSources": 0,
+    "plannedRequests": 6,
+    "oversizeRequests": 0,
+    "requests": [
+      {
+        "estimatedPromptTokens": 3699,
+        "actualPromptTokens": 3650,
+        "doneReason": "stop"
+      },
+      {
+        "estimatedPromptTokens": 2599,
+        "actualPromptTokens": 2550,
+        "doneReason": "stop"
+      },
+      {
+        "estimatedPromptTokens": 3144,
+        "actualPromptTokens": 3095,
+        "doneReason": "stop"
+      },
+      {
+        "estimatedPromptTokens": 3753,
+        "actualPromptTokens": 3704,
+        "doneReason": "stop"
+      },
+      {
+        "estimatedPromptTokens": 2758,
+        "actualPromptTokens": 2709,
+        "doneReason": "stop"
+      },
+      {
+        "estimatedPromptTokens": 2052,
+        "actualPromptTokens": 2003,
+        "doneReason": "stop"
+      }
+    ],
+    "limitations": [
+      "Chunk planning and a classification instruction both changed; not an isolated chunk-size ablation",
+      "All 172 source segments retained in accounts; copied text is not semantic accuracy",
+      "Named CEDAR follow-up and AMBER contradiction retained; separate FIP teaching has no case",
+      "Actual IV fluids sometimes labeled proposed; lactate sometimes owner-report; unknown outcome sometimes outcome",
+      "Blood-sample-unknown topics duplicated; 3 study cards versus 39 previously",
+      "ASR seeder/cedar difference remains conservatively unmerged"
+    ]
+  },
+  "privatePilotSmoke": {
+    "audioSeconds": 41.130625,
+    "transcriptionSeconds": 2.578,
+    "models": [
+      {
+        "model": "qwen3:30b",
+        "seconds": 10.685,
+        "jobsDone": true,
+        "recordCounts": {
+          "topics": 1,
+          "articles": 1,
+          "cases": 1,
+          "shifts": 1,
+          "discussions": 1,
+          "questions": 0
+        }
+      },
+      {
+        "model": "qwen3.5:9b-q4_K_M",
+        "seconds": 15.198,
+        "jobsDone": true,
+        "recordCounts": {
+          "topics": 1,
+          "articles": 1,
+          "cases": 1,
+          "shifts": 1,
+          "discussions": 1,
+          "questions": 0
+        }
+      }
+    ],
+    "cachedReplayPreservedRun": true,
+    "offlineBrowser": {
+      "viewports": [
+        390,
+        1440
+      ],
+      "networkRequests": 0,
+      "audioPlayback": true,
+      "horizontalOverflow": false
+    }
+  },
+  "backupDrill": {
+    "adapter": "rclone-local",
+    "versions": 2,
+    "remoteByteVerification": true,
+    "downloadAndDecryptionVerified": true,
+    "restoredLibrariesMatch": true,
+    "sourceUnavailable": true,
+    "independentCloudVerified": false,
+    "offMachineKeyCustodyVerified": false
+  },
+  "installed": {
+    "rclone": "1.75.2",
+    "tokenizers": "0.23.3",
+    "newModelWeights": false
+  }
+}

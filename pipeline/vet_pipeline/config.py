@@ -15,6 +15,10 @@ DEFAULT = {
         "timeout_seconds": 120,
         "context_char_limit": 12000,
         "context_window": 8192,
+        "tokenizer_path": "",
+        "tokenizer_sha256": "",
+        "chat_overhead_tokens": 64,
+        "context_safety_tokens": 128,
         "max_output_tokens": 4096,
         "repeat_penalty": 1.0,
         "presence_penalty": 0.0,
@@ -37,7 +41,13 @@ DEFAULT = {
     "archive": {"timezone": "Unknown until configured"},
     "retry": {"max_attempts": 3, "base_delay_seconds": 30},
     "retention": {"enabled": False, "days": 14, "require_remote": True},
-    "backup": {"remote": "", "allow_clinical_remote": False, "timeout_seconds": 300},
+    "backup": {
+        "remote": "",
+        "allow_clinical_remote": False,
+        "timeout_seconds": 300,
+        "executable": "rclone",
+        "config_file": "",
+    },
     "usb": {
         "roots": [],
         "device_label": "",
@@ -78,6 +88,13 @@ def config(path: Path | None = None):
     if out["retry"]["base_delay_seconds"] < 0 or out["retention"]["days"] < 0:
         raise ValueError("Negative retry or retention interval")
     t = out["transcription"]
+    p = out["provider"]
+    if (
+        p["context_window"] < 512
+        or p["max_output_tokens"] < 1
+        or min(p["chat_overhead_tokens"], p["context_safety_tokens"]) < 0
+    ):
+        raise ValueError("Invalid inference token budget")
     if out["provider"]["extraction_protocol"] not in ["legacy", "grounded-v2"]:
         raise ValueError("Unknown extraction protocol")
     if t["kind"] not in ["faster-whisper", "whisper-cpp"]:

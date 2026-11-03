@@ -21,3 +21,14 @@ __pycache__/
 content/*.previous/
 content/*.staged-*/
 fixtures/generated/
+# Defense in depth: private pilot/backup artifacts never belong in this checkout.
+/evaluations/
+/real-recordings/
+/clinical-data/
+*.vkb
+*.sqlite*
+*.key
+rclone.conf
+client_secret*.json
+*oauth-client*.json
+.~lock.*#

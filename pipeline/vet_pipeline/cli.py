@@ -50,6 +50,11 @@ def main():
     a.add_argument("backup", type=Path)
     a.add_argument("--key", required=True, type=Path)
     a.add_argument("--target", required=True, type=Path)
+    a = sub.add_parser("fetch-backup")
+    a.add_argument("name")
+    a.add_argument("--key", required=True, type=Path)
+    a.add_argument("--target", required=True, type=Path)
+    a.add_argument("--sha256")
     a = sub.add_parser("apply-edits")
     a.add_argument("--source", required=True, type=Path)
     a = sub.add_parser("recover-library")
@@ -164,6 +169,13 @@ def dispatch(a, store, cfg):
         return {"backup": str(backup.create_backup(store, a.key, a.destination))}
     if a.command == "restore":
         return {"restored": str(backup.restore(a.backup, a.key, a.target))}
+    if a.command == "fetch-backup":
+        return {
+            "downloaded": str(
+                backup.fetch_backup(cfg, a.name, a.key, a.target, a.sha256)
+            ),
+            "verified": True,
+        }
     if a.command == "apply-edits":
         from .editing import apply_edits
 

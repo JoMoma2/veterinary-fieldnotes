@@ -142,3 +142,40 @@ Copy `config/benchmarks/local-vulkan.example.toml` outside Git and verify its lo
 For the first **authorized** real pilot, use 5–15 minutes in a fresh real-only workspace. Record recollections first, then compare actual audio, transcripts, source facts, case links, article targets and cards. Correct a verbatim human reference for WER; recollection is not a transcript. A real audio manifest uses `origin: "authorized-record"` and recording entries with `id`, `file`, optional `reference`, `referenceKind: "human-transcript" | "recollection"`, and `terminology`. Pass `--origin authorized-record --authorization-ref LOCAL_PERMISSION_REFERENCE` to `scripts/benchmark-transcription.py`; recollection receives no WER score. Extraction's benchmark CLI supports the same origin/reference gate.
 
 The current Vulkan adapter requires mono 16 kHz PCM16 WAV. Convert a local copy if necessary, never the recorder original; exact hardware file format and clock/mount behavior are still unverified. Inspect **all drug names, doses, units, negations and patient labels**, not only low-confidence-looking words. Do not fix ASR by guessing. Publication/privacy review remains mandatory. Independent cloud backup/key custody, real recorder trials and full-shift quality validation still precede unattended service/deletion activation.
+
+## First-recording readiness revision (r3, 2026-11-02)
+
+This revision prepares a reviewed real pilot rather than extending the synthetic model search. No new model weights, driver/runtime changes, service restarts, clinical input or external inference occurred. Small pinned offline tokenizer metadata was installed (Qwen3 ~11.4 MB, Qwen3.5 ~12.8 MB), plus user-local rclone 1.75.2 (~30 MB release archive, official checksum verified). Existing Large V3 and all installed LLMs remain unchanged.
+
+### Whole-prompt planning and measured effects
+
+Grounded-v2 budgets the **actual serialized system/user messages**, including response schema, source identifiers/text, relevant topic naming index, role/template allowance, full output-token reservation and safety space. Pinned local tokenizers avoid an English-character heuristic. If no tokenizer is configured, a conservative UTF-8 byte bound is used. Missing/bad configured tokenizers fail before inference; no runtime tokenizer download occurs. Compatible API requests no longer append an unbudgeted duplicate schema and now set their reserved output limit explicitly.
+
+New jobs persist contiguous source ranges in `extractions/JOB/chunk-plan.json` before inference. The plan is immutable and transcript-hash bound. Existing numeric checkpoint/split files retain the historical partition, so completed results are not repacked or recomputed. If growing topic context no longer fits a saved range, the preflight guard creates durable child splits before HTTP; bounded output-limit splitting remains a fallback. A single oversized source segment fails with an understandable request for finer verified source offsets/larger context rather than silently truncating it.
+
+One targeted run reused the **same saved 374-second ASR transcript** as r2, with Qwen3 30B and the new planner/instruction:
+
+| Measurement | Prior r2 | Readiness r3 |
+| --- | ---: | ---: |
+| Extraction time | 199.387 s | 125.581 s |
+| Oversized attempted requests | 2 | 0 |
+| Classified / unclassified source segments | 158 / 14 | 161 / 11 |
+| Generated study cards | 39 | 3 |
+
+Six proactive requests completed with `stop`. Estimated/actual prompt counts were 3144/3095, 3753/3704, 2758/2709, 2599/2550, 3699/3650, 2052/2003; each reserved 4096 response tokens plus 128 safety in an 8192 window. Extraction plus file projection took 125.983 seconds. The ~37% extraction-time decrease includes avoiding failed oversized requests. **This was not a new end-to-end audio timing or an isolated chunk-size ablation:** both the planner and a classification instruction changed. It is one repeated synthetic workload, not proof of medical accuracy or full-shift throughput.
+
+Manual inspection found AMBER's conflicting grooming history preserved and CEDAR follow-up/vitals linked to its explicit earlier case. Separate FIP teaching produced no new case (the old run had an inappropriate FIP discussion case). ASR's seeder/cedar label mismatch remained deliberately separate. Smaller chunks did **not** solve all associations or consolidation: two blood-sample-unknown article targets remain, evidence kinds sometimes confuse actual IV fluids with proposed treatment or label lactate as owner-report, and card output declined sharply. New output has 13 articles, 3 cases, 34 discussions, 3 cards. Case counts alone are not accuracy scores; the waveform repeats fixtures twice. Review actual meanings/source links before acceptance.
+
+### Unclassified-source investigation
+
+The original 14 sources were genuinely absent from accepted model accounts, rather than discarded by quote validation. They included explicit missing results/diagnosis/outcome, a blood sample with no results, and context/teaching/continuation markers. The instruction now asks for clinically meaningful unknowns while avoiding unsupported topic/case assignments. All source segments still survive verbatim, even when unclassified. Literal unknown clauses can be tagged deterministically as `unknown` while remaining context-unassigned; no article, case or question is inferred from that fallback. New quality reports distinguish model omissions, context-only citations and deterministic unknown scaffolding. This fallback fired on none of the new run's remaining 11 excerpts; it is tested separately.
+
+Model-classified source coverage improved **158→161 of 172**, and unclassified segments declined **14→11**. This measures accepted source coverage, not semantic completeness: copied source text or a syntactically valid fact may still have an incorrect evidence kind or grouping. Unclassified material remains visible/highlighted in the private timeline and editable via the existing ID-preserving owner-edit path.
+
+### Private pilot workflow and smoke
+
+See [FIRST_RECORDING.md](FIRST_RECORDING.md) for exact commands. `scripts/evaluate-recording.py` accepts a WAV ≤15 minutes, preserves original/hash/timestamps, converts only a workspace copy, saves immutable ASR plus a separate manual reference, runs installed local Qwen models with identical input, and renders an offline `review.html` with audio/source links, model outputs, recollections and owner findings. Model/input/settings/digest identify independent result workspaces. References must be explicitly marked corrected before WER or reference extraction; memories are never scored as verbatim ground truth. Workspaces/keys/backups are rejected inside Git, including the private master. Real input is not routed into demo exports, cloud models, remote storage or publication.
+
+A **41.130625-second synthetic medication WAV** exercised the new path: Large V3 took **2.578 s**, Qwen3 **10.685 s**, Qwen3.5 **15.198 s**. Both completed and each saved one article/case/discussion, **zero study cards**. Cached replay reused the Qwen3 result. Offline desktop (1440 px) and mobile (390 px) browser checks showed both models, working normalized audio, no horizontal overflow and **zero HTTP requests**. This validates usability/integration, not a fresh accuracy estimate or speaker/timestamp accuracy. No real recording was available.
+
+Sanitized metrics: [validation/readiness-r3.json](validation/readiness-r3.json). Full synthetic/private artifacts: `~/.local/share/vet-fieldnotes-validation/readiness-r3/`. Existing r2 overnight estimates remain conservative illustrations; do not substitute a saved-transcript run for a new full-shift measurement. The next useful quality evidence is an authorized real pilot, not another model download.

@@ -107,12 +107,27 @@ class OutputLimitError(ValueError):
     """The provider reached its explicitly configured output budget."""
 
 
+class InputBudgetError(OutputLimitError):
+    """The full serialized messages plus reserved response cannot fit safely."""
+
+
+def grounded_messages(transcript, context):
+    from . import grounded
+
+    schema, payload = grounded.request(transcript, context, KIND)
+    return schema, [
+        {"role": "system", "content": grounded.PROMPT},
+        {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+    ]
+
+
 class Provider:
     def __init__(self, cfg):
         self.cfg = cfg
         self.last_metrics = {}
         self.last_content = None
         self.last_quality = {}
+        self.last_budget = {}
 
     def extract(self, transcript, context, origin):
         authorize_provider(self.cfg, origin)
@@ -166,7 +181,15 @@ class Provider:
             {"role": "system", "content": prompt},
             {"role": "user", "content": payload},
         ]
-        kwargs = {}
+        if grounded:
+            response_schema, messages = grounded_messages(transcript, context)
+            from .budget import messages_budget
+
+            self.last_budget = messages_budget(messages, p)
+            if not self.last_budget["fits"]:
+                raise InputBudgetError(
+                    "Serialized extraction prompt plus reserved response exceeds the context budget"
+                )
         headers = {}
         if p["kind"] == "ollama":
             endpoint = p["base_url"].rstrip("/") + "/api/chat"
@@ -198,9 +221,13 @@ class Provider:
                 "model": p["model"],
                 "messages": messages,
                 "temperature": 0,
+                "max_tokens": p["max_output_tokens"],
                 "response_format": {"type": "json_object"},
             }
-            messages[0]["content"] += "\nOutput schema: " + json.dumps(response_schema)
+            # grounded_messages already serializes the complete response schema.
+            # Do not append unbudgeted duplicate schema text after preflight.
+            if not grounded:
+                messages[0]["content"] += "\nOutput schema: " + json.dumps(response_schema)
         # No response bodies in logs: errors may contain private transcript excerpts or credentials.
         with httpx.Client(
             timeout=p["timeout_seconds"], follow_redirects=False, trust_env=False
@@ -230,9 +257,20 @@ class Provider:
             else v["choices"][0]["message"]["content"]
         )
         self.last_content = content
+        if p["kind"] != "ollama" and v["choices"][0].get("finish_reason") == "length":
+            raise OutputLimitError("Model output hit its configured token limit")
         if p["kind"] == "ollama" and v.get("done_reason") == "length":
             raise OutputLimitError(
                 "Model output hit its token limit; reduce chunk size or increase the bounded output budget"
+            )
+        if (
+            grounded
+            and p["kind"] == "ollama"
+            and (v.get("prompt_eval_count") or 0) + p["max_output_tokens"]
+            > p["context_window"]
+        ):
+            raise InputBudgetError(
+                "Provider prompt accounting exceeded the reserved context budget"
             )
         data = json.loads(content)
         if grounded:
@@ -336,7 +374,7 @@ def with_topics(context, data):
     return list(by_key.values())[-16:]
 
 
-def extract_chunk(store, job, chunk, cfg, context, key, depth=0):
+def extract_chunk(store, job, chunk, cfg, context, key, depth=0, output_splits=0):
     file = store.root / "extractions" / job["id"] / f"{key}.json"
     split = file.with_suffix(".split.json")
     if file.exists():
@@ -349,18 +387,31 @@ def extract_chunk(store, job, chunk, cfg, context, key, depth=0):
         try:
             data = provider.extract(chunk, context, job["origin"])
             validate_extraction(data, chunk)
-        except OutputLimitError:
-            if depth >= 2 or len(chunk["segments"]) < 2:
+        except OutputLimitError as error:
+            is_input = isinstance(error, InputBudgetError)
+            if (
+                depth >= 8
+                or (not is_input and output_splits >= 2)
+                or len(chunk["segments"]) < 2
+            ):
                 raise
             midpoint = len(chunk["segments"]) // 2
             write_json(
                 split,
-                {"splitAt": midpoint, "reason": "output-token-limit", "maxDepth": 2},
+                {
+                    "splitAt": midpoint,
+                    "reason": "input-token-budget"
+                    if is_input
+                    else "output-token-limit",
+                    "maxDepth": 8,
+                    "maxOutputSplits": 2,
+                },
             )
             write_json(
                 store.root / "quality" / job["id"] / f"{key}-limit.json",
                 {
-                    "event": "output-limit-split",
+                    "event": "input-budget-split" if is_input else "output-limit-split",
+                    "budget": provider.last_budget,
                     "elapsedSeconds": round(time.monotonic() - started, 3),
                     "providerMetrics": provider.last_metrics,
                 },
@@ -374,18 +425,32 @@ def extract_chunk(store, job, chunk, cfg, context, key, depth=0):
                         "model": cfg["provider"]["model"],
                         "elapsedSeconds": round(time.monotonic() - started, 3),
                         "providerMetrics": provider.last_metrics,
+                        "budget": provider.last_budget,
                     },
                 )
             write_json(file, data)
             return data
-    midpoint = load_json(split)["splitAt"]
+    split_info = load_json(split)
+    midpoint = split_info["splitAt"]
+    child_output_splits = output_splits + (
+        split_info.get("reason") != "input-token-budget"
+    )
     if not 0 < midpoint < len(chunk["segments"]):
         raise ValueError("Invalid extraction split checkpoint")
     left = {**chunk, "segments": chunk["segments"][:midpoint]}
     right = {**chunk, "segments": chunk["segments"][midpoint:]}
-    first = extract_chunk(store, job, left, cfg, context, key + "-a", depth + 1)
+    first = extract_chunk(
+        store, job, left, cfg, context, key + "-a", depth + 1, child_output_splits
+    )
     second = extract_chunk(
-        store, job, right, cfg, with_topics(context, first), key + "-b", depth + 1
+        store,
+        job,
+        right,
+        cfg,
+        with_topics(context, first),
+        key + "-b",
+        depth + 1,
+        child_output_splits,
     )
     data = combine_outputs([prefix_output(first, "a"), prefix_output(second, "b")])
     validate_extraction(data, chunk)
@@ -393,8 +458,7 @@ def extract_chunk(store, job, chunk, cfg, context, key, depth=0):
     return data
 
 
-def extract_recording(store, job, t, cfg, context):
-    outputs = []
+def legacy_source_chunks(t, cfg):
     limit = cfg["provider"]["transcript_char_limit"]
     if (
         cfg["provider"]["kind"] != "mock"
@@ -410,7 +474,107 @@ def extract_recording(store, job, t, cfg, context):
                 "Insufficient context budget for extraction schema and bounded output"
             )
         limit = min(limit, 6000, available * 2)
-    for index, chunk in enumerate(chunks(t, limit)):
+    return chunks(t, limit)
+
+
+def planned_chunks(store, job, t, cfg, context):
+    from .budget import transcript_hash, messages_budget
+
+    folder = store.root / "extractions" / job["id"]
+    target = folder / "chunk-plan.json"
+    fingerprint = transcript_hash(t)
+    if target.exists():
+        plan = load_json(target)
+        if plan.get("transcriptSha256") != fingerprint:
+            raise ValueError("Transcript differs from immutable extraction chunk plan")
+    else:
+        legacy = folder.exists() and any(folder.glob("[0-9]*.json"))
+        budgeted = (
+            not legacy
+            and cfg["provider"]["kind"] != "mock"
+            and cfg["provider"]["extraction_protocol"] == "grounded-v2"
+        )
+        ranges = []
+        estimates = []
+        start = 0
+        count = len(t["segments"])
+        if budgeted:
+            while start < count:
+                best = start
+                left = start + 1
+                right = count
+                while left <= right:
+                    end = (left + right) // 2
+                    candidate = {**t, "segments": t["segments"][start:end]}
+                    _, messages = grounded_messages(candidate, context)
+                    estimate = messages_budget(messages, cfg["provider"])
+                    fits = (
+                        estimate["fits"]
+                        and sum(len(s["text"]) for s in candidate["segments"])
+                        <= cfg["provider"]["transcript_char_limit"]
+                    )
+                    if fits:
+                        best = end
+                        left = end + 1
+                    else:
+                        right = end - 1
+                if best == start:
+                    raise ValueError(
+                        "Insufficient context budget for one evidence segment; use a larger context or manually verified finer source segments"
+                    )
+                # Prefer a late explicit subject/case boundary, keeping its header
+                # with what follows. This is a partition, never an inferred link.
+                boundaries = [
+                    i
+                    for i in range(start + 1, best)
+                    if re.search(
+                        r"^\s*(?:separate\b|returning to (?:synthetic )?case\b)",
+                        t["segments"][i]["text"],
+                        re.I,
+                    )
+                ]
+                if boundaries and boundaries[-1] >= start + (best - start) // 2:
+                    best = boundaries[-1]
+                if best > start + 1 and t["segments"][best - 1][
+                    "text"
+                ].rstrip().endswith(","):
+                    best -= 1
+                _, messages = grounded_messages(
+                    {**t, "segments": t["segments"][start:best]}, context
+                )
+                ranges.append([start, best])
+                estimates.append(messages_budget(messages, cfg["provider"]))
+                start = best
+        else:
+            for chunk in legacy_source_chunks(t, cfg):
+                end = start + len(chunk["segments"])
+                ranges.append([start, end])
+                start = end
+        plan = {
+            "schemaVersion": 1,
+            "transcriptSha256": fingerprint,
+            "strategy": "serialized-message-budget"
+            if budgeted
+            else "legacy-boundaries",
+            "ranges": ranges,
+            "initialBudgets": estimates,
+        }
+        write_json(target, plan)
+    last = 0
+    for start, end in plan["ranges"]:
+        if start != last or not start < end <= len(t["segments"]):
+            raise ValueError("Invalid extraction chunk plan")
+        last = end
+    if last != len(t["segments"]):
+        raise ValueError("Incomplete extraction chunk plan")
+    return [
+        {**t, "segments": t["segments"][start:end]} for start, end in plan["ranges"]
+    ]
+
+
+def extract_recording(store, job, t, cfg, context):
+    outputs = []
+    for index, chunk in enumerate(planned_chunks(store, job, t, cfg, context)):
         data = extract_chunk(store, job, chunk, cfg, context, f"{index:04d}")
         context = with_topics(context, data)
         outputs.append(prefix_output(data, f"c{index}"))
