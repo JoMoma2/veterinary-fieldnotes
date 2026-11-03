@@ -231,31 +231,13 @@ Cleanup is dry-run by default (`cleanup`). Enable `[retention] enabled=true` onl
 
 ## Recorder and unattended Ubuntu service
 
-The service is supplied but **not installed/enabled**. First inspect the real recorder with `lsblk -o NAME,LABEL,MOUNTPOINTS,TRAN,RM`. Ubuntu must mount it; the application does not change system automount or udev settings.
+See [USB_AUTOMATION.md](USB_AUTOMATION.md) for the actual staged setup, first-shift instructions and test evidence. Production now uses `vet-pipeline unattended`, which enforces exact registered UUID/serial matching, source-preservation locks, local inference, per-stage shared-GPU deferral, temporary sleep inhibition, resumable jobs, private synchronization and offline morning reports. The older `scan`, `run` and `nightly` commands remain available for explicit operator workflows; the unattended service adds the above guards.
 
-Configure allowed mount roots and a device label and/or chosen marker filename in `[usb]`. Discovery accepts USB-mounted storage matching those settings. The import glob does not assume device folder/filename conventions. Files younger than `stable_seconds`, symlinks, incomplete WAVs, and changing files are deferred/refused. Deduplication handles repeated connections. `scan --source /PATH` is an explicit test/diagnostic alternative.
+The owner-only configuration is `~/.config/vet-fieldnotes/pipeline.toml`; the production workspace is `~/.local/share/vet-fieldnotes-live`. Units and application launchers are installed **disabled** while the recorder is absent. Open **Fieldnotes — Register Recorder** after connecting it; activation requires a matching UUID, local recording/processing authorization and the current code's passed synthetic test. Clinical GitHub storage is a separate explicit consent/reference, public approval remains separate, and retention/deletion remain locked off. Do not bypass registration by manually enabling an unmatched timer.
 
-```bash
-uv run --project pipeline vet-pipeline --workspace /PRIVATE/WORKSPACE \
-  --config ~/.config/vet-fieldnotes/pipeline.toml scan --source /MOUNT/RECORDER --date YYYY-MM-DD
-```
+**Fieldnotes — Morning Review** opens the local `review/index.html`. It contains full retained audio/transcripts, timestamp playback, extracted discussions, article/source links, cases, study material, unclassified excerpts, timing/status and unapproved publication candidates. It uses no listening web server or external resources.
 
-The nightly command discovers configured mounts, scans independent files, resumes queued work even if the recorder was removed, synchronizes completed knowledge to configured private GitHub, optionally creates/uploads encrypted backups, and runs the configured retention policy (disabled by default). Grouping defaults to import date; pass an explicit date when an overnight shift belongs to the prior day. Recorder clock policy and automatic shift-boundary heuristics await actual hardware testing. A single continuously connected recorder may contain multiple shifts; no claim of automatic inference of those boundaries is made.
-
-Review `automation/vet-fieldnotes.service` and `.timer`. Adapt the checkout path if necessary (`%h/vet-knowledge-library` matches this host), create the private workspace and configured master checkout, preload the selected transcription model, and provide any provider key in the owner-only optional environment file. A user systemd service depends on an active user manager; lingering through logout requires an intentional system policy decision. To install after testing:
-
-```bash
-mkdir -p ~/.config/systemd/user ~/.local/share/vet-fieldnotes
-cp automation/vet-fieldnotes.{service,timer} ~/.config/systemd/user/
-systemctl --user daemon-reload
-systemctl --user start vet-fieldnotes.service    # inspect first; no timer yet
-journalctl --user -u vet-fieldnotes.service
-systemctl --user enable --now vet-fieldnotes.timer
-```
-
-The service template uses no backup-key arguments. To opt into optional encrypted backups later, explicitly add those arguments and their writable backup directory in a user unit override; no such override is required for GitHub/local operation.
-
-The timer checks every two minutes after the prior service finishes; file locks stop overlapping runs. This polling approach tolerates missed mount events without recorder-specific udev assumptions. No service was activated during implementation. Disable with `systemctl --user disable --now vet-fieldnotes.timer`.
+Polling is approximately every2minutes; automatic file stability uses observations across polls, rather than trusting the recorder's clock. Incomplete/changing WAVs are deferred individually. Queued work resumes after login/restart even if the recorder is unplugged. `Linger=no` remains unchanged: keep Ubuntu signed in (screen lock is fine); signed-out/headless activation is unverified. The service holds a temporary sleep inhibitor during active work where session policy permits, never changes global power settings, and never restarts/unloads MMM/FCC/Ollama.
 
 ## Current local AI compatibility and benchmarks
 

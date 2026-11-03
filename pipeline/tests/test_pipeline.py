@@ -231,7 +231,9 @@ def test_cleanup_requires_confirmed_backup_and_keeps_original(
     store, cfg, first, tmp_path
 ):
     run(store, cfg)
-    cfg["retention"].update(days=0, enabled=True, require_remote=True)
+    cfg["retention"].update(days=0, enabled=True, require_remote=True,
+                            automatic_deletion=True, retain_source_audio=False,
+                            retain_transcripts=False)
     assert cleanup(store, cfg, True) == []
     key = tmp_path / "key"
     create_key(key)

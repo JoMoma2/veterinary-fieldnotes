@@ -136,3 +136,6 @@ For the first **private, authorized 5–15 minute recording**, follow [FIRST_REC
 
 
 Private GitHub synchronization is configured in `[github]` of the private pipeline TOML; see [OPERATIONS.md](docs/OPERATIONS.md#private-master-synchronization). When enabled, `run` and `nightly` commit/push completed knowledge, verify the remote commit, and persist pending failures with capped retry delays. A failed push never resets completed transcription/extraction or removes local results. Clinical storage still needs both explicit authorization gates. The private real-recording evaluation tool deliberately keeps all synchronization disabled.
+
+
+For plug-in operation, see [USB_AUTOMATION.md](docs/USB_AUTOMATION.md). Disabled production units, Large V3/Qwen3 configuration and the **Fieldnotes — Register Recorder / Morning Review** launchers are staged locally. Register the actual recorder once by UUID/serial and supply local-processing authorization; a separate explicit choice controls clinical GitHub storage. The recorder is currently absent, so production activation remains pending. All imported originals, normalized copies, complete transcripts and extraction checkpoints are retained, with cleanup locked off. The background synthetic timer/recovery tests passed using real models; physical USB behavior and clinical accuracy still need real validation.

@@ -34,6 +34,9 @@ verify_interval_seconds = 3600
 
 [retention]
 enabled = false
+retain_source_audio = true
+retain_transcripts = true
+automatic_deletion = false
 days = 14
 require_remote = true
 
@@ -44,7 +47,10 @@ timeout_seconds = 300
 
 [usb]
 roots = [] # e.g. ["/media/YOUR_USER"]. USB mounts only; no arbitrary home scan.
-device_label = "" # Actual hardware configuration required.
+device_label = "" # Optional additional match.
+device_uuid = "" # Register actual filesystem UUID before unattended activation.
+device_serial = "" # Match exact inherited USB device serial when available.
+automount_read_only = false # Registration enables only for the exact registered device.
 sentinel = "" # Optional relative marker filename, chosen by the owner.
 glob = "**/*" # Extension is checked case-insensitively; filename layout is not assumed.
 stable_seconds = 30
@@ -53,3 +59,11 @@ authorization_ref = "" # Required before import; never published.
 
 [archive]
 timezone = "Unknown until configured" # e.g. America/Detroit. Does not verify device clock time.
+
+[unattended]
+simulation_root = "" # Nonempty only for isolated synthetic tests; never a production root.
+gpu_busy_limit = 20
+gpu_memory_limit_mb = 3000
+session_hours = 8 # Import-batch window, not a guessed clinical shift duration.
+timezone = "America/Detroit"
+inhibit_sleep = true

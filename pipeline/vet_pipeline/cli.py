@@ -31,6 +31,7 @@ def main():
     a = sub.add_parser("run")
     a.add_argument("--force-retry", action="store_true")
     sub.add_parser("status")
+    sub.add_parser("unattended")
     a = sub.add_parser("retry")
     a.add_argument("id")
     a = sub.add_parser("review-template")
@@ -99,6 +100,9 @@ def main():
             or (args.command == "sync-master" and result.get("pending"))
             or any(x.get("status") == "failed" for x in result.get("processing", []))
         ):
+            return 1
+        if args.command == "unattended" and (result.get("incomplete") or result.get("discoveryError")
+            or any(x.get("status") == "failed" for x in result.get("imports", []))):
             return 1
         if args.command == "nightly" and (
             any(j["stage"] != "done" for j in store.jobs())
@@ -204,6 +208,10 @@ def dispatch(a, store, cfg):
             return backup.upload_backups(store, cfg)
     if a.command == "cleanup":
         return {"eligible": backup.cleanup(store, cfg, a.apply), "deleted": a.apply}
+    if a.command == "unattended":
+        from .unattended import cycle
+
+        return cycle(store, cfg)
     if a.command in ["scan", "nightly"]:
         sources = [a.source] if getattr(a, "source", None) else automation.discover(cfg)
         imported = [

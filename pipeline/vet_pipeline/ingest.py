@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, math, re, shutil, wave
+import json, math, re, shutil, wave, uuid
 from pathlib import Path
 from .util import atomic_write, digest_file, now, write_json, load_json
 
@@ -59,16 +59,25 @@ def ingest(
         return existing["id"], False
     # A partial voice-activation file is never queued until its contents and metadata are stable.
     if kind == "audio":
-        with wave.open(str(path), "rb") as wav:
-            if wav.getnframes() == 0:
-                raise ValueError("Empty WAV")
-            frames = wav.getnframes()
-            frame_size = wav.getnchannels() * wav.getsampwidth()
-            seen = 0
-            while chunk := wav.readframes(65536):
-                seen += len(chunk)
-            if seen != frames * frame_size:
-                raise ValueError("Truncated WAV payload")
+        try:
+            wav = wave.open(str(path), "rb")
+        except wave.Error:
+            # Float/extended WAV headers need the local decoder; retain original bytes.
+            from .audio_prepare import inspect_audio
+            if not (inspect_audio(path)["durationSeconds"] or 0) > 0:
+                raise ValueError("Empty or invalid WAV")
+            wav = None
+        if wav:
+            with wav:
+                if wav.getnframes() == 0:
+                    raise ValueError("Empty WAV")
+                frames = wav.getnframes()
+                frame_size = wav.getnchannels() * wav.getsampwidth()
+                seen = 0
+                while chunk := wav.readframes(65536):
+                    seen += len(chunk)
+                if seen != frames * frame_size:
+                    raise ValueError("Truncated WAV payload")
     else:
         transcript_valid(load_json(path))
     workspace_origin = store.db.execute("SELECT origin FROM jobs LIMIT 1").fetchone()
@@ -101,6 +110,20 @@ def ingest(
 
             os.fsync(f.fileno())
         temp.replace(target)
+        import os
+        os.utime(target, ns=(before.st_atime_ns, before.st_mtime_ns))
+        with target.open("rb") as retained:
+            os.fsync(retained.fileno())
+        directory = os.open(target.parent, os.O_DIRECTORY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+        write_json(store.root / "source-metadata" / f"{job_id}.json", {
+            "originalName": path.name, "sourceModifiedNs": before.st_mtime_ns,
+            "sourceSizeBytes": before.st_size, "sha256": sha,
+            "clockConfidence": "unknown", "dateBasis": "assigned import batch; not a verified recording clock",
+        })
     finally:
         temp.unlink(missing_ok=True)
     with store.db:
@@ -136,8 +159,28 @@ def transcribe(store, job, cfg):
         t = transcript_valid(load_json(source))
     elif cfg["transcription"]["kind"] == "whisper-cpp":
         from .whisper_cpp import transcribe_cpp
-
-        t = transcribe_cpp(source, cfg["transcription"])
+        from .audio_prepare import normalize_copy
+        needs_conversion = True
+        try:
+            with wave.open(str(source), "rb") as wav:
+                needs_conversion = (wav.getframerate(), wav.getnchannels(), wav.getsampwidth()) != (16000, 1, 2)
+        except wave.Error:
+            pass
+        if needs_conversion:
+            normalized = store.root / "normalized" / f"{job['id']}.wav"
+            metadata = normalized.with_suffix(".json")
+            if normalized.exists() and metadata.exists():
+                saved = load_json(metadata)
+                if saved["originalSha256"] != digest_file(source) or saved["normalizedSha256"] != digest_file(normalized):
+                    raise ValueError("Saved normalized audio changed; preserve it for review")
+            else:
+                if normalized.exists():
+                    # A crash between audio and manifest installation: retain that copy too.
+                    normalized.rename(normalized.with_suffix(".interrupted-" + uuid.uuid4().hex + ".wav"))
+                write_json(metadata, normalize_copy(source, normalized, max_seconds=86400))
+            source = normalized
+        t = transcribe_cpp(source, {**cfg["transcription"],
+            "details_path": str(store.root / "transcription-details" / f"{job['id']}.json")})
     else:
         from faster_whisper import WhisperModel
 

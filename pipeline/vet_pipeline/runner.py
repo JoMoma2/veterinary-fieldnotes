@@ -6,7 +6,11 @@ from .extraction import extract_recording, OutputLimitError
 from .library import retrieve, commit, materialize
 
 
-def run(store, cfg, force_retry=False):
+class ProcessingDeferred(Exception):
+    """An unavailable/shared GPU should not consume a recording's retry budget."""
+
+
+def run(store, cfg, force_retry=False, before_stage=None):
     run_start = time.monotonic()
     results = []
     with lock(store.root):
@@ -22,6 +26,8 @@ def run(store, cfg, force_retry=False):
             timings = {}
             try:
                 if job["stage"] == "transcribe":
+                    if before_stage:
+                        before_stage(job, "transcribe")
                     stage_start = time.monotonic()
                     transcribe(store, job, cfg)
                     timings["transcription"] = round(time.monotonic() - stage_start, 3)
@@ -35,6 +41,8 @@ def run(store, cfg, force_retry=False):
                     job = store.get(job["id"])
                 t = load_json(store.root / "transcripts" / f"{job['id']}.json")
                 if job["stage"] == "extract":
+                    if before_stage:
+                        before_stage(job, "extract")
                     stage_start = time.monotonic()
                     context = retrieve(store, t, cfg["provider"]["context_char_limit"])
                     timings["retrieval"] = round(time.monotonic() - stage_start, 3)
@@ -85,6 +93,8 @@ def run(store, cfg, force_retry=False):
                         result["quality"]["unclassifiedSources"]
                         or result["quality"]["warnings"]
                     )
+            except ProcessingDeferred as error:
+                result = {"job": job["id"], "status": "deferred", "reason": str(error)}
             except Exception as error:
                 attempts = job["attempts"] + 1
                 # Exception class only in durable logs: model/server error text may contain clinical data.
@@ -117,6 +127,8 @@ def run(store, cfg, force_retry=False):
             with logfile.open("a") as f:
                 f.write(json.dumps({"at": now(), **result}) + "\n")
                 f.flush()
+            if result["status"] == "deferred":
+                break
         try:
             stage_start = time.monotonic()
             materialize(store)

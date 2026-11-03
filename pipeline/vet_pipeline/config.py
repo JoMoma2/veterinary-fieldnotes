@@ -48,7 +48,12 @@ DEFAULT = {
         "max_retry_seconds": 3600,
         "verify_interval_seconds": 3600,
     },
-    "retention": {"enabled": False, "days": 14, "require_remote": True},
+    "retention": {"enabled": False, "days": 14, "require_remote": True,
+                  "automatic_deletion": False, "retain_source_audio": True,
+                  "retain_transcripts": True},
+    "unattended": {"simulation_root": "", "gpu_busy_limit": 20,
+                   "gpu_memory_limit_mb": 3000, "session_hours": 8,
+                   "timezone": "America/Detroit", "inhibit_sleep": True},
     "backup": {
         "remote": "",
         "allow_clinical_remote": False,
@@ -59,6 +64,9 @@ DEFAULT = {
     "usb": {
         "roots": [],
         "device_label": "",
+        "device_uuid": "",
+        "device_serial": "",
+        "automount_read_only": False,
         "sentinel": "",
         "glob": "**/*",
         "stable_seconds": 30,
@@ -86,6 +94,10 @@ def config(path: Path | None = None):
         raise ValueError("USB sentinel must be a relative filename")
     if u["stable_seconds"] < 1:
         raise ValueError("USB stability interval must be positive")
+    if not (0 <= out["unattended"]["gpu_busy_limit"] <= 100
+            and out["unattended"]["gpu_memory_limit_mb"] >= 0
+            and 1 <= out["unattended"]["session_hours"] <= 24):
+        raise ValueError("Invalid unattended resource/session limits")
     if (
         out["provider"]["transcript_char_limit"] < 1000
         or out["provider"]["context_char_limit"] < 0

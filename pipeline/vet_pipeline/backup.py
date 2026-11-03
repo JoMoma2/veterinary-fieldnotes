@@ -214,6 +214,11 @@ def upload_backups(store, cfg):
 
 def cleanup(store, cfg, apply=False):
     p = cfg["retention"]
+    protected = (not p["automatic_deletion"] or p["retain_source_audio"] or p["retain_transcripts"])
+    if protected:
+        if apply:
+            raise ValueError("Source/transcript preservation lock prohibits cleanup")
+        return []
     if apply and not p["enabled"]:
         raise ValueError("Retention deletion is disabled in configuration")
     results = []

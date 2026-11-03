@@ -68,6 +68,13 @@ def sync_master(store, checkout: Path, cfg, allow_clinical=False, push=False):
         raise ValueError("Master synchronization requires the main branch")
     with lock(store.root):
         lib = validate_library(current(store))
+        policy = checkout / "production-storage.json"
+        if policy.exists():
+            reserved = load_json(policy)
+            if reserved.get("reservedOrigin") != "authorized-record" or reserved.get("archivePath") != "archive":
+                raise ValueError("Unsupported production archive reservation")
+            if any(e["origin"] == "synthetic" for group, values in lib.items() if group != "topics" for e in values):
+                raise ValueError("Production private archive is reserved for authorized real knowledge; use a separate synthetic repository")
         real = any(
             e["origin"] != "synthetic"
             for group, values in lib.items()

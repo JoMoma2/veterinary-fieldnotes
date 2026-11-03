@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-11-03T04:35:52.953908Z",
+  "scope": "Synthetic software integration; actual recorder absent; not clinical accuracy certification",
+  "finalLocalRun": {
+    "status": "passed",
+    "origin": "synthetic",
+    "systemdTimer": true,
+    "simulatedUSBOnly": true,
+    "recordings": 4,
+    "interruptedAndResumed": true,
+    "savedCheckpointHashesUnchanged": 3,
+    "reconnectionDeduplicated": true,
+    "originalsAndTranscriptsRetained": true,
+    "normalizedStereoCopy": true,
+    "futureRecorderTimestampHandled": true,
+    "newRecordCounts": {
+      "topics": 5,
+      "articles": 5,
+      "cases": 2,
+      "shifts": 1,
+      "discussions": 7,
+      "questions": 6
+    },
+    "secondsIncludingTimerWaits": 115.101,
+    "summary": {
+      "audioSeconds": 79.268,
+      "activeProcessingSeconds": 38.568,
+      "workerSecondsIncludingInterruptedRuns": 45.015,
+      "batchRecordingsImported": 4,
+      "batchRecordingsProcessed": 4,
+      "batchArticlesCreated": 5,
+      "batchArticlesUpdated": 0,
+      "unclassifiedDiscussions": 0
+    },
+    "fallbackSourceRecallCards": 3,
+    "vulkanConfirmedFiles": 4
+  },
+  "privateRemoteRun": {
+    "status": "passed",
+    "origin": "synthetic",
+    "systemdTimer": true,
+    "simulatedUSBOnly": true,
+    "recordings": 4,
+    "interruptedAndResumed": true,
+    "savedCheckpointHashesUnchanged": 3,
+    "reconnectionDeduplicated": true,
+    "originalsAndTranscriptsRetained": true,
+    "normalizedStereoCopy": true,
+    "futureRecorderTimestampHandled": true,
+    "newRecordCounts": {
+      "topics": 0,
+      "articles": 0,
+      "cases": 2,
+      "shifts": 1,
+      "discussions": 8,
+      "questions": 0
+    },
+    "secondsIncludingTimerWaits": 134.871,
+    "masterSync": {
+      "remote_verified": true,
+      "commit": "2d43acb6ec6184a3573f14a69f3fb8d5ba26db25",
+      "repository": "JoMoma2/veterinary-fieldnotes-master"
+    }
+  },
+  "productionPreparation": {
+    "commit": "4545eaea81b6fc8a1c00c2e2c9946776b0021881",
+    "remoteVerified": true,
+    "syntheticDataPreservedSeparately": true,
+    "liveArchiveEmpty": true
+  },
+  "activation": {
+    "productionTimerEnabled": false,
+    "actualRecorderConnected": false,
+    "userLinger": false,
+    "sourceDeletionEnabled": false,
+    "clinicalStorageEnabled": false,
+    "publicPublicationEnabled": false
+  },
+  "browser": {
+    "viewports": [
+      390,
+      1440
+    ],
+    "audioPlayback": true,
+    "sourceAnchors": true,
+    "timestampStartSeconds": 4.66,
+    "timestampSeekVerified": true,
+    "externalHttpRequests": 0
+  },
+  "pythonTests": 108
+}

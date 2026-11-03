@@ -249,3 +249,31 @@ def test_automatic_clinical_sync_does_not_bypass_explicit_authorization(
     blocked = github.sync_pending_master(store, cfg)
     assert blocked["pending"] and blocked["error"] == "ValueError"
     assert git(checkout[0], "rev-parse", "HEAD").stdout == before
+
+
+def test_prepare_live_archive_preserves_synthetic_history_and_keeps_origin_separate(store, cfg, first, checkout, monkeypatch):
+    import runpy
+    from vet_pipeline.util import load_json
+
+    run(store, cfg)
+    original = current(store)
+    path, remote = checkout
+    github.sync_master(store, path, cfg, push=True)
+    monkeypatch.setattr('sys.argv', ['prepare-live-master.py', '--checkout', str(path), '--apply', '--push'])
+    runpy.run_path(str(REPO / 'scripts/prepare-live-master.py'), run_name='__main__')
+    marker = load_json(path / 'production-storage.json')
+    assert marker['reservedOrigin'] == 'authorized-record'
+    assert not (path / 'archive').exists()
+    assert verify_snapshot(path / marker['syntheticArchive'])[0] == original
+    with pytest.raises(ValueError, match='reserved for authorized real knowledge'):
+        github.sync_master(store, path, cfg, push=True)
+    # Synthetic fixture facts with a simulated authorized origin exercise storage gates locally.
+    for row in store.db.execute("SELECT kind,id,data FROM library_records WHERE kind<>'topics'").fetchall():
+        data = json.loads(row['data']); data['origin'] = 'authorized-record'
+        with store.db:
+            store.db.execute('UPDATE library_records SET data=? WHERE kind=? AND id=?',
+                             (json.dumps(data), row['kind'], row['id']))
+    cfg['backup']['allow_clinical_remote'] = True
+    result = github.sync_master(store, path, cfg, allow_clinical=True, push=True)
+    assert result['remote_verified']
+    assert verify_snapshot(path / marker['syntheticArchive'])[0] == original

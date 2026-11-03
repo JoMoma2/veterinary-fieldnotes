@@ -1,5 +1,7 @@
 # First authorized recording: local pilot
 
+For the staged automatic USB service and desktop registration/review, use [USB_AUTOMATION.md](USB_AUTOMATION.md). This document remains the separate local-only model-comparison/reference workflow; it deliberately disables synchronization even if the supplied config enables it.
+
 Use a **5–15 minute, appropriately authorized WAV**, in a new private workspace. Recording permission, local processing permission, cloud storage permission and publication permission are separate. This workflow uploads nothing, approves nothing, starts no USB service and deletes no recording. It rejects workspaces inside any Git checkout, including the private master. Keep all names, references, corrections and reports outside Git.
 
 ## Prepare once

@@ -7,13 +7,13 @@ Wants=network-online.target
 Type=oneshot
 UMask=0077
 WorkingDirectory=%h/vet-knowledge-library
-Environment=VET_WORKSPACE=%h/.local/share/vet-fieldnotes
+Environment=VET_WORKSPACE=%h/.local/share/vet-fieldnotes-live
 EnvironmentFile=-%h/.config/vet-fieldnotes/environment
-ExecStart=%h/vet-knowledge-library/pipeline/.venv/bin/vet-pipeline --config %h/.config/vet-fieldnotes/pipeline.toml nightly
+ExecStart=%h/vet-knowledge-library/pipeline/.venv/bin/vet-pipeline --config %h/.config/vet-fieldnotes/pipeline.toml unattended
 TimeoutStartSec=infinity
 Nice=10
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ReadWritePaths=%h/.local/share/vet-fieldnotes %h/vet-knowledge-master
+ReadWritePaths=%h/.local/share/vet-fieldnotes-live -%h/vet-knowledge-master
 # Recorder mounts and model caches need read access. First cache the chosen model with the owner account.

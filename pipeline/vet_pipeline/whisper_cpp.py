@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 import wave
 from pathlib import Path
-from .util import load_json
+from .util import load_json, write_json
 
 
 def parse_whisper_cpp(data):
@@ -68,7 +68,10 @@ def transcribe_cpp(source: Path, settings):
             check=True,
             timeout=settings["timeout_seconds"],
         )
-        transcript = parse_whisper_cpp(load_json(prefix.with_suffix(".json")))
+        raw = load_json(prefix.with_suffix(".json"))
+        if settings.get("details_path"):
+            write_json(Path(settings["details_path"]), raw)
+        transcript = parse_whisper_cpp(raw)
         adjustments = []
         for index, segment in enumerate(transcript["segments"]):
             if segment["start"] >= duration or segment["end"] > duration + 1:

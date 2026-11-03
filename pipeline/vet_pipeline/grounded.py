@@ -228,6 +228,7 @@ def project(raw, transcript, context, kinds):
     covered = set()
     cited = set()
     deterministic_unknowns = 0
+    fallback_cards = 0
     warnings = []
     repairs = []
     for index, lesson in enumerate(raw["discussions"]):
@@ -459,6 +460,22 @@ def project(raw, transcript, context, kinds):
                         "sourceDiscussionIds": [local],
                     }
                 )
+            if not any(local in q["sourceDiscussionIds"] for q in result["questions"]):
+                # One literal cloze card when the model omits questions. Never
+                # turn an unclassified excerpt into a medical learning claim.
+                suitable = next((f for f in facts if 6 <= len(f["text"].split()) <= 40), None)
+                if suitable:
+                    words = suitable["text"].split()
+                    cue = " ".join(words[:min(6, len(words) // 2)])
+                    result["questions"].append({
+                        "id": f"study-{local}-source-recall", "format": "flashcard",
+                        "topics": [key],
+                        "prompt": f"Source recall — complete the recorded statement: “{cue} …”",
+                        "answer": suitable["text"],
+                        "explanation": "Deterministic source-recall fallback, not a model-authored medical question or verified recommendation. The answer is an exact recorded quote; retain its uncertainties and review the linked context.",
+                        "articleIds": [key], "sourceDiscussionIds": [local],
+                    })
+                    fallback_cards += 1
         except ValueError as error:
             warnings.append({"discussion": f"g{index + 1}", "reason": str(error)})
     # Never silently discard a source segment when a model omits or cannot ground it.
@@ -494,6 +511,7 @@ def project(raw, transcript, context, kinds):
         "omittedSources": len(sources) - len(cited),
         "contextOnlySources": len(cited - covered),
         "deterministicUnknownSources": deterministic_unknowns,
+        "fallbackSourceRecallCards": fallback_cards,
         "warnings": warnings,
         "repairs": repairs,
     }
