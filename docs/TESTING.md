@@ -77,8 +77,11 @@ A two-version encrypted synthetic backup drill actually used the rclone local ba
 
 ## Unattended retained-source deployment
 
-108 Python tests pass, including new UUID/serial matching, read-only mount command, observed stability with future device clock, source normalization/retention, protected cleanup, shared-GPU deferral/no retry consumption, unclassified report visibility, registration/proof/privacy gates, source-recall fallback provenance, and synthetic-master preservation/live-origin separation tests. No real data or paid inference used.
+110 Python tests pass, including new UUID/serial matching, read-only mount command, observed stability with future device clock, source normalization/retention, protected cleanup, shared-GPU deferral/no retry consumption, unclassified report visibility, registration/proof/privacy gates, source-recall fallback provenance, and synthetic-master preservation/live-origin separation tests. No real data or paid inference used.
 
 Real background systemd timer tests ran Large V3 Vulkan and Qwen3 on 4 synthetic WAVs, interrupted/resumed after saved work, verified 3 unchanged checkpoint hashes, reconnected without duplicates, retained every source/transcript and displayed offline reports. Three runs also verified actual private GitHub commits. The final local-only run produced 6 cards (3 labeled source-recall fallbacks); private production namespace is now reserved, so future remote synthetic tests require a separate private synthetic repository. Final run115.101 s including waits/interruption for79.268 s audio; this is functional evidence, not medical accuracy or12-hour throughput certification.
 
 Offline desktop/mobile browser checks loaded audio and validated actual4.66 s seeking, article-to-discussion anchors, no horizontal overflow and zero HTTP requests. Production units are staged, not active: real recorder absent. Unrelated pre-existing user-manager/spice unit warnings were left unchanged. Public content remains empty. See USB_AUTOMATION.md for owner steps and SESSION_HANDOFF.md for private artifact locations.
+
+
+The approved-content CLI now uses the supported project-local Node wrapper and forces production builds even if the caller has LIBRARY_DATASET=demo. Two script-level tests cover that behavior and rejection of a private destination before any export. Total110 Python tests pass. The actual generated six-card local dataset passed the four pipeline browser tests; the final production build and four privacy/search browser tests also pass.

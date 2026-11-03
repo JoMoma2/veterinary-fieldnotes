@@ -87,5 +87,10 @@
     "timestampSeekVerified": true,
     "externalHttpRequests": 0
   },
-  "pythonTests": 108
+  "pythonTests": 110,
+  "publicationHelper": {
+    "supportedNodeWrapper": true,
+    "productionDatasetForced": true,
+    "privateRepositoryRejected": true
+  }
 }

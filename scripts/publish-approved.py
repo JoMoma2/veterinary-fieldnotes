@@ -1,6 +1,6 @@
 """Explicit reviewed publication; never called by the recorder watcher."""
 
-import argparse, json, subprocess
+import argparse, json, os, subprocess
 from pathlib import Path
 from vet_pipeline.config import config
 from vet_pipeline.store import Store
@@ -27,8 +27,12 @@ try:
     counts = export(store, a.review, a.checkout / "content/public", a.allow_clinical)
 finally:
     store.close()
-subprocess.run(["npm", "run", "check"], cwd=a.checkout, check=True)
-subprocess.run(["npm", "run", "build"], cwd=a.checkout, check=True)
+# Use the same supported, user-local Node toolchain as local builds. A caller's
+# demonstration environment must never select the dataset for publication.
+node_runner = str(a.checkout / "scripts/local-node.sh")
+build_environment = {**os.environ, "LIBRARY_DATASET": "production"}
+subprocess.run([node_runner, "run", "check"], cwd=a.checkout, env=build_environment, check=True)
+subprocess.run([node_runner, "run", "build"], cwd=a.checkout, env=build_environment, check=True)
 subprocess.run(["git", "add", "--", "content/public"], cwd=a.checkout, check=True)
 changed = subprocess.run(
     ["git", "diff", "--cached", "--quiet", "--", "content/public"], cwd=a.checkout
