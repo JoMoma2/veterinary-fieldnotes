@@ -1,5 +1,20 @@
 # First authorized recording: local pilot
 
+## Rerun retained WAVs as a separate local ASR comparison
+
+USB media is unnecessary once the original WAVs are imported. The owner-authorized whole-batch test uses `scripts/benchmark-retained-asr.py`, independently of the short manually referenced pilot below. It **does not** extract knowledge, modify the existing library/transcripts, call external inference or publish/upload anything. Keep source/output/config outside Git and use a new private output directory for each configuration. Copy the existing local Vulkan example to a private profile and set `max_text_context=0` and `temperature_fallback=false` in its `[transcription]` section for the current candidate. Existing profiles/defaults remain unchanged.
+
+```bash
+cd /home/quinten/vet-knowledge-library
+uv run --project pipeline --extra evaluation python scripts/benchmark-retained-asr.py \
+  --source-workspace ~/.local/share/vet-fieldnotes-live \
+  --output ~/.local/share/vet-fieldnotes-evaluations/NEW-RETAINED-ASR-COMPARISON \
+  --config /PRIVATE/candidate.toml \
+  --authorization-ref LOCAL-RETEST-AUTHORIZATION-REFERENCE
+```
+
+Open the output's `index.html` for progress, individual original/working audio, full baseline/candidate text and timestamp/repetition warnings. Refresh after each recording. Resume with identical arguments: completed artifacts are hash-checked and reused; changed settings/source/model require a new directory. Resource deferrals return 75 and can be retried later; no other application's model is unloaded. Invalid model timestamps keep the entire raw output marked for review. A recovered raw output without a completed parse is explicitly review-required. Results remain unreviewed even when repetition is reduced; this procedure alone does not measure speech or clinical accuracy. The current transient batch unit/report are recorded in SESSION_HANDOFF.md.
+
 **After the first real ASR incident:** prioritize a clearly understandable 30–60 s passage before another long run. Listen to both the original and normalized/working copy: if only the working copy sounds wrong, investigate decoding/resampling; if both are unintelligible, assess recorder placement/settings; if speech is clear but text is repetitive, isolate the ASR failure. These are diagnostic paths, not conclusions. Write a faithful manual reference, mark uncertain words as uncertain, and compare actual speech against output rather than accepting repetition-free JSON as accurate. Preserve every old transcript/raw Whisper output. The automatic pipeline now holds severe ASR repetition/invalid timing for review and warns on already derived notes. Use a separate pilot workspace to compare corrections; do not erase applied-recording checkpoints or silently replace existing canonical notes.
 
 For the staged automatic USB service and desktop registration/review, use [USB_AUTOMATION.md](USB_AUTOMATION.md). This document remains the separate local-only model-comparison/reference workflow; it deliberately disables synchronization even if the supplied config enables it.
