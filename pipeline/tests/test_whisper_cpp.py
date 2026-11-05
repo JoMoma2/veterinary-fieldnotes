@@ -8,8 +8,12 @@ from vet_pipeline.ingest import ingest, transcribe
 from vet_pipeline.whisper_cpp import transcribe_cpp
 
 
+@pytest.mark.parametrize('decode_settings,expected_flags', [
+    ({}, []),
+    ({'max_text_context': 0, 'temperature_fallback': False}, ['-mc', '0', '-nf']),
+])
 def test_cpp_checkpoint_survives_extraction_interruption(
-    store, cfg, tmp_path, monkeypatch
+    store, cfg, tmp_path, monkeypatch, decode_settings, expected_flags
 ):
     wav = tmp_path / "synthetic.wav"
     with wave.open(str(wav), "wb") as f:
@@ -24,12 +28,17 @@ def test_cpp_checkpoint_survives_extraction_interruption(
     cfg["transcription"].update(
         kind="whisper-cpp", executable=str(executable), model=str(model)
     )
+    cfg['transcription'].update(decode_settings)
     calls = []
 
     def infer(args, **kwargs):
         calls.append(args)
         assert kwargs["timeout"] == 1800
         assert args[args.index("-dev") + 1] == "0"
+        for flag in expected_flags:
+            assert flag in args
+        if not expected_flags:
+            assert '-mc' not in args and '-nf' not in args
         from pathlib import Path
 
         Path(args[-1] + ".json").write_text(
@@ -59,6 +68,7 @@ def test_cpp_checkpoint_survives_extraction_interruption(
         first["transcriptionBackend"]["timestampAdjustments"][0]["originalEnd"] == 1.122
     )
     assert first["transcriptionBackend"]["gpuAccelerationConfirmed"]
+    assert first['transcriptionBackend']['decodingSettings']['temperatureFallback'] == cfg['transcription']['temperature_fallback']
 
 
 def test_cpp_failure_does_not_create_checkpoint(store, cfg, tmp_path, monkeypatch):

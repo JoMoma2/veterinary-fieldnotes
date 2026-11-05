@@ -46,6 +46,11 @@ def transcribe_cpp(source: Path, settings):
             )
     with tempfile.TemporaryDirectory(prefix="vet-whisper-cpp-") as tmp:
         prefix = Path(tmp) / "transcript"
+        decoding = []
+        if settings.get('max_text_context', -1) >= 0:
+            decoding += ['-mc', str(settings['max_text_context'])]
+        if not settings.get('temperature_fallback', True):
+            decoding += ['-nf']
         result = subprocess.run(
             [
                 str(executable),
@@ -59,6 +64,7 @@ def transcribe_cpp(source: Path, settings):
                 str(settings["threads"]),
                 "-dev",
                 str(settings["gpu_device"]),
+                *decoding,
                 "-ojf",
                 "-of",
                 str(prefix),
@@ -109,5 +115,7 @@ def transcribe_cpp(source: Path, settings):
             "gpuAccelerationConfirmed": bool(proof),
             "backendEvidence": proof,
             "timestampAdjustments": adjustments,
+            'decodingSettings': {'maxTextContext': settings.get('max_text_context', -1),
+                                 'temperatureFallback': settings.get('temperature_fallback', True)},
         }
         return transcript

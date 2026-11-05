@@ -17,6 +17,8 @@ device = "cpu"
 compute_type = "int8"
 language = "en"
 allow_model_download = false
+max_text_context = -1 # whisper.cpp default; compare 0 in an isolated reference benchmark to reset text carry-over.
+temperature_fallback = true # Set false only in a separate benchmark profile; defaults stay unchanged.
 
 [retry]
 max_attempts = 3
