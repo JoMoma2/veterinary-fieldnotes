@@ -151,5 +151,7 @@ def run(source, output, cfg, authorization_ref):
             write_json(root / 'progress.json', {'stage': 'between-recordings', 'lastCompleted': item['number'], 'at': now()})
             render(root, session)
             print(json.dumps({'recording': item['number'], 'status': result['status'], 'seconds': result['seconds'], 'maxPhraseRepeats': result.get('candidateQuality', {}).get('maximumPhraseRepeats')}), flush=True)
-        write_json(root / 'progress.json', {'stage': 'finished', 'at': now()})
+        progress = load_json(root / 'progress.json') if (root / 'progress.json').exists() else {}
+        if progress.get('stage') != 'finished':
+            write_json(root / 'progress.json', {'stage': 'finished', 'at': now()})
         return render(root, session)

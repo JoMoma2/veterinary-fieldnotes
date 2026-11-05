@@ -1,0 +1,84 @@
+{
+  "model": "Whisper Large V3 f16",
+  "backend": "whisper.cpp Vulkan",
+  "candidateSettings": {
+    "maxTextContext": 0,
+    "temperatureFallback": false
+  },
+  "referenceTranscriptAvailable": false,
+  "audioSeconds": 22887.021,
+  "perRecordingSecondsTotal": 633.096,
+  "wallSecondsIncludingResourceWaits": 1212.312,
+  "records": [
+    {
+      "number": 1,
+      "status": "review-required",
+      "seconds": 101.625,
+      "candidateMaximumPhraseRepeats": 17,
+      "baselineMaximumPhraseRepeats": 1843,
+      "candidateInvalidTimestampCount": 0,
+      "baselineInvalidTimestampCount": 0
+    },
+    {
+      "number": 2,
+      "status": "review-required",
+      "seconds": 97.444,
+      "candidateMaximumPhraseRepeats": 18,
+      "baselineMaximumPhraseRepeats": 2177,
+      "candidateInvalidTimestampCount": 0,
+      "baselineInvalidTimestampCount": 0
+    },
+    {
+      "number": 3,
+      "status": "review-required",
+      "seconds": 116.432,
+      "candidateMaximumPhraseRepeats": 31,
+      "baselineMaximumPhraseRepeats": 1310,
+      "candidateInvalidTimestampCount": 2,
+      "baselineInvalidTimestampCount": 7
+    },
+    {
+      "number": 4,
+      "status": "review-required",
+      "seconds": 109.517,
+      "candidateMaximumPhraseRepeats": 20,
+      "baselineMaximumPhraseRepeats": 1746,
+      "candidateInvalidTimestampCount": 0,
+      "baselineInvalidTimestampCount": 1
+    },
+    {
+      "number": 5,
+      "status": "review-required",
+      "seconds": 99.269,
+      "candidateMaximumPhraseRepeats": 48,
+      "baselineMaximumPhraseRepeats": 1604,
+      "candidateInvalidTimestampCount": 0,
+      "baselineInvalidTimestampCount": 1
+    },
+    {
+      "number": 6,
+      "status": "review-required",
+      "seconds": 104.38,
+      "candidateMaximumPhraseRepeats": 28,
+      "baselineMaximumPhraseRepeats": 1628,
+      "candidateInvalidTimestampCount": 1,
+      "baselineInvalidTimestampCount": 0
+    },
+    {
+      "number": 7,
+      "status": "completed-unreviewed",
+      "seconds": 4.429,
+      "candidateMaximumPhraseRepeats": 2,
+      "baselineMaximumPhraseRepeats": 2,
+      "candidateInvalidTimestampCount": 0,
+      "baselineInvalidTimestampCount": 0
+    }
+  ],
+  "limitations": "Technical timing/repetition/timestamp metrics only. No corrected reference transcript or speech/clinical accuracy score. Clinical content, source identities and artifacts remain private.",
+  "sourceIntegrityVerified": {
+    "originalWavs": 7,
+    "workingWavs": 7,
+    "baselineWhisperOutputs": 7
+  },
+  "resumeVerifiedWithoutRepeatedInference": true
+}

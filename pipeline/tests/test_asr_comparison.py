@@ -47,7 +47,9 @@ def test_retained_comparison_is_private_and_resumes_without_source_changes(batch
     result = execute(batch)
     assert result['completed'] == 2 and len(batch['calls']) == 2
     assert all(r['status'] == 'completed-unreviewed' for r in result['results'])
+    finished = (batch['output'] / 'progress.json').read_text()
     assert execute(batch)['completed'] == 2 and len(batch['calls']) == 2
+    assert (batch['output'] / 'progress.json').read_text() == finished
     assert all(j['stage'] == 'transcribe' for j in store.jobs())
     assert all(digest_file(store.root / 'inputs' / (j['id'] + '.wav')) == before[j['id']] for j in store.jobs())
     html = (batch['output'] / 'index.html').read_text()
