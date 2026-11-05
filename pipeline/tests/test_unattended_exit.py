@@ -17,3 +17,11 @@ def test_timer_exit_distinguishes_waiting_from_failure(store, first, monkeypatch
     monkeypatch.setattr(cli, 'dispatch', lambda *a: result)
     monkeypatch.setattr('sys.argv', ['vet-pipeline', '--workspace', str(store.root), 'unattended'])
     assert cli.main() == expected
+
+
+def test_explicit_review_hold_is_visible_without_failing_timer(store, first, monkeypatch):
+    from vet_pipeline import cli
+    store.update(first, stage='review', error='TranscriptionReviewRequired')
+    monkeypatch.setattr(cli, 'dispatch', lambda *a: {'incomplete': 1, 'processing': []})
+    monkeypatch.setattr('sys.argv', ['vet-pipeline', '--workspace', str(store.root), 'unattended'])
+    assert cli.main() == 0

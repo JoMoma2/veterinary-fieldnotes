@@ -71,7 +71,14 @@ def transcribe_cpp(source: Path, settings):
         raw = load_json(prefix.with_suffix(".json"))
         if settings.get("details_path"):
             write_json(Path(settings["details_path"]), raw)
+        from .asr_quality import assess_whisper, TranscriptionReviewRequired
+        quality = assess_whisper(raw, duration)
+        if settings.get('quality_path'):
+            write_json(Path(settings['quality_path']), quality)
+        if quality['invalidTimestampSegments'] or quality['outOfBoundsSegments']:
+            raise TranscriptionReviewRequired('Retained Whisper output has invalid source timestamps; owner review required')
         transcript = parse_whisper_cpp(raw)
+        transcript['transcriptionQuality'] = quality
         adjustments = []
         for index, segment in enumerate(transcript["segments"]):
             if segment["start"] >= duration or segment["end"] > duration + 1:

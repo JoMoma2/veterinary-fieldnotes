@@ -180,7 +180,8 @@ def transcribe(store, job, cfg):
                 write_json(metadata, normalize_copy(source, normalized, max_seconds=86400))
             source = normalized
         t = transcribe_cpp(source, {**cfg["transcription"],
-            "details_path": str(store.root / "transcription-details" / f"{job['id']}.json")})
+            "details_path": str(store.root / "transcription-details" / f"{job['id']}.json"),
+            "quality_path": str(store.root / 'transcription-quality' / f"{job['id']}.json")})
     else:
         from faster_whisper import WhisperModel
 

@@ -116,7 +116,7 @@ def cycle(store, cfg):
             state['lastDiscovery'] = {'filesSeen': len(result['imports']),
                 'waitingStable': sum(x.get('status') == 'waiting-stable' for x in result['imports'])}
             write_json(state_path, state)
-            due = any(j['stage'] != 'done' and j['attempts'] < cfg['retry']['max_attempts'] and j['retry_after'] <= time.time() for j in store.jobs())
+            due = any(j['stage'] in ['transcribe', 'extract', 'commit'] and j['attempts'] < cfg['retry']['max_attempts'] and j['retry_after'] <= time.time() for j in store.jobs())
             def stage_gate(job, stage):
                 state['activeRun'] = {'at': now(), 'recordingId': job['id'], 'stage': stage}
                 write_json(state_path, state)

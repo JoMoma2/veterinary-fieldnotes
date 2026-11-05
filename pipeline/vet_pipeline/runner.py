@@ -4,6 +4,7 @@ from .util import load_json, now, write_json, lock
 from .ingest import transcribe
 from .extraction import extract_recording, OutputLimitError
 from .library import retrieve, commit, materialize
+from .asr_quality import assess_segments, TranscriptionReviewRequired
 
 
 class ProcessingDeferred(Exception):
@@ -16,7 +17,7 @@ def run(store, cfg, force_retry=False, before_stage=None):
     with lock(store.root):
         for old in store.jobs():
             job = store.get(old["id"])
-            if job["stage"] == "done":
+            if job["stage"] in ['done', 'review']:
                 continue
             if job["attempts"] >= cfg["retry"]["max_attempts"] or (
                 not force_retry and job["retry_after"] > time.time()
@@ -40,6 +41,11 @@ def run(store, cfg, force_retry=False, before_stage=None):
                     )
                     job = store.get(job["id"])
                 t = load_json(store.root / "transcripts" / f"{job['id']}.json")
+                if job['stage'] == 'extract' and job['source_kind'] == 'audio':
+                    quality = assess_segments(t['segments'])
+                    write_json(store.root / 'transcription-quality' / f"{job['id']}.json", quality)
+                    if quality['reviewRequired']:
+                        raise TranscriptionReviewRequired('ASR repetition/quality warning; compare retained transcript with audio before extraction')
                 if job["stage"] == "extract":
                     if before_stage:
                         before_stage(job, "extract")
@@ -93,6 +99,11 @@ def run(store, cfg, force_retry=False, before_stage=None):
                         result["quality"]["unclassifiedSources"]
                         or result["quality"]["warnings"]
                     )
+            except TranscriptionReviewRequired as error:
+                store.update(job['id'], stage='review', attempts=0,
+                             error='TranscriptionReviewRequired', retry_after=0)
+                result = {'job': job['id'], 'status': 'review-required',
+                          'stage': 'review', 'reason': str(error)}
             except ProcessingDeferred as error:
                 result = {"job": job["id"], "status": "deferred", "reason": str(error)}
             except Exception as error:
@@ -154,6 +165,10 @@ def run(store, cfg, force_retry=False, before_stage=None):
 
 
 def reset_failed(store, id):
-    if not store.get(id):
+    job = store.get(id)
+    if not job:
         raise ValueError("Unknown job ID")
-    store.update(id, attempts=0, retry_after=0, error=None)
+    fields = {'attempts': 0, 'retry_after': 0, 'error': None}
+    if job['stage'] == 'review':
+        fields['stage'] = 'extract' if (store.root / 'transcripts' / f'{id}.json').exists() else 'transcribe'
+    store.update(id, **fields)

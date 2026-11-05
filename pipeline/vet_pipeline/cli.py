@@ -106,7 +106,7 @@ def main():
         # recording errors visible, including errors not yet due for another try.
         if args.command == "unattended" and (result.get("discoveryError")
             or any(x.get("status") == "failed" for x in result.get("imports", []))
-            or any(j["stage"] != "done" and j["error"] for j in store.jobs())):
+            or any(j["stage"] not in ['done', 'review'] and j["error"] for j in store.jobs())):
             return 1
         if args.command == "nightly" and (
             any(j["stage"] != "done" for j in store.jobs())

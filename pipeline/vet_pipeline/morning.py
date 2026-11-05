@@ -26,6 +26,8 @@ def report(store, cfg, state):
     audio_seconds = 0
     links = []
     groups = {}
+    asr_flagged = 0
+    asr_flagged_ids = set()
     for j in jobs:
         rid = j['id']
         meta_path = store.root / 'source-metadata' / (rid + '.json')
@@ -59,6 +61,12 @@ def report(store, cfg, state):
         else:
             media = ''
             body = '<a href="../index.html">Morning report</a>'
+        qp = store.root / 'transcription-quality' / (rid + '.json')
+        quality = load_json(qp) if qp.exists() else {}
+        if quality.get('reviewRequired'):
+            asr_flagged += 1
+            asr_flagged_ids.add(rid)
+            body += '<section class="flag"><h2>Transcription needs audio review</h2><p>Repeated text or invalid timing was detected. This is a screening warning; it does not prove which words were spoken. Existing derived knowledge may be unreliable and remains unreviewed.</p><pre>' + E(json.dumps(quality, indent=2)) + '</pre></section>'
         body += '<details><summary>Original metadata / clock uncertainty</summary><pre>' + E(json.dumps(meta, indent=2)) + '</pre></details>'
         tp = store.root / 'transcripts' / (rid + '.json')
         if tp.exists():
@@ -69,6 +77,13 @@ def report(store, cfg, state):
                 body += '<p>' + (('<a href="' + media + f'#t={s["start"]},{s["end"]}">' + label + '</a> ') if media else label + ' ') + E(s['text']) + '</p>'
         else:
             body += '<p>Transcript not available here: pending processing or recovered permanent knowledge without its original source media.</p>'
+            raw_path = store.root / 'transcription-details' / (rid + '.json')
+            if raw_path.exists():
+                raw = load_json(raw_path)
+                body += '<details><summary>Full raw Whisper output — unvalidated text and timestamps</summary><p>Preserved even when timestamp validation failed. These offsets are model output, not verified source links.</p>'
+                for entry in raw.get('transcription', []):
+                    body += '<p>' + E(json.dumps(entry.get('offsets', {}))) + ' ' + E(entry.get('text', '')) + '</p>'
+                body += '</details>'
         body += '<h2>Extracted discussions</h2>'
         for d in lib['discussions']:
             if not any(s['recordingId'] == rid for s in d['segments']):
@@ -90,7 +105,10 @@ def report(store, cfg, state):
                 output.append('<li><a href="../recordings/' + E(rid) + '.html#' + E(did) + '">' + E(d['title']) + '</a></li>')
         return '<ul>' + ''.join(output) + '</ul>'
     for a in lib['articles']:
-        atomic_write(root / 'articles' / (a['id'] + '.html'), page(a['title'], '<a href="../index.html">Morning report</a><pre>' + E(a['body']) + '</pre>' + sources(a['sourceDiscussionIds'])))
+        warning = ''
+        if any(s['recordingId'] in asr_flagged_ids for did in a['sourceDiscussionIds'] for s in dm.get(did, {}).get('segments', [])):
+            warning = '<section class="flag"><h2>Unreviewed transcription source</h2><p>This article uses ASR with quality warnings. Its claims may come from repeated or incorrectly recognized speech. Compare the linked audio before studying or relying on it.</p></section>'
+        atomic_write(root / 'articles' / (a['id'] + '.html'), page(a['title'], '<a href="../index.html">Morning report</a>' + warning + '<pre>' + E(a['body']) + '</pre>' + sources(a['sourceDiscussionIds'])))
     pending = [j for j in jobs if j['stage'] != 'done']
     seconds = 0
     events = store.root / 'events.jsonl'
@@ -112,6 +130,8 @@ def report(store, cfg, state):
     baseline = state.get('session', {}).get('articlesBefore', {})
     batch_ids = set(state.get('session', {}).get('recordingIds', []))
     summary = {'recordingsImported': len(jobs), 'recordingsProcessed': len(jobs) - len(pending),
+               'recordingsAwaitingTranscriptReview': sum(j['stage'] == 'review' for j in jobs),
+               'recordingsWithASRWarnings': asr_flagged,
                'audioSeconds': round(audio_seconds, 3), 'activeProcessingSeconds': round(seconds, 3),
                'workerSecondsIncludingInterruptedRuns': round(worker_seconds, 3),
                'batchRecordingsImported': len(batch_ids),
@@ -125,6 +145,8 @@ def report(store, cfg, state):
                'masterSync': state.get('masterSync', {}), 'lastPoll': state.get('lastPoll')}
     write_json(root / 'summary.json', summary)
     body = '<p>Private local review. Audio, full transcripts and intermediate results are retained. Import batches are not verified recording dates; clock offsets remain recording-relative.</p>'
+    if asr_flagged:
+        body += '<section class="flag"><h2>Audio/transcription review required</h2><p>' + str(asr_flagged) + ' recordings have ASR quality warnings. Read the warnings on each recording page and compare with its audio. Previously generated notes and questions from flagged sources are unreviewed; successful processing does not establish accuracy.</p></section>'
     body += '<h2>Processing summary</h2><pre>' + E(json.dumps(summary, indent=2)) + '</pre>'
     body += '<p>Per-job active time excludes unfinished interrupted attempts; worker time includes interruption/import/sync overhead but excludes timer waits. Last work/batch preserves meaningful activity rather than being overwritten by idle polls.</p>'
     body += '<h2>Shift / import batches</h2>'
