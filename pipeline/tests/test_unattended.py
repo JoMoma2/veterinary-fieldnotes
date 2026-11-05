@@ -26,7 +26,7 @@ def setup(cfg, tmp_path, monkeypatch):
     from vet_pipeline.util import write_json
     write_json(tmp_path / 'private/usb-observations.json',
                {str(wav.resolve()): {'signature': [wav.stat().st_size, wav.stat().st_mtime_ns], 'since': time.time() - 100}})
-    monkeypatch.setattr('vet_pipeline.unattended.resource_gate', lambda c: None)
+    monkeypatch.setattr('vet_pipeline.unattended.resource_gate', lambda c, stage: None)
     monkeypatch.setattr('vet_pipeline.runner.transcribe', fake_transcribe)
     monkeypatch.setattr('vet_pipeline.extraction.planned_chunks', lambda store, job, t, cfg, context: [t])
     monkeypatch.setattr('vet_pipeline.extraction.Provider.extract', lambda *a: load_json(REPO / 'fixtures/pipeline/responses/first.json'))
@@ -74,7 +74,7 @@ def test_timer_cycle_retains_media_and_reports_then_deduplicates_reconnection(st
 
 def test_busy_gpu_defers_without_consuming_retry_or_losing_audio(store, cfg, tmp_path, monkeypatch):
     usb, wav = setup(cfg, tmp_path, monkeypatch)
-    def busy(c):
+    def busy(c, stage):
         assert (store.root / 'review/index.html').exists()
         assert load_json(store.root / 'review/summary.json')['lastObservedStage']['stage'] == 'transcribe'
         raise ProcessingDeferred('shared GPU busy')
@@ -82,7 +82,7 @@ def test_busy_gpu_defers_without_consuming_retry_or_losing_audio(store, cfg, tmp
     first = cycle(store, cfg)
     assert first['processing'][0]['status'] == 'deferred'
     assert store.jobs()[0]['attempts'] == 0 and store.jobs()[0]['stage'] == 'transcribe'
-    monkeypatch.setattr('vet_pipeline.unattended.resource_gate', lambda c: None)
+    monkeypatch.setattr('vet_pipeline.unattended.resource_gate', lambda c, stage: None)
     assert cycle(store, cfg)['incomplete'] == 0
 
 

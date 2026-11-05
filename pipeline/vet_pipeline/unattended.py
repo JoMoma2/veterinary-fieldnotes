@@ -5,14 +5,13 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
-import httpx
 from . import automation, backup
 from .github import sync_pending_master
 from .library import current
 from .morning import report
 from .private import private_path
 from .publication import review_template
-from .runner import run, ProcessingDeferred
+from .runner import run
 from .util import load_json, write_json, now, lock
 
 
@@ -40,37 +39,9 @@ def validate(cfg):
         raise ValueError('Select installed whisper.cpp weights; automatic downloads are forbidden')
 
 
-def resource_gate(cfg):
-    """Conservative shared-GPU policy; never unload or restart other services."""
-    from .evaluation import verified_local_model
-    try:
-        with httpx.Client(timeout=5, trust_env=False) as client:
-            response = client.get(cfg['provider']['base_url'].rstrip('/') + '/api/ps')
-            response.raise_for_status()
-            if response.json().get('models'):
-                raise ProcessingDeferred('Ollama has a resident model; waiting rather than disrupting shared MMM/FCC work')
-        verified_local_model(cfg)  # metadata only; detects cloud-backed aliases before sending data
-    except ProcessingDeferred:
-        raise
-    except Exception:
-        raise ProcessingDeferred('Local Ollama/model metadata is unavailable; saved jobs remain queued') from None
-    devices = []
-    for file in Path('/sys/class/drm').glob('card*/device/mem_info_vram_total'):
-        try:
-            if (file.parent / 'vendor').read_text().strip() == '0x1002':
-                devices.append((int(file.read_text()), file.parent))
-        except OSError:
-            pass
-    if not devices:
-        raise ProcessingDeferred('AMD GPU resource telemetry unavailable; no unverified CPU fallback')
-    _, device = max(devices)
-    try:
-        busy = int((device / 'gpu_busy_percent').read_text())
-        used = int((device / 'mem_info_vram_used').read_text()) / (1024 * 1024)
-    except OSError:
-        raise ProcessingDeferred('GPU telemetry temporarily unavailable') from None
-    if busy > cfg['unattended']['gpu_busy_limit'] or used > cfg['unattended']['gpu_memory_limit_mb']:
-        raise ProcessingDeferred(f'Shared GPU busy ({busy}%, {used:.0f} MiB); imports retained, inference deferred')
+def resource_gate(cfg, stage='transcribe'):
+    from .resources import check_resources
+    check_resources(cfg, stage)
 
 
 @contextlib.contextmanager
@@ -150,7 +121,7 @@ def cycle(store, cfg):
                 state['activeRun'] = {'at': now(), 'recordingId': job['id'], 'stage': stage}
                 write_json(state_path, state)
                 report(store, cfg, state)
-                resource_gate(cfg)
+                resource_gate(cfg, stage=stage)
             with sleep_inhibitor(cfg['unattended']['inhibit_sleep'] and due) as inhibited:
                 result['sleepInhibited'] = inhibited
                 result['processing'] = run(store, cfg, before_stage=stage_gate)

@@ -53,6 +53,8 @@ DEFAULT = {
                   "retain_transcripts": True},
     "unattended": {"simulation_root": "", "gpu_busy_limit": 20,
                    "gpu_memory_limit_mb": 3000, "session_hours": 8,
+                   "reuse_idle_ollama": True, "reuse_free_memory_mb": 1024,
+                   "transcription_free_memory_mb": 6000,
                    "timezone": "America/Detroit", "inhibit_sleep": True},
     "backup": {
         "remote": "",
@@ -98,6 +100,13 @@ def config(path: Path | None = None):
             and out["unattended"]["gpu_memory_limit_mb"] >= 0
             and 1 <= out["unattended"]["session_hours"] <= 24):
         raise ValueError("Invalid unattended resource/session limits")
+    limits = out['unattended']
+    if type(limits['reuse_idle_ollama']) is not bool or any(
+        isinstance(limits[key], bool) or not isinstance(limits[key], (int, float))
+        or not 1 <= limits[key] <= 1048576
+        for key in ['reuse_free_memory_mb', 'transcription_free_memory_mb']
+    ):
+        raise ValueError('Invalid idle-model reuse/headroom settings')
     if (
         out["provider"]["transcript_char_limit"] < 1000
         or out["provider"]["context_char_limit"] < 0

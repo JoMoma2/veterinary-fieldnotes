@@ -14,7 +14,7 @@ PROOF = Path.home() / '.local/share/vet-fieldnotes-setup/synthetic-test.json'
 
 def core_fingerprint():
     h = hashlib.sha256()
-    for name in ['automation', 'unattended', 'ingest', 'runner', 'morning', 'config', 'backup', 'whisper_cpp', 'grounded', 'github']:
+    for name in ['automation', 'unattended', 'resources', 'ingest', 'audio_prepare', 'runner', 'morning', 'config', 'backup', 'whisper_cpp', 'grounded', 'github']:
         h.update((REPO / 'pipeline/vet_pipeline' / (name + '.py')).read_bytes())
     return h.hexdigest()
 
