@@ -235,7 +235,7 @@ def test_new_knowledge_is_synced_even_during_previous_success_cache(
 
 
 def test_automatic_clinical_sync_does_not_bypass_explicit_authorization(
-    store, cfg, first, checkout
+    store, cfg, first, checkout, monkeypatch
 ):
     run(store, cfg)
     row = store.db.execute("SELECT kind,id,data FROM library_records WHERE kind='articles' LIMIT 1").fetchone()
@@ -246,9 +246,17 @@ def test_automatic_clinical_sync_does_not_bypass_explicit_authorization(
                          (json.dumps(record), row["kind"], row["id"]))
     before = git(checkout[0], "rev-parse", "HEAD").stdout
     cfg["github"].update(enabled=True, checkout=str(checkout[0]), allow_clinical=True)
+    sync = github.sync_master
+    monkeypatch.setattr(github, 'sync_master', lambda *a, **k: pytest.fail('unauthorized Git operation attempted'))
     blocked = github.sync_pending_master(store, cfg)
-    assert blocked["pending"] and blocked["error"] == "ValueError"
+    assert blocked['pending'] and blocked['status'] == 'awaiting-authorization'
+    assert blocked['attempts'] == 0 and 'error' not in blocked
+    assert github.sync_pending_master(store, cfg) == blocked
     assert git(checkout[0], "rev-parse", "HEAD").stdout == before
+    monkeypatch.setattr(github, 'sync_master', sync)
+    monkeypatch.setattr('vet_pipeline.extraction.Provider.extract', lambda *a: pytest.fail('repeated inference'))
+    cfg['backup']['allow_clinical_remote'] = True
+    assert github.sync_pending_master(store, cfg)['remote_verified']
 
 
 def test_prepare_live_archive_preserves_synthetic_history_and_keeps_origin_separate(store, cfg, first, checkout, monkeypatch):

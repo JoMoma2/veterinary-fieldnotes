@@ -96,7 +96,8 @@ def main():
         ):
             return 1
         if isinstance(result, dict) and (
-            result.get("master_sync", {}).get("pending")
+            (result.get("master_sync", {}).get("pending")
+             and result.get("master_sync", {}).get("status") != 'awaiting-authorization')
             or (args.command == "sync-master" and result.get("pending"))
             or any(x.get("status") == "failed" for x in result.get("processing", []))
         ):

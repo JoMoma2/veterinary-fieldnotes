@@ -32,10 +32,13 @@ def report(store, cfg, state):
         meta = load_json(meta_path) if meta_path.exists() else {}
         if j['source_kind'] == 'audio':
             original = store.root / 'inputs' / (rid + '.wav')
-            if original.exists() and 'durationSeconds' not in meta:
+            # Refresh old codec estimates once using the corrected duration reader;
+            # preserve original filesystem/hash/name metadata and clock uncertainty.
+            if original.exists() and ('durationSeconds' not in meta or meta.get('audioMetadataVersion') != 2):
                 try:
                     from .audio_prepare import inspect_audio
                     meta.update(inspect_audio(original))
+                    meta['audioMetadataVersion'] = 2
                     write_json(meta_path, meta)
                 except Exception:
                     meta['durationSeconds'] = None

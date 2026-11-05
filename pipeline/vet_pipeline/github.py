@@ -215,6 +215,23 @@ def sync_pending_master(store, cfg, *, force=False, checkout=None, allow_clinica
             ).encode()).hexdigest()
         prior = load_json(statefile) if statefile.exists() else {}
         same = prior.get("snapshotSha256") == fingerprint
+        real = any(e['origin'] != 'synthetic' for group, values in library.items()
+                   if group != 'topics' for e in values)
+        if real and not (clinical and cfg['backup']['allow_clinical_remote']):
+            # Intentional local-only mode is not an Internet/upload failure.
+            # Preserve a durable pending snapshot without any Git/network call.
+            if same and prior.get('status') == 'awaiting-authorization':
+                return prior
+            state = {'snapshotSha256': fingerprint, 'checkout': str(checkout),
+                     'status': 'awaiting-authorization', 'pending': True,
+                     'attempts': 0, 'retryAfter': 0,
+                     'reason': 'Private GitHub storage awaits separate authorization; local processing continues'}
+            write_json(statefile, state)
+            with (directory / 'events.jsonl').open('a') as log:
+                log.write(json.dumps({'at': now(), 'status': state['status']}) + '\n')
+                log.flush()
+                os.fsync(log.fileno())
+            return state
         clock = time.time()
         if same and not force and prior.get("retryAfter", 0) > clock:
             return {**prior, "status": "deferred" if prior.get("pending") else "verified"}

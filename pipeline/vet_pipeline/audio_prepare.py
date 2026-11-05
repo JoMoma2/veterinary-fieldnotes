@@ -9,6 +9,19 @@ from pathlib import Path
 from .util import digest_file
 
 
+def duration_seconds(path):
+    """Read PCM with stdlib; use codec-aware verified layout for other WAVs."""
+    try:
+        with wave.open(str(path), 'rb') as wav:
+            duration = wav.getnframes() / wav.getframerate()
+    except (wave.Error, EOFError):
+        duration = inspect_audio(path)['durationSeconds']
+    import math
+    if duration is None or not math.isfinite(duration) or duration <= 0:
+        raise ValueError('Audio duration is unavailable or invalid; preserve source for review')
+    return duration
+
+
 def _recorder_ima_timing(path):
     """Recognize complete IMA WAVs whose fact field incorrectly counts blocks.
 

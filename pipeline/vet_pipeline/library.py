@@ -236,10 +236,22 @@ def commit(store, job, t, extracted, timezone_name="Unknown until configured"):
         lib["shifts"].append(shift)
     duration = max(s["end"] for s in t["segments"])
     if job["source_kind"] == "audio":
-        import wave
-
-        with wave.open(str(store.root / "inputs" / f"{job['id']}.wav"), "rb") as wav:
-            duration = wav.getnframes() / wav.getframerate()
+        from .audio_prepare import duration_seconds
+        source = store.root / 'inputs' / f"{job['id']}.wav"
+        normalized = store.root / 'normalized' / f"{job['id']}.wav"
+        if normalized.exists():
+            # Source offsets refer to the actual ASR input. Resampling can add
+            # a fraction of a sample; keep those saved offsets unchanged rather
+            # than relaxing source validation against the original sample grid.
+            from .util import digest_file
+            saved = load_json(normalized.with_suffix('.json'))
+            if saved['originalSha256'] != job['sha256'] or saved['normalizedSha256'] != digest_file(normalized):
+                raise ValueError('Normalized source integrity differs; preserve audio for review')
+            duration = duration_seconds(normalized)
+            if duration != saved['normalizedDurationSeconds']:
+                raise ValueError('Normalized duration differs from saved manifest')
+        else:
+            duration = duration_seconds(source)
     from datetime import datetime, timezone
 
     shift["recordings"].append(

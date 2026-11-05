@@ -7,6 +7,8 @@ import pytest
     (False, {'incomplete': 1, 'discoveryError': 'OSError'}, 1),
     (False, {'incomplete': 1, 'imports': [{'status': 'failed'}]}, 1),
     (False, {'incomplete': 1, 'processing': [{'status': 'failed'}]}, 1),
+    (False, {'incomplete': 1, 'master_sync': {'pending': True, 'status': 'awaiting-authorization'}}, 0),
+    (False, {'incomplete': 1, 'master_sync': {'pending': True, 'status': 'failed'}}, 1),
 ])
 def test_timer_exit_distinguishes_waiting_from_failure(store, first, monkeypatch, failed, result, expected):
     from vet_pipeline import cli
