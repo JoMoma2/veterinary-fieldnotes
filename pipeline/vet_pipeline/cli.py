@@ -101,8 +101,11 @@ def main():
             or any(x.get("status") == "failed" for x in result.get("processing", []))
         ):
             return 1
-        if args.command == "unattended" and (result.get("incomplete") or result.get("discoveryError")
-            or any(x.get("status") == "failed" for x in result.get("imports", []))):
+        # Queued/GPU-deferred work is expected between timer polls. Keep actual
+        # recording errors visible, including errors not yet due for another try.
+        if args.command == "unattended" and (result.get("discoveryError")
+            or any(x.get("status") == "failed" for x in result.get("imports", []))
+            or any(j["stage"] != "done" and j["error"] for j in store.jobs())):
             return 1
         if args.command == "nightly" and (
             any(j["stage"] != "done" for j in store.jobs())

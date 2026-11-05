@@ -1,4 +1,14 @@
-# Session handoff — staged USB automation
+# Session handoff — registered recorder and first-run compatibility fix
+
+## Latest state — 2026-11-05 (supersedes staged-state notes below)
+
+The owner connected the Yiko LU08 and explicitly requested registering that specific USB device and activating automatic local processing. Its filesystem UUID and USB serial are saved **only in the private owner configuration**. The production timer is now enabled; it imports only the registered device, not arbitrary flash drives. Seven WAVs were safely imported into the live private workspace. Both clinical cloud-storage permission gates remain false; no public publication is enabled. All audio/transcript retention locks remain on. Actual private audio has now been decoded locally; do not include any of it, transcripts, private paths/identifiers or extracted content in Git.
+
+The first run failed at normalization: mono IMA ADPCM WAVs report an unreliable byte-rate duration and write **block count in the fact sample-count field**. `audio_prepare.py` now recognizes only that structurally verified pattern, checks RIFF/chunk sizes, complete blocks, samples-per-block and decoder agreement, and retains both the original header estimate and a timing warning in normalized manifests. Truncated blocks, invalid layout, corruption, ordinary PCM duration mismatches and duration limits still fail closed. All seven retained inputs normalized successfully without changing their source hashes. The samples use the declared sample rate; true recorder clock/physical timing and medical accuracy remain unverified. Do not use incorrect filenames as actual shift dates.
+
+Only Fieldnotes was paused for the repair. The seven affected transcription retry counters were reset after verified conversion, without clearing any checkpoints. The timer was restarted. The shared-GPU gate may defer while another application keeps an Ollama model resident; **never unload it or stop MMM/FCC**. The CLI now distinguishes healthy queued/deferred work from actual failures; persistent recording errors and discovery/import errors still return failure. A deferred poll does not prove transcription or extraction succeeded. Check the live ledger and morning report for the latest stage before reporting progress.
+
+Validation: **121 Python tests passed**, including new synthetic compressed-WAV compatibility/truncation/layout/limit/hash checks and deferred-versus-error exit-code tests. Source files, normalized working copies/manifests and any later transcripts remain under `~/.local/share/vet-fieldnotes-live/`; morning review is `review/index.html`. Never enable deletion, clinical uploads or public approval automatically. Independent backup remains optional/deferred. Next: allow shared GPU capacity to become available, verify the first actual Whisper transcript and subsequent extraction, then manually review real terminology/case associations and clarify recorder clock and actual coverage with the owner.
 
 ## Current outcome
 
