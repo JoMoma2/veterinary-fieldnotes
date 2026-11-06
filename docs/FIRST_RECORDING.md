@@ -1,5 +1,7 @@
 # First authorized recording: local pilot
 
+For the existing two-sample sensitivity pilot, use the **self-contained viewer** at `~/Fieldnotes-private-review/small-recorder-settings-test.html`. It embeds both short clips and their transcripts so Firefox does not need access to other hidden local files. Navigation and timestamp playback stay within that file. To regenerate a private pilot viewer, use `scripts/render-pilot-report.py PRIVATE_PILOT --output PRIVATE_REPORT.html`; inputs/outputs must stay outside Git. The generated HTML itself contains clinical audio/text: keep it private. This is bounded to 32 MiB of short-clip audio and is not a solution for embedding an entire shift. Original audio, immutable ASR and reference files remain separate and unchanged.
+
 ## Rerun retained WAVs as a separate local ASR comparison
 
 USB media is unnecessary once the original WAVs are imported. The owner-authorized whole-batch test uses `scripts/benchmark-retained-asr.py`, independently of the short manually referenced pilot below. It **does not** extract knowledge, modify the existing library/transcripts, call external inference or publish/upload anything. Keep source/output/config outside Git and use a new private output directory for each configuration. Copy the existing local Vulkan example to a private profile and set `max_text_context=0` and `temperature_fallback=false` in its `[transcription]` section for the current candidate. Existing profiles/defaults remain unchanged.
