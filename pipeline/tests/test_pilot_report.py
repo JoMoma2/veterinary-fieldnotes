@@ -66,3 +66,18 @@ def test_single_file_export_works_outside_hidden_source_directory(tmp_path):
     assert render_pilot(root, output) == output
     assert output.is_file() and (output.stat().st_mode & 0o777) == 0o600
     assert output.read_text().count('data:audio/wav;base64,') == 2
+
+
+def test_filter_comparison_labels_are_escaped_without_settings_transition_claim(tmp_path):
+    root = pilot(tmp_path)
+    from vet_pipeline.util import load_json
+    data = load_json(root / 'pilot.json')
+    data.update(title='Noise <comparison>', description='Same source; filtering only.')
+    data['samples'][0]['description'] = '<unfiltered>'
+    data['samples'][0]['quality'] = {'reviewRequired': True, 'reasons': ['Repeated <phrase>']}
+    write_json(root / 'pilot.json', data)
+    text = render_pilot(root).read_text()
+    assert 'Noise &lt;comparison&gt;' in text and '&lt;unfiltered&gt;' in text
+    assert 'Same source; filtering only.' in text
+    assert 'setting-change labels are provisional' not in text
+    assert '<strong>Review required:</strong> Repeated &lt;phrase&gt;' in text

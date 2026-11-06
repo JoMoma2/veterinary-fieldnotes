@@ -1,5 +1,21 @@
 # Session handoff — registered recorder and first-run compatibility fix
 
+## Latest work — isolated clothing-rustle comparison, 2026-11-06
+
+Owner feedback: clear portions of the previous small pilot sound90–95% correct by informal listening; clothing rustle is the remaining concern. Owner authorized both improving placement and testing software filtering, and confirmed the **entire FIRST/earlier clip** is affected. This authorizes isolated experiments only; **do not resume main processing or change recorder/production settings** yet.
+
+Final comparison root: `~/.local/share/vet-fieldnotes-evaluations/rustle-filter-20261106-035123/`. Working self-contained viewer: **`~/Fieldnotes-private-review/shirt-rustle-comparison.html`**. It contains3 versions of the same180s first pilot excerpt, with full unreviewed transcripts, source-relative start120s, timestamp buttons and embedded WAVs. Previous working earlier/later report remains separate. Nothing uploaded.
+
+New `pipeline/vet_pipeline/audio_filter.py` and `scripts/filter-review-audio.py` use already-installed PyAV/libavfilter; no ffmpeg executable, new dependency/model, driver or service modifications. Profiles: highpass=`highpass=f=80:p=2:r=f64`; denoise=that plus `afftdn=nr=6:nf=-50:tn=1:gs=5`. Outputs must be new private mono16k PCM16 WAVs outside Git; source hashes checked, atomic no-overwrite install, sample count/PTS continuity checked. A measured400-sample afftdn delay at16k is compensated by feeding400 zero samples to flush tail, removing only leading delay, and retaining exact original-length output. Synthetic impulse tests include near-end content. Profiles never run automatically.
+
+Final unfiltered/highpass/denoise timings6.310/5.313/5.941s; exact phrase max6/4/2; consecutive6/2/1; no final heuristic warnings. Same Whisper context0/fallbackfalse and settings hash; GPU acceleration confirmed. **Not measured speech accuracy.** An earlier uncorrected-delay denoise version had28 consecutive repeats; retained at `~/.local/share/vet-fieldnotes-evaluations/rustle-filter-20261106-034839/`. Do not confuse its results with the final report. ASR sensitivity to processing/boundaries is a reason to require listening/manual reference, not a reason to hide the failed trial.
+
+Final root has `pilot.json`, private `profile.toml`, immutable per-variant evaluation sessions/transcripts/draft references/ASR provenance/raw Whisper JSON, `filtered-copies/`+filter manifests, integrity snapshots, index.html and saved `run-comparison.py`. Source remains earlier pilot's immutable normalized excerpt; full original copies stay in that earlier pilot. Re-run script creates a NEW workspace (not a resume); do not invoke unnecessarily. No Qwen/knowledge generation.
+
+182Python tests pass. Firefox automated check played all3 clips (180s, advancing time, no media/page errors), clicked internal links and timestamp buttons, and saw no HTTP requests. Prior pilot full-file hashes, Morning Report hashes, production config hash and USB names/sizes/mtimes all stayed unchanged. Main service inactive/MainPID0 and timer disabled; no test process left running. `pilot_report.py` now supports escaped custom report descriptions/titles and prominent screen warnings; earlier/later default remains compatible.
+
+**Next:** owner opens the new report and compares the SAME10–20s at a time across all3 audio/transcripts. Record restored words, lost words and invented phrases, especially quiet speech/drugs. If helpful, correct each evaluation's separate reference.json and mark manually-corrected; never edit immutable ASR. Select a filter only from that listening evidence. Keep original/unfiltered fallback even if selecting one later; changing only copies is essential. No whole-batch rerun, automation restart or global production change until owner asks. Additional generic usage: docs/AUDIO_FILTER_REVIEW.md. Independent backup remains optional; clinical cloud/publication gates remain off.
+
 ## Latest state — 2026-11-05 (supersedes staged-state notes below)
 
 ### Newest state — 2026-11-06 reset; DO NOT START PROCESSING

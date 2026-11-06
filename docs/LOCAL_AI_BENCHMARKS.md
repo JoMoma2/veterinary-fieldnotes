@@ -1,5 +1,17 @@
 # Local AI results — resumed development, 2026-11-02
 
+## Clothing-rustle filtering comparison — 2026-11-06
+
+The owner informally estimates90–95% words correct outside clothing rustle on the recent pilot; this is listening feedback, **not measured WER**. They identified the first entire180s clip as rustle-heavy. Tested that same clip using existing LargeV3/Vulkan, context0/fallbackfalse, with three audio preparations. All inference was local and GPU acceleration confirmed.
+
+| Preparation | ASR seconds | Segments | Max exact phrase count | Consecutive max | Heuristic hold |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Unfiltered | 6.310 | 50 | 6 | 6 | No |
+| 80Hz two-pole high-pass | 5.313 | 39 | 4 | 2 | No |
+| Same high-pass +6dB FFT denoise | 5.941 | 40 | 2 | 1 | No |
+
+No manually corrected reference exists; **do not interpret fewer segments/repeats as improved speech or veterinary-term accuracy**. The first denoised experiment, before correcting its25ms delay, produced28 consecutive repeats; its raw output/audio remain retained separately. Filtering and slight boundary changes can harm recognition. Final delay-compensated filtered audio retains exact sample count, with synthetic impulse tests verifying near-start/middle/end alignment. No production filter/settings were enabled. Private report and next owner comparison steps: [AUDIO_FILTER_REVIEW.md](AUDIO_FILTER_REVIEW.md).182Python tests pass.
+
 **The complete local processing path now works on synthetic WAVs. It is not ready for unattended clinical use.** Large V3 substantially improves transcription, and source-grounded extraction prevents several previous failure modes. Classification, grouping, topic naming, ASR drug/case-name errors, and long-recording quality still need real-world evaluation.
 
 No real clinical material, paid inference, driver/runtime/service changes, USB activation, or automatic deletion occurred. MMM/FCC and existing Ollama defaults were preserved. Previous-session results remain in `validation/local-ai.json`; current sanitized evidence is in [validation/local-ai-r2.json](validation/local-ai-r2.json).
