@@ -58,6 +58,9 @@ def report(store, cfg, state):
             body = '<a href="../index.html">Morning report</a><p>Original filename: ' + E(j['source_name']) + '; stage: ' + E(j['stage']) + '; error: ' + E(j['error'] or 'None') + '</p>'
             body += '<p>Original copy</p><audio controls preload="none" src="../../inputs/' + rid + '.wav"></audio>'
             body += '<p>Working copy (same time origin)</p><audio controls preload="none" src="' + media + '"></audio>'
+            filtered = store.root / 'filtered' / (rid + '.wav')
+            if filtered.exists():
+                body += '<p>Filtered ASR working copy (original retained; same time origin)</p><audio controls preload="none" src="../../filtered/' + rid + '.wav"></audio>'
         else:
             media = ''
             body = '<a href="../index.html">Morning report</a>'

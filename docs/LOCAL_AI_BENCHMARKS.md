@@ -1,5 +1,9 @@
 # Local AI results — resumed development, 2026-11-02
 
+**Owner feedback — 2026-11-07:** despite good intelligible-speech ASR by informal listening, real knowledge extraction/card utility is reported extremely poor, with incoherent or nonmedical recall examples. Existing throughput, JSON validation and exact-source checks do not measure educational value. Owner requested a same-configuration rerun for examples and specifically deferred AI fixes. Old complete outputs were archived; fresh extraction checkpoints/library start empty while29parsed transcripts are reused. No claim of improved quality is warranted. Prioritize semantic relevance/card usefulness in the next authorized development session.
+
+**Owner listening follow-up / runtime promotion (2026-11-06):** owner found high-pass improved the audio/transcript and combined gentle denoise improved both further. They informally estimate98–99% words on the target clips; this remains **unmeasured**, with no manually corrected WER reference and no full-shift accuracy claim. Owner explicitly requested the full retained-source private run. Only the private live configuration was promoted to denoise+context0/fallbackfalse; general defaults stay unchanged. New integration tests verify filtering/checkpoint retention through the full synthetic library/candidate workflow. See handoff for real-run observation, not this historical benchmark table, for completion status.
+
 ## Clothing-rustle filtering comparison — 2026-11-06
 
 The owner informally estimates90–95% words correct outside clothing rustle on the recent pilot; this is listening feedback, **not measured WER**. They identified the first entire180s clip as rustle-heavy. Tested that same clip using existing LargeV3/Vulkan, context0/fallbackfalse, with three audio preparations. All inference was local and GPU acceleration confirmed.

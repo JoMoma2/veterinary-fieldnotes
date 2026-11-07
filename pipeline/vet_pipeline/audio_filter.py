@@ -1,4 +1,4 @@
-"""Conservative, opt-in audio experiments. Never used by automatic processing.
+"""Conservative, opt-in filtering of retained private working copies.
 
 Uses the already optional PyAV/libavfilter dependency, not an external service.
 Filter meanings: https://ffmpeg.org/ffmpeg-filters.html#highpass and #afftdn.
@@ -21,7 +21,7 @@ PROFILES = {
 }
 
 
-def filter_copy(source, target, profile):
+def filter_copy(source, target, profile, *, max_seconds=900):
     """Create a new private mono16k PCM16 WAV, preserving length and time origin.
 
     Reject overwrites, unexpected audio formats, changed inputs, and discontinuous
@@ -33,6 +33,8 @@ def filter_copy(source, target, profile):
     import av
 
     source, target = private_path(source), private_path(target)
+    if type(max_seconds) is not int or not 1 <= max_seconds <= 86400:
+        raise ValueError("Invalid filtered audio duration limit")
     if profile not in PROFILES:
         raise ValueError("Unknown audio experiment profile")
     if source == target or target.exists():
@@ -46,8 +48,8 @@ def filter_copy(source, target, profile):
             if (original.getnchannels(), original.getsampwidth(), original.getframerate(), original.getcomptype()) != (1, 2, 16000, "NONE"):
                 raise ValueError("Filtering requires a separate mono16k PCM16 working copy")
             expected = original.getnframes()
-            if expected <= 0 or expected > 900 * 16000:
-                raise ValueError("Keep filter experiments between one sample and 15 minutes")
+            if expected <= 0 or expected > max_seconds * 16000:
+                raise ValueError("Filtered audio exceeds the configured duration limit")
             graph = av.filter.Graph()
             inlet = graph.add_abuffer(sample_rate=16000, format="s16", layout="mono", time_base=Fraction(1, 16000))
             nodes = [inlet] + [graph.add(name, options) for name, options in PROFILES[profile]]

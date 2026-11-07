@@ -18,7 +18,8 @@ compute_type = "int8"
 language = "en"
 allow_model_download = false
 max_text_context = -1 # whisper.cpp default; compare 0 in an isolated reference benchmark to reset text carry-over.
-temperature_fallback = true # Set false only in a separate benchmark profile; defaults stay unchanged.
+temperature_fallback = true # Keep historical decoding unless reviewed results justify an explicit change.
+audio_filter = "none" # whisper-cpp only: none, highpass, or denoise (highpass + gentle FFT denoise); originals retained.
 
 [retry]
 max_attempts = 3

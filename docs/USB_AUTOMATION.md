@@ -1,5 +1,7 @@
 # USB automation and morning review
 
+**Current activation (2026-11-06):** owner requested resuming the registered recorder for the full private pipeline after reviewing filtered clips. Main timer is enabled. All audio/transcripts and intermediates are retained; no device deletion or cleanup is enabled. Public publication is explicitly on hold until morning approval. The recorder currently has35WAVs; import reads can be slow and all files are copied before AI begins. Leave the recorder plugged in until imports finish. The private Morning Review application launcher now uses the read-only loopback viewer; a publication-preview link shows saved candidate records without publishing anything. See latest SESSION_HANDOFF.md for current run status.
+
 ## Current status
 
 **The real recorder is not connected. Production configuration, disabled systemd units and desktop launchers are staged; the production timer is not active.** Isolated synthetic timer tests actually ran Large V3 Vulkan and Qwen3 30B, interrupted/resumed processing, reconnected without duplicates and automatically verified private GitHub commits. This does not verify the actual recorder's USB behavior, filesystem, clocks or medical extraction quality.

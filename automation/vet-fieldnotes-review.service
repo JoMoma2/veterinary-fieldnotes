@@ -1,0 +1,17 @@
+[Unit]
+Description=Read-only local Veterinary Fieldnotes morning review
+
+[Service]
+Type=simple
+UMask=0077
+WorkingDirectory=%h/vet-knowledge-library
+ExecStart=%h/vet-knowledge-library/pipeline/.venv/bin/python -m vet_pipeline.review_server --workspace %h/.local/share/vet-fieldnotes-live
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/.local/share/vet-fieldnotes-live
+
+[Install]
+WantedBy=default.target

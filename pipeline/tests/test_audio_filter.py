@@ -86,3 +86,11 @@ def test_rejects_git_exports_and_unknown_profiles(tmp_path):
         filter_copy(source, repo / 'private.wav', 'highpass')
     with pytest.raises(ValueError, match='Unknown'):
         filter_copy(source, tmp_path / 'new.wav', 'arbitrary filter chain')
+
+
+def test_explicit_long_recording_limit_preserves_samples(tmp_path):
+    source = tmp_path / 'source.wav'; audio(source, samples=32037)
+    with pytest.raises(ValueError, match='duration limit'):
+        filter_copy(source, tmp_path / 'too-long.wav', 'denoise', max_seconds=2)
+    result = filter_copy(source, tmp_path / 'allowed.wav', 'denoise', max_seconds=86400)
+    assert result['samples'] == 32037

@@ -1,7 +1,8 @@
 # Private clothing-rustle comparison
 
 Filtering is an experiment on **copies**, never a replacement for original audio.
-It is not enabled in automatic processing. Reducing contact with the microphone
+The owner has now explicitly enabled the combined profile for the retained-source
+private run; general defaults remain unfiltered. Public publication is on hold. Reducing contact with the microphone
 can be tried alongside filtering; do not change recorder settings preemptively.
 
 Open `~/Fieldnotes-private-review/shirt-rustle-comparison.html` in Firefox.

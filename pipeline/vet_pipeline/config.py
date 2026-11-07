@@ -39,6 +39,7 @@ DEFAULT = {
         "timeout_seconds": 1800,
         "max_text_context": -1,
         "temperature_fallback": True,
+        "audio_filter": "none",
     },
     "archive": {"timezone": "Unknown until configured"},
     "retry": {"max_attempts": 3, "base_delay_seconds": 30},
@@ -140,6 +141,8 @@ def config(path: Path | None = None):
         raise ValueError("Invalid transcription resource limits")
     if type(t['max_text_context']) is not int or not -1 <= t['max_text_context'] <= 16384 or type(t['temperature_fallback']) is not bool:
         raise ValueError('Invalid Whisper decoding controls')
+    if t['audio_filter'] not in ['none', 'highpass', 'denoise'] or (t['audio_filter'] != 'none' and t['kind'] != 'whisper-cpp'):
+        raise ValueError('Invalid Whisper audio filter')
     return out
 
 

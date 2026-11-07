@@ -179,9 +179,30 @@ def transcribe(store, job, cfg):
                     normalized.rename(normalized.with_suffix(".interrupted-" + uuid.uuid4().hex + ".wav"))
                 write_json(metadata, normalize_copy(source, normalized, max_seconds=86400))
             source = normalized
+        preprocessing = None
+        profile = cfg['transcription'].get('audio_filter', 'none')
+        if profile != 'none':
+            from .audio_filter import filter_copy, PROFILES
+            filtered = store.root / 'filtered' / f"{job['id']}.wav"
+            metadata = filtered.with_suffix('.json')
+            if filtered.exists() and metadata.exists():
+                preprocessing = load_json(metadata)
+                if (preprocessing['sourceSha256'] != digest_file(source)
+                        or preprocessing['outputSha256'] != digest_file(filtered)
+                        or preprocessing['profile'] != profile
+                        or preprocessing['filters'] != [list(v) for v in PROFILES[profile]]):
+                    raise ValueError('Saved filtered audio/profile changed; preserve it for review')
+            else:
+                if filtered.exists():
+                    filtered.rename(filtered.with_suffix('.interrupted-' + uuid.uuid4().hex + '.wav'))
+                preprocessing = filter_copy(source, filtered, profile, max_seconds=86400)
+                write_json(metadata, preprocessing)
+            source = filtered
         t = transcribe_cpp(source, {**cfg["transcription"],
             "details_path": str(store.root / "transcription-details" / f"{job['id']}.json"),
             "quality_path": str(store.root / 'transcription-quality' / f"{job['id']}.json")})
+        if preprocessing is not None:
+            t.setdefault('transcriptionBackend', {})['audioPreprocessing'] = preprocessing
     else:
         from faster_whisper import WhisperModel
 
