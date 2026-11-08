@@ -1,5 +1,39 @@
 # Session handoff — whole-night context evaluation
 
+## Latest active task — speakers and medical study questions, 2026-11-08
+
+Owner approved both changes and requested the SAME full last shift, preserving raw audio/transcripts, then explicitly asked not to watch the entire test for token reasons. After startup verification leave it running. They report much better large-context notes and want to focus on question quality. No publication or global service changes. Latest clarification: use ALL conversational context to propose doctor/staff/client roles and patient relationships, with subjective confidence and evidence; avoid invented identities, ownership from mere patient mentions, or confidence presented as fact. Persistent staff recognition is low priority/deferred; no client history/roster.
+
+**Working and launched:** separate Python3.12 CPU diarization environment, public small pyannote3.0 segmentation + English WeSpeakerResNet34 ONNX models. Anonymous labels try to match across chunks/files within this shift. Turn alignment is segment-level; mixed/poor coverage stays unknown. Labels are not verified identities. Per-ten-minute inference checkpoints and shift-only vectors preserve work on interruption.3attempts/chunk; failed recordings/chunks do not erase successful ones. No GPU/ROCm/Ollama modifications. Qwen runs AFTER the CPU phase, retains whole-night context and exact source validation, with speaker tags and inferred role hypotheses. Only self-contained transferable medical questions; no case trivia/vignettes or forced cards. The old grounded quote-completion fallback was removed for future processing; old saved outputs were not overwritten.
+
+**Paths:**
+- New private experiment: ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/speakers-medical-20261108/
+- Source/reference: earlier focused-evidence/ experiment; same78recordings/72parsed transcripts. No Whisper rerun.20ASR-warning parsed files remain context-only;6raw-only files stay reviewable, not evidence.
+- Visible review: ~/Fieldnotes-private-review/Speakers-and-medical-questions-20261108/
+- Open Results.html directly for standalone readable notes + speaker transcript (no links/server required). Medical-notes.md and Speaker-labelled-transcript.md are text copies. Audio-review.html links to the separate read-only local audio viewer; if a viewer restarts its capability URL can become stale, but standalone files still work.
+- Models/manifest: ~/.local/share/vet-fieldnotes-ai/models/speakers/models.json
+- Isolated environment: ~/.local/share/vet-fieldnotes-ai/diarization-venv/
+- Worker: vet-fieldnotes-speakers-study-20261108.service
+- Viewer: vet-fieldnotes-speakers-review-20261108.service
+
+Startup: real45secondretained-audio CPU probe completed in.86s (2turns/1embedding), proving execution only. Full run advanced through21recordings/29chunks with70anonymous clusters and zero recorded chunk errors; similarity thresholds are provisional and split/merge errors need listening review. Both audio-enabled HTML routes returned200; source WAV Range support is already tested.224Python tests passed;57focused tests passed after adding synthetic interruption/resume coverage. No semantic speaker/medical accuracy measured, no clinical publication. This is an experiment, not a promoted nightly strategy. Source words/Whisper files and oldA/Breports remain untouched. Data/vectors/reports/capability URLs stay OUTSIDE Git. Check current status rather than copying startup counts.
+
+### Continue without repeating work
+
+1. Check worker state and private speaker-progress.json first. CPU speaker stage precedes Qwen; experiment.json can still be prepared while speaker processing is running. The new experiment reserves98304context/32768output with32requestedGPUlayers; a9.67ssynthetic allocation request succeeded before Qwen began. This adds speaker-token headroom without truncating the night or reducing response room. No global model settings were changed. After CPU completion sources get reversible voice metadata and a new source hash; words/offsets stay identical. Later run() calls enforce immutable hashes and per-request token budgets.
+2. Review Results.html with the owner: voice continuity, mixed/unknown speaker labels, role/relationship evidence and alternative interpretations, fair medical-only questions. Numeric confidence is subjective, not a verified probability. Correct quotes do not prove role inference or medical correctness.
+3. Do not watch the full run merely to wait. It runs as a transient user service, with8h invocation limit and checkpoint recovery. Resource exit75 retries after60s, fatal exit1 does not loop. Persistent CPU vectors are scoped to this private test for recovery, not a permanent client recognizer or future-shift input. No automatic deletion is enabled.
+4. Resume if interrupted (only when no healthy worker is running):
+```bash
+cd /home/quinten/vet-knowledge-library
+~/.local/share/vet-fieldnotes-ai/diarization-venv/bin/python scripts/review-shift-context.py run-speakers \
+  ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/speakers-medical-20261108 \
+  --models ~/.local/share/vet-fieldnotes-ai/models/speakers/models.json
+```
+5. Do not rerun A/B with modified request flags or replace default nightly extraction with this experiment. Their original full-context and detail prompts are intentionally preserved when medicalOnlyQuestions=false. No automatic Quinten naming/staff enrollment was done; that needs an owner-confirmed reference/role mapping later.
+6. Check final git log/CI for the speaker-study milestone; completed implementation is committed separately. Main site remains empty of clinical/demo data. Next useful work follows owner review, not more speculative synthetic optimization.
+
+
 ## Latest checkpoint — 2026-11-08
 
 The owner's priority is highest extraction quality, not speed. Work continues on the **Nov 7 import batch**, even after midnight; do not silently select a different shift. All changes are isolated from the ordinary nightly library, configuration, USB automation, global Ollama/MMM/FCC and public website. Raw source data is retained; clinical cloud/publication authorization remains off.

@@ -270,3 +270,48 @@ def test_focused_packet_keeps_original_whole_context_and_budgets_extra_copies(st
     assert copied == ['b0001']
     assert 'retained-whole-night ' * 1000 in s.prompt(context, limited, s.DETAIL_SCHEMA)
     assert len(tokenizer.encode(s.prompt(context, limited, s.DETAIL_SCHEMA), add_special_tokens=False).ids) + 32768 + 512 <= cfg['provider']['context_window']
+
+
+def test_medical_question_policy_filters_case_recall_without_losing_notes(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch); value = detail()
+    value['study_questions'] = [{'prompt': 'What was Sample diagnosed with?', 'answer': 'Unknown.',
+                                'explanation': 'Case recall.', 'evidence': [{'source': 'b0002', 'quote': 'diagnosis unknown.'}]}]
+    accepted, rejected = s.validate_detail(value, load_json(root / 'sources.json'), True, ['Sample'])
+    assert not accepted['study_questions'] and accepted['facts']
+    assert rejected[0]['section'] == 'study_questions'
+    assert 'STUDY QUESTION POLICY' in s.detail_task(index()['episodes'][0], load_json(root / 'sources.json'), medical_only=True)
+    assert 'STUDY QUESTION POLICY' not in s.detail_task(index()['episodes'][0], load_json(root / 'sources.json'))
+
+
+def test_speaker_metadata_preserves_all_original_words_and_roles_need_real_ids(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch); sources = load_json(root / 'sources.json')
+    sources['b0001']['speakerSegments'] = [{**sources['b0001']['segments'][0], 'speaker': 'Speaker_001'}]
+    write_json(root / 'sources.json', sources)
+    context = s.full_context(root)
+    assert '{S001} Sample patient is uncomfortable.' in context
+    assert 'Returning to Sample; diagnosis unknown.' in context
+    value = index(); value['speaker_annotations'] = [{
+        'speaker': 'Speaker_099', 'role': 'veterinarian', 'relationship': '', 'confidence': .9,
+        'reason': 'Unsupported synthetic proposal.', 'alternatives': [],
+        'evidence': [{'source': 'b0001', 'quote': 'Sample patient'}]}]
+    accepted, rejected = s.project_index(value, sources, ['Speaker_001'])
+    assert accepted['speaker_annotations'] == [] and rejected
+    value['speaker_annotations'][0]['speaker'] = 'Speaker_001'
+    accepted, rejected = s.project_index(value, sources, ['Speaker_001'])
+    assert len(accepted['speaker_annotations']) == 1
+    # Validation checks speaker/source provenance, not whether a role is true.
+
+
+def test_owner_visible_review_is_standalone_escaped_and_outside_git(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch)
+    owner = tmp_path / 'owner-results'
+    experiment = load_json(root / 'experiment.json'); experiment['ownerResultsDirectory'] = str(owner)
+    write_json(root / 'experiment.json', experiment)
+    write_json(root / 'index-map.json', index())
+    data = detail(); data['summary'] = '<script>untrusted source</script>'
+    write_json(root / 'calls/episode-001.json', {'data': data, 'metrics': {'seconds': 1}})
+    s.render(root)
+    html = (owner / 'Results.html').read_text()
+    assert '&lt;script&gt;' in html and '<script>' not in html
+    assert 'untrusted source' in (owner / 'Medical-notes.md').read_text()
+    assert (owner / 'Results.html').stat().st_mode & 0o077 == 0

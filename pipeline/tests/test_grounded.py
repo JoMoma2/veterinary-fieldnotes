@@ -46,11 +46,13 @@ def save(store, tmp_path, t, data, name):
 
 
 def test_program_assigns_identifiers_times_and_flashcard_links():
-    t = transcript()
+    t = transcript('For synthetic case AMBER-TRAINING, diagnosis unknown. Tachypnea means an increased respiratory rate.')
     schema, payload = request(t, [], KIND)
     assert "start" not in json.dumps(schema)
     assert "localId" not in json.dumps(schema)
-    data, quality = project({"discussions": [lesson(t)]}, t, [], KIND)
+    row = lesson(t)
+    row['facts'][0].update(quote='Tachypnea means an increased respiratory rate.', question='What does tachypnea mean?')
+    data, quality = project({"discussions": [row]}, t, [], KIND)
     validate_extraction(data, t)
     d = data["discussions"][0]
     q = data["questions"][0]
@@ -61,23 +63,19 @@ def test_program_assigns_identifiers_times_and_flashcard_links():
     assert data["cases"][0]["diagnosis"] is None
 
 
-def test_literal_recall_fallback_is_labeled_and_never_infers_from_unclassified():
+def test_literal_recall_fallback_is_disabled_and_conversation_trivia_is_rejected():
     t = transcript('During classroom practice, the operator read the pump alarm history; the device model was unknown.')
     row = lesson(t, isCase=False, caseLabel=None, newTopic='Classroom pump practice')
     row['facts'][0]['question'] = ''
     data, quality = project({'discussions': [row]}, t, [], KIND)
     validate_extraction(data, t)
-    assert quality['fallbackSourceRecallCards'] == 1
-    card = data['questions'][0]
-    assert card['answer'] == t['segments'][0]['text']
-    assert card['prompt'].startswith('Source recall — complete')
-    assert 'not a model-authored medical question' in card['explanation']
-    assert card['sourceDiscussionIds'] == ['g1']
+    assert quality['fallbackSourceRecallCards'] == 0
+    assert data['questions'] == [] and data['articles']
     empty, quality = project({'discussions': []}, t, [], KIND)
     assert not empty['questions'] and quality['fallbackSourceRecallCards'] == 0
     row['facts'][0]['question'] = 'What was recorded during this practice?'
     explicit, quality = project({'discussions': [row]}, t, [], KIND)
-    assert len(explicit['questions']) == 1 and quality['fallbackSourceRecallCards'] == 0
+    assert not explicit['questions'] and quality['fallbackSourceRecallCards'] == 0
 
 
 def test_model_cannot_add_a_source_id_or_timestamp():

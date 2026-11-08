@@ -10,6 +10,7 @@ import json
 import re
 import unicodedata
 from jsonschema import Draft202012Validator
+from .study_policy import MEDICAL_QUESTION_RULES, question_rejection
 
 VERSION = "grounded-v2"
 PROMPT = """Extract useful learning from the CURRENT recording, not from your medical knowledge.
@@ -36,11 +37,13 @@ new and supply a specific newTopic name. Existing topics are a naming index, not
 current case evidence. isCase is true only for a patient discussion, false for general
 teaching/equipment. caseLabel must be a supplied explicit label occurring in that
 discussion's sources, or null. Never combine different patients. species is a word
-explicitly in the patient's source, or Unknown. Attach a useful recall question to one
-or two facts per discussion using fact.question; the answer will be that exact quote.
-Use an empty question on other facts. Do not invent IDs or times.
+explicitly in the patient's source, or Unknown. fact.question is OPTIONAL and its
+answer will be the exact fact quote. Only use a question when that quote expresses
+a general medical principle independently of a particular patient or conversation.
+Otherwise use an empty question; case details remain useful notes, not study cards.
+Do not invent IDs or times.
 Example fact: {"source":"e-example", "kind":"clinical-suspicion", "quote":"Obstruction is a concern, not confirmed."}
-The example is format guidance, never evidence for the current recording."""
+The example is format guidance, never evidence for the current recording.""" + '\n' + MEDICAL_QUESTION_RULES
 
 
 def slug(text):
@@ -448,6 +451,10 @@ def project(raw, transcript, context, kinds):
                 if not source_fact["question"].strip():
                     continue
                 fact = facts[fact_index]
+                rejected_question = question_rejection({'prompt': source_fact['question'], 'answer': fact['text']}, [lesson.get('caseLabel')])
+                if rejected_question:
+                    warnings.append({'discussion': local, 'reason': rejected_question})
+                    continue
                 result["questions"].append(
                     {
                         "id": f"study-{local}-f{fact_index + 1}",
@@ -455,27 +462,11 @@ def project(raw, transcript, context, kinds):
                         "topics": [key],
                         "prompt": source_fact["question"],
                         "answer": fact["text"],
-                        "explanation": f"Recorded evidence ({fact['kind']}): {fact['text']} This is source recall, not external medical verification.",
+                        "explanation": f"Source-supported medical knowledge ({fact['kind']}): {fact['text']} Not externally medically verified.",
                         "articleIds": [key],
                         "sourceDiscussionIds": [local],
                     }
                 )
-            if not any(local in q["sourceDiscussionIds"] for q in result["questions"]):
-                # One literal cloze card when the model omits questions. Never
-                # turn an unclassified excerpt into a medical learning claim.
-                suitable = next((f for f in facts if 6 <= len(f["text"].split()) <= 40), None)
-                if suitable:
-                    words = suitable["text"].split()
-                    cue = " ".join(words[:min(6, len(words) // 2)])
-                    result["questions"].append({
-                        "id": f"study-{local}-source-recall", "format": "flashcard",
-                        "topics": [key],
-                        "prompt": f"Source recall — complete the recorded statement: “{cue} …”",
-                        "answer": suitable["text"],
-                        "explanation": "Deterministic source-recall fallback, not a model-authored medical question or verified recommendation. The answer is an exact recorded quote; retain its uncertainties and review the linked context.",
-                        "articleIds": [key], "sourceDiscussionIds": [local],
-                    })
-                    fallback_cards += 1
         except ValueError as error:
             warnings.append({"discussion": f"g{index + 1}", "reason": str(error)})
     # Never silently discard a source segment when a model omits or cannot ground it.

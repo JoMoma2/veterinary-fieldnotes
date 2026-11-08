@@ -13,6 +13,10 @@ a.add_argument('--directory', type=Path, required=True)
 a.add_argument('--config', type=Path, required=True)
 f = sub.add_parser('prepare-focused')
 f.add_argument('reference', type=Path); f.add_argument('directory', type=Path)
+f = sub.add_parser('prepare-speakers')
+f.add_argument('reference', type=Path); f.add_argument('directory', type=Path)
+f = sub.add_parser('run-speakers')
+f.add_argument('directory', type=Path); f.add_argument('--models', type=Path, required=True)
 for name in ['run', 'report', 'watch-report', 'run-focused']:
     sub.add_parser(name).add_argument('directory', type=Path)
 args = p.parse_args()
@@ -27,6 +31,10 @@ try:
         print(shift_context.prepare_focused(args.reference, args.directory))
     elif args.command == 'run-focused':
         shift_context.run_focused_after_reference(args.directory)
+    elif args.command == 'prepare-speakers':
+        print(shift_context.prepare_speaker_study(args.reference, args.directory))
+    elif args.command == 'run-speakers':
+        shift_context.run_speaker_study(args.directory, args.models)
     else:
         print(shift_context.render(args.directory))
 except ProcessingDeferred:

@@ -47,6 +47,10 @@ def render_report(root):
     body += '<p>Reasoning mode: ' + ('enabled' if experiment.get('thinking') else 'disabled') + '; maximum generated tokens: ' + str(experiment['provider']['max_output_tokens']) + '. This is a combined context/prompt/synthesis experiment, not a controlled measurement of context alone.</p>'
     if experiment.get('focusedEvidence'):
         body += '<p><strong>Focused-evidence variant:</strong> the complete night is retained, with extra copies of selected original passages near the writing task. Same model, context allocation and output allowance; source copies are budgeted without removing original context.</p>'
+    if experiment.get('medicalOnlyQuestions'):
+        body += '<p><strong>Study policy:</strong> self-contained, transferable medical knowledge only; no case recall, case vignettes, names/dates, quotation completion or nonmedical workflow questions. Zero questions is acceptable. Passing citation checks is not medical verification.</p>'
+    if experiment.get('speakerLabels'):
+        body += '<p><a href="speakers.html">Speaker-labelled full transcript and audio review</a>. Voice labels are anonymous, shift-scoped and unverified. Mixed/unknown segments are not forced onto one person.</p>'
     if metrics:
         body += '<p>Saved inference wall time: ' + e(round(sum(m.get('seconds', 0) for m in metrics), 1)) + ' s; maximum reported input tokens: ' + str(max(m.get('prompt_eval_count', 0) or 0 for m in metrics)) + '; peak sampled GPU allocation: ' + str(max(m.get('peakGpuMiB', 0) for m in metrics)) + ' MiB.</p>'
     if experiment.get('lastErrorClass'):
@@ -70,6 +74,15 @@ def render_report(root):
                 out += '<button data-audio="../inputs/' + e(block['recordingId']) + '.wav" data-start="' + str(block['start']) + '" data-label="' + e(label) + '">Listen</button>'
             out += '</p>'
         return out + '</details>'
+
+    if index.get('speaker_annotations'):
+        body += '<section><h2>Speaker role and relationship hypotheses</h2><p>Subjective AI confidence, not calibrated probability or confirmed credentials/ownership. Voice-clustering and turn-assignment errors can invalidate an otherwise plausible interpretation.</p>'
+        markdown += ['## Speaker role and relationship hypotheses', '', 'Subjective AI confidence, not confirmed identities or calibrated probabilities.', '']
+        for annotation in index['speaker_annotations']:
+            label = annotation['speaker'] + ' — ' + annotation['role']
+            body += '<h3>' + e(label) + '</h3><p>' + e(annotation['relationship']) + '</p><p>Model confidence: ' + e(round(annotation['confidence'], 2)) + '. ' + e(annotation['reason']) + '</p><p>Alternatives: ' + e('; '.join(annotation['alternatives'])) + '</p>' + evidence(annotation['evidence'])
+            markdown += [label, annotation['relationship'], 'Model confidence: ' + str(annotation['confidence']), annotation['reason'], 'Alternatives: ' + '; '.join(annotation['alternatives']), 'Evidence: ' + '; '.join(ref['source'] + ': ' + ref['quote'] for ref in annotation['evidence']), '']
+        body += '</section>'
 
     if not episodes:
         body += '<p>The whole-night context map has not been saved yet. Source transcripts are already available below.</p>'
@@ -140,6 +153,8 @@ def render_report(root):
         for key in record['blocks']:
             block = sources[key]
             body += '<p id="' + e(key) + '"><strong>' + e(key) + ' · ' + e(f'{block["start"]:.2f}–{block["end"]:.2f}s') + '</strong> ' + e(block['text']) + '</p>'
+            if block.get('speakerSegments'):
+                body += '<p>Voice estimates: ' + e('; '.join(f"{s['startSeconds']:.2f}–{s['endSeconds']:.2f}s {s['speaker']}" for s in block['speakerSegments'])) + '</p>'
             if (root / 'inputs' / (block['recordingId'] + '.wav')).exists():
                 body += '<button data-audio="../inputs/' + e(block['recordingId']) + '.wav" data-start="' + str(block['start']) + '" data-label="Recording ' + str(block['recordingNumber']) + '">Listen at this source timestamp</button>'
         body += '</details>'

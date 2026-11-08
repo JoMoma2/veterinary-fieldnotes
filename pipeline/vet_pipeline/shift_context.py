@@ -21,6 +21,7 @@ from .private import initialize_private, private_path
 from .resources import check_resources, gpu_snapshot
 from .runner import ProcessingDeferred
 from .util import atomic_write, digest_file, load_json, lock, now, write_json
+from .study_policy import MEDICAL_QUESTION_RULES, question_rejection
 
 VERSION = 'whole-shift-review-v3'
 
@@ -39,6 +40,29 @@ EPISODE = obj({
     'association_reason': TEXT, 'sources': {'type': 'array', 'items': SOURCE, 'minItems': 1, 'uniqueItems': True},
 })
 INDEX_SCHEMA = obj({'episodes': {'type': 'array', 'items': EPISODE}, 'limitations': {'type': 'array', 'items': TEXT}})
+SPEAKER_ANNOTATION = obj({'speaker': {'type': 'string', 'pattern': '^Speaker_[0-9]{3,}$'},
+    'role': {'enum': ['veterinarian', 'veterinary-staff', 'client', 'unknown']},
+    'relationship': TEXT, 'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+    'reason': TEXT, 'alternatives': {'type': 'array', 'items': TEXT},
+    'evidence': {'type': 'array', 'items': EVIDENCE}})
+SPEAKER_INDEX_SCHEMA = obj({**INDEX_SCHEMA['properties'], 'speaker_annotations': {'type': 'array', 'items': SPEAKER_ANNOTATION}})
+SPEAKER_TASK = '''Speaker tags are UNVERIFIED voice-clustering metadata, not confirmed identities.
+Use the WHOLE transcript and conversational context to propose speaker roles or
+patient relationships when evidence supports them. Consider explicit introductions,
+forms of address, responses, responsibilities discussed and repeated consistent
+exchanges. Weigh clues together, including contrary evidence and alternative readings.
+Speaking medically, mentioning a patient, being nearby or speaking frequently alone
+does not establish a role or ownership. The same speaker can discuss several patients;
+neither their voice nor their role proves which case a passage belongs to.
+Do not infer gender, real names or credentials from a voice. Don't treat a question's
+addressee as confirmed unless the reply/turn assignment supports it; mixed-speaker
+segments and clustering errors reduce confidence. Quote the actual supporting exchanges.
+Return only useful supported speaker_annotations, with confidence 0..1 as a subjective
+model estimate, NOT calibrated probability. Relationship should state uncertainty.
+Use unknown/empty relationship when clues are weak or contradictory. No invented roles,
+patient links or background. No persistent client profiles or cross-shift identification.
+Speaker labels in source tags are metadata and must not be copied into evidence quotes.
+'''
 CLAIM = obj({'kind': {'enum': ['owner-report', 'observation', 'suspicion', 'confirmed-diagnosis', 'actual-treatment', 'proposed-treatment', 'outcome', 'recorded-reasoning', 'equipment', 'practical-technique', 'unknown']},
              'text': TEXT, 'evidence': {'type': 'array', 'items': EVIDENCE, 'minItems': 1}})
 LESSON = obj({'text': TEXT, 'limitations': TEXT, 'evidence': {'type': 'array', 'items': EVIDENCE, 'minItems': 1}})
@@ -154,7 +178,16 @@ def full_context(root):
         for key in record['blocks']:
             block = sources[key]
             flag = '' if block['eligible'] else ' ASR-REVIEW-CONTEXT-ONLY'
-            lines.append(f'[{key}{flag}] {block["text"]}')
+            text = block['text']
+            if block.get('speakerSegments'):
+                parts = []; last = None
+                for segment in block['speakerSegments']:
+                    label = segment['speaker'].replace('Speaker_', 'S') if segment['speaker'].startswith('Speaker_') else '?'
+                    if label != last:
+                        parts.append('{' + label + '}'); last = label
+                    parts.append(text[segment['from']:segment['to']])
+                text = ' '.join(parts)
+            lines.append(f'[{key}{flag}] {text}')
     return '\n'.join(lines)
 
 
@@ -233,7 +266,7 @@ def validate_index(value, sources):
     return value
 
 
-def validate_detail(value, sources):
+def validate_detail(value, sources, medical_only=False, patient_labels=()):
     Draft202012Validator(DETAIL_SCHEMA).validate(value)
     value = copy.deepcopy(value)
     accepted = {**value, 'facts': [], 'practical_lessons': [], 'study_questions': []}; rejected = []
@@ -245,6 +278,11 @@ def validate_detail(value, sources):
         accepted.update(summary='No fully cited summary accepted. Review the individually cited details below.', summary_evidence=[])
     for key in ['facts', 'practical_lessons', 'study_questions']:
         for item in value[key]:
+            if key == 'study_questions' and medical_only:
+                reason = question_rejection(item, patient_labels)
+                if reason:
+                    rejected.append({'section': key, 'reason': reason, 'item': item})
+                    continue
             try:
                 repairs += repair_evidence(item['evidence'], sources)
             except ValueError:
@@ -255,9 +293,9 @@ def validate_detail(value, sources):
     return accepted, rejected
 
 
-def project_index(value, sources):
+def project_index(value, sources, known_speakers=None):
     """Reject unsupported identity links while retaining useful unassigned episodes."""
-    Draft202012Validator(INDEX_SCHEMA).validate(value)
+    Draft202012Validator(SPEAKER_INDEX_SCHEMA if known_speakers is not None else INDEX_SCHEMA).validate(value)
     accepted = {'episodes': [], 'limitations': list(value['limitations'])}; rejected = []
     for original in value['episodes']:
         episode = copy.deepcopy(original)
@@ -284,7 +322,23 @@ def project_index(value, sources):
             episode['association'] = 'unassigned'
             episode['association_reason'] += ' No validated explicit identity evidence.'
         accepted['episodes'].append(episode)
-    return validate_index(accepted, sources), rejected
+    validate_index(accepted, sources)
+    if known_speakers is not None:
+        accepted['speaker_annotations'] = []
+        for annotation in value['speaker_annotations']:
+            try:
+                if annotation['speaker'] not in known_speakers:
+                    raise ValueError('Invented speaker ID')
+                if annotation['role'] != 'unknown' or annotation['relationship']:
+                    validate_evidence(annotation['evidence'], sources)
+                    present = {span['speaker'] for ref in annotation['evidence'] for span in sources[ref['source']].get('speakerSegments', [])}
+                    if annotation['speaker'] not in present:
+                        raise ValueError('Speaker absent from supporting source blocks')
+            except ValueError:
+                rejected.append({'reason': 'Unsupported speaker role/relationship evidence', 'item': annotation})
+            else:
+                accepted['speaker_annotations'].append(annotation)
+    return accepted, rejected
 
 
 def request_fingerprint(text, experiment):
@@ -362,9 +416,13 @@ def call(root, cfg, context, task, schema, key):
             raise ValueError('Runtime context accounting exceeded output reservation')
         data = json.loads(raw['message']['content'] if thinking else raw['response'])
         if key == 'index':
-            data, rejected = project_index(data, sources)
+            speaker_ids = load_json(root / 'speaker-labels.json')['speakers'] if experiment.get('speakerLabels') else None
+            data, rejected = project_index(data, sources, speaker_ids)
         else:
-            data, rejected = validate_detail(data, sources)
+            labels = [episode['patient_label'] for episode in load_json(root / 'index-map.json')['episodes'] if episode['patient_label']] if experiment.get('medicalOnlyQuestions') else []
+            aliases = load_json(root / 'owner-aliases.json') if (root / 'owner-aliases.json').exists() else {}
+            labels += [name for group in aliases.values() for name in group]
+            data, rejected = validate_detail(data, sources, experiment.get('medicalOnlyQuestions', False), labels)
             repairs = data.pop('_citationRepairs', [])
             if repairs:
                 write_json(folder / (key + '-repairs.json'), repairs)
@@ -424,18 +482,20 @@ def name_hints(episode, sources, aliases=None):
             'warning': 'Retrieval candidates only, NOT evidence that all mentions are the same patient. Consider every mention and its context, including later returns, explicit switches and conflicting identities. ASR-warning blocks remain context-only. Owner spelling aliases, when supplied, are annotations rather than clinical source evidence.'}
 
 
-def detail_task(episode, sources, aliases=None):
+def detail_task(episode, sources, aliases=None, medical_only=False):
     task = 'Write a detailed, readable learning account for this CANDIDATE episode, using the entire night for context. The index is a hypothesis, not evidence. Verify patient association against source text and explain uncertainty. Clearly distinguish reported facts from unknowns; summary must not add claims beyond cited facts. Preserve detailed reasoning actually discussed, diagnostic findings, treatments, practical/equipment instructions and unresolved contradictions. Teach only what was supported in this recording, not extra textbook recommendations. Generate zero to three worthwhile standalone medical/practical questions only when supported. No patient-name trivia or automatic quote-completion cards. Candidate episode:\n' + json.dumps(episode, ensure_ascii=False)
     hints = name_hints(episode, sources, aliases)
     if hints:
         task += '\nHIGH-RECALL SOURCE RETRIEVAL (not patient-link proof):\n' + json.dumps(hints, ensure_ascii=False)
+    if medical_only:
+        task += '\n' + MEDICAL_QUESTION_RULES
     return task
 
 
-def focused_task(episode, sources, aliases, context, cfg):
+def focused_task(episode, sources, aliases, context, cfg, medical_only=False):
     """Duplicate relevant originals near the writing task, retaining the FULL night."""
     from tokenizers import Tokenizer
-    base = detail_task(episode, sources, aliases)
+    base = detail_task(episode, sources, aliases, medical_only)
     hints = name_hints(episode, sources, aliases) or {}
     keys = list(dict.fromkeys([*hints.get('literal_mention_blocks', []), *episode['sources'], *hints.get('nearby_context_blocks', [])]))
     keys = [key for key in keys if key in sources and sources[key]['eligible']]
@@ -470,21 +530,25 @@ def run(root):
         if verified_local_model(cfg) != experiment['modelDigest']:
             raise ValueError('Selected model digest changed')
         context = full_context(root)
+        if experiment.get('speakerLabels'):
+            context = 'VOICE TAGS: {S001}=Speaker_001, etc; {?}=unknown or mixed. These are unverified, shift-scoped labels. Tags are not spoken words.\n' + context
         sources = load_json(root / 'sources.json')
         aliases = load_json(root / 'owner-aliases.json') if (root / 'owner-aliases.json').exists() else {}
         started = time.monotonic()
         experiment.pop('lastErrorClass', None)
         experiment.update(status='running', lastStartedAt=now()); write_json(root / 'experiment.json', experiment)
         try:
-            index = bounded_call(root, cfg, context, INDEX_TASK, INDEX_SCHEMA, 'index')
+            index_task = INDEX_TASK + ('\n' + SPEAKER_TASK if experiment.get('speakerLabels') else '')
+            schema = SPEAKER_INDEX_SCHEMA if experiment.get('speakerLabels') else INDEX_SCHEMA
+            index = bounded_call(root, cfg, context, index_task, schema, 'index')
             write_json(root / 'index-map.json', index); render(root)
             failed = []
             for number, episode in enumerate(index['episodes'], 1):
                 if time.monotonic() - started > 8 * 3600:
                     raise ProcessingDeferred('Eight-hour run allowance reached; saved episode checkpoints can resume')
-                task = detail_task(episode, sources, aliases)
+                task = detail_task(episode, sources, aliases, experiment.get('medicalOnlyQuestions', False))
                 if experiment.get('focusedEvidence'):
-                    task, copied = focused_task(episode, sources, aliases, context, cfg)
+                    task, copied = focused_task(episode, sources, aliases, context, cfg, experiment.get('medicalOnlyQuestions', False))
                     write_json(root / 'focus-packets' / f'episode-{number:03d}.json', {'duplicatedSourceIds': copied, 'fullNightRetained': True})
                 key = f'episode-{number:03d}'
                 try:
@@ -506,7 +570,10 @@ def run(root):
 
 def render(root):
     from .shift_context_report import render_report
-    return render_report(root)
+    path = render_report(root)
+    from .review_export import export
+    export(root)
+    return path
 
 
 def reproject_saved(root):
@@ -532,7 +599,8 @@ def reproject_saved(root):
                 continue
             response = raw['response']
             value = json.loads(response['message']['content'] if experiment['thinking'] else response['response'])
-            data, rejected = validate_detail(value, sources); repairs = data.pop('_citationRepairs', [])
+            labels = [episode['patient_label'] for episode in load_json(root / 'index-map.json')['episodes'] if episode['patient_label']] if experiment.get('medicalOnlyQuestions') else []
+            data, rejected = validate_detail(value, sources, experiment.get('medicalOnlyQuestions', False), labels); repairs = data.pop('_citationRepairs', [])
             old_hash = hashlib.sha256(before).hexdigest()
             history = root / 'projection-history' / (target.stem + '-' + old_hash + '.json')
             if not history.exists():
@@ -609,3 +677,40 @@ def run_focused_after_reference(root):
             time.sleep(1)
     write_json(root / 'baseline.json', reference_baseline(reference))
     run(root)
+
+
+def prepare_speaker_study(reference, directory):
+    """Fresh all-night inference: optional voice metadata + medical-only questions."""
+    reference = private_path(reference); root = initialize_private(directory)
+    for name in ['sources.json', 'recordings.json', 'owner-aliases.json', 'owner-aliases-provenance.json']:
+        if (reference / name).exists():
+            shutil.copy2(reference / name, root / name)
+    for folder in ['inputs', 'transcripts', 'transcription-details']:
+        if (reference / folder).exists():
+            shutil.copytree(reference / folder, root / folder, copy_function=os.link)
+    experiment = load_json(reference / 'experiment.json')
+    experiment.update(status='prepared', version='whole-shift-speakers-medical-v1', medicalOnlyQuestions=True,
+                      focusedEvidence=True, referenceExperiment=str(reference),
+                      baselineLabel='Previous full-night output — older question policy', createdAt=now())
+    for key in ['lastErrorClass', 'finishedAt', 'failedEpisodes', 'lastStartedAt', 'speakerLabels']:
+        experiment.pop(key, None)
+    write_json(root / 'experiment.json', experiment)
+    write_json(root / 'baseline.json', reference_baseline(reference))
+    render(root)
+    return root
+
+
+def run_speaker_study(root, model_manifest):
+    from . import speakers
+    root = private_path(root)
+    # A distinct lock protects the preparatory CPU stage as well as inference.
+    with lock(root / 'speaker-run'):
+        experiment = load_json(root / 'experiment.json')
+        if experiment.get('version') != 'whole-shift-speakers-medical-v1':
+            raise ValueError('Not a speaker-study workspace')
+        if not experiment.get('speakerLabels'):
+            if digest_file(root / 'sources.json') != experiment['sourcesSha256']:
+                raise ValueError('Immutable source changed before speaker annotation')
+            speakers.run(root, model_manifest)
+            speakers.annotate(root)
+        run(root)

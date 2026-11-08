@@ -1,0 +1,6 @@
+# Isolated CPU diarization environment, Python 3.12. Run from the repository root.
+-e ./pipeline[evaluation]
+sherpa-onnx==2.0.1
+sherpa-onnx-core==2.0.1
+numpy==2.5.4
+soundfile==0.13.1

@@ -51,7 +51,9 @@ def test_offline_tokenizer_disables_any_saved_truncation(tmp_path):
 
 
 def test_plans_are_complete_immutable_and_keep_old_boundaries(store, cfg, first):
-    cfg["provider"].update(kind="ollama", model="local")
+    # Boundaries must remain immutable even when prompt policies grow. Exercise
+    # the explicit source limit instead of relying on the old prompt's byte size.
+    cfg["provider"].update(kind="ollama", model="local", context_window=16384, transcript_char_limit=1000)
     t = {
         "segments": [
             {
