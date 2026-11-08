@@ -121,3 +121,14 @@ def test_diagnostics_link_actual_files_without_directory_listing_or_missing_json
         assert client.get(prefix + 'quality/test/step%201.json').status_code == 200
         assert client.get(prefix + 'quality/test/').status_code == 404
     assert 'No saved diagnostic' in diagnostic_links(tmp_path, 'missing')
+
+
+def test_fact_check_report_reflects_new_candidates_without_rerunning_inference(store,cfg,first):
+    from vet_pipeline.runner import run
+    from vet_pipeline.morning import report
+    from vet_pipeline.util import load_json,write_json
+    run(store,cfg);report(store,cfg,{})
+    with running(store.root) as (client,prefix):
+        result=client.get(prefix+'review/question-verification.html')
+        assert result.status_code==200 and 'PENDING' in result.text
+        assert 'not clinical certification' in result.text

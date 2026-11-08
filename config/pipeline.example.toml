@@ -82,3 +82,16 @@ context_window = 98304
 max_output_tokens = 32768
 gpu_layers = 32
 timeout_seconds = 3600
+
+# Local independent-source medical checks. Missing evidence holds real questions
+# from publication but never erases transcripts or invalidates saved knowledge.
+[question_verification]
+enabled = false
+references_dir = ""
+auto_refresh_sources = false
+refresh_days = 7
+max_reference_age_days = 180
+reference_char_limit = 14000
+max_output_tokens = 32768
+max_attempts = 2
+timeout_seconds = 1800

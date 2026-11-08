@@ -35,6 +35,11 @@ def review_template(store, output):
             for e in entries
         ],
     }
+    from .question_verification import status
+    for entry in review['entries']:
+        if entry['kind']=='questions':
+            question=next(q for q in data['questions'] if q['id']==entry['id'])
+            entry['medicalVerification']=status(store,question)['status'] if question['origin']!='synthetic' else 'synthetic-demonstration-only'
     write_json(output, review)
     return review
 
@@ -90,7 +95,15 @@ def export(store, review_path: Path, target: Path, allow_clinical=False):
                     raise ValueError(
                         "Approval lacks required authorization/privacy review"
                     )
+                if group == 'questions' and e['origin'] != 'synthetic':
+                    from .question_verification import status
+                    if status(store,e)['status'] != 'supported':
+                        raise ValueError('Study question needs independent external medical verification before publication')
                 e = copy.deepcopy(e)
+                if group == 'questions' and e['origin'] != 'synthetic':
+                    checked=status(store,e)
+                    cited={ref['url']:ref['title'] for component in checked['components'] for citation in component['evidence'] for ref in [checked['references'][citation['source']]]}
+                    e['explanation']+='\n\nIndependent medical references: '+'; '.join(title+' — '+url for url,title in cited.items())
                 if group == "topics":
                     output[group].append(e)
                     continue

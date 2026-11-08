@@ -179,9 +179,15 @@ def report(store, cfg, state):
         body += '<details open><summary>' + E(shift) + '</summary><ul>' + ''.join(entries) + '</ul></details>'
     body += '<h2>Knowledge articles</h2><ul>' + ''.join('<li><a href="articles/' + E(a['id']) + '.html">' + E(a['title']) + '</a></li>' for a in lib['articles']) + '</ul>'
     body += '<h2>Cases</h2>' + ''.join('<details><summary>' + E(c['title']) + '</summary><pre>' + E(json.dumps(c, indent=2)) + '</pre></details>' for c in lib['cases'])
-    body += '<h2>Study questions</h2>' + ''.join('<details><summary>' + E(q['prompt']) + '</summary><pre>' + E(json.dumps(q, indent=2)) + '</pre></details>' for q in lib['questions'])
+    from .question_verification import status as verification_status
+    body += '<h2>Study question candidates</h2><p><a href="question-verification.html">Independent medical fact-checking report</a>. Source recordings prove what was said, not medical correctness. Unverified/ambiguous/unsupported questions are held from publication.</p>'
+    for q in lib['questions']:
+        checked = verification_status(store,q) if q['origin']!='synthetic' else {'status':'synthetic demonstration'}
+        body += '<details><summary>' + E(q['prompt']) + ' — ' + E(checked['status'].upper()) + '</summary><p>Independent reference check: ' + E(checked['status']) + '</p><pre>' + E(json.dumps(q, indent=2)) + '</pre></details>'
     body += '<h2>Publication candidates</h2><p><a href="publication-candidates.json">Generated review template</a> (all unapproved). Copy to a separate approval file before owner review; this candidate file is regenerated. Unapproved material never blocks private processing. The existing reviewed-publication helper pushes approved content; Cloudflare then rebuilds automatically.</p>'
     if pending:
         body += '<h2>Needs attention / waiting</h2><p>GPU/Ollama deferral does not consume retries. Recording errors retry up to the configured limit. After resolving an exhausted job, use vet-pipeline retry JOB_ID for this workspace; no successful transcription/extraction is repeated.</p><pre>' + E(json.dumps([dict(j) for j in pending], indent=2)) + '</pre>'
     atomic_write(root / 'index.html', page('Veterinary Fieldnotes — morning review', body))
+    from .question_verification import render as verification_report
+    verification_report(store)
     return summary

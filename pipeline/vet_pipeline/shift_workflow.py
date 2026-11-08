@@ -138,6 +138,7 @@ def persist(store, root, cfg):
     if review_file.exists():
         from .util import atomic_write
         content=review_file.read_text()
+        content=content.replace('</h1>','</h1><p><a href="question-verification.html">Independent medical verification of study candidates</a></p>',1)
         for job in jobs:
             for folder in ['filtered','normalized','inputs']:
                 if (store.root/folder/(job['id']+'.wav')).exists():

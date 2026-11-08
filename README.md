@@ -1,5 +1,7 @@
 # Fieldnotes — Veterinary Knowledge Library
 
+Study questions require [independent medical reference verification](docs/MEDICAL_FACT_CHECKING.md) before real publication; transcript grounding alone is insufficient.
+
 For the organized owner-local installation, open `~/FieldNotes/Start.html`. See [Local folder layout](docs/LOCAL_LAYOUT.md) for source, reports, retained recordings and configuration.
 
 A local-first veterinary learning system: authorized recordings become source-linked discussions, case records, additive knowledge notes, and pre-generated study questions. Private processing and public publication are separate.

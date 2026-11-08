@@ -52,6 +52,7 @@ DEFAULT = {
         "max_retry_seconds": 3600,
         "verify_interval_seconds": 3600,
     },
+    "question_verification": {"enabled": False, "references_dir": "", "max_reference_age_days": 180, "reference_char_limit": 14000, "auto_refresh_sources": False, "refresh_days": 7, "max_output_tokens": 32768, "max_attempts": 2, "timeout_seconds": 1800},
     "shift_context": {"enabled": False, "context_window": 98304, "max_output_tokens": 32768, "gpu_layers": 32, "timeout_seconds": 3600},
     "retention": {"enabled": False, "days": 14, "require_remote": True,
                   "automatic_deletion": False, "retain_source_audio": True,
@@ -128,6 +129,12 @@ def config(path: Path | None = None):
         and g["verify_interval_seconds"] >= 1
     ):
         raise ValueError("Invalid private GitHub synchronization settings")
+    v=out['question_verification']
+    if (type(v['enabled']) is not bool or type(v['auto_refresh_sources']) is not bool
+        or not 1<=v['max_attempts']<=3 or v['max_output_tokens']<256
+        or v['reference_char_limit']<100 or v['max_reference_age_days']<1
+        or not 1<=v['refresh_days']<=v['max_reference_age_days'] or v['timeout_seconds']<=0):
+        raise ValueError('Invalid independent question verification settings')
     p = out["provider"]
     if (
         p["context_window"] < 512

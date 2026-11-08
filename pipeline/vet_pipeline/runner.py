@@ -14,7 +14,11 @@ class ProcessingDeferred(Exception):
 def run(store, cfg, force_retry=False, before_stage=None, transcribe_only=False):
     if cfg.get("shift_context", {}).get("enabled") and not transcribe_only:
         from .shift_workflow import run as run_shift
-        return run_shift(store, cfg, force_retry, before_stage)
+        results=run_shift(store, cfg, force_retry, before_stage)
+        if cfg.get('question_verification',{}).get('enabled'):
+            from .question_verification import run_checks
+            run_checks(store,cfg)
+        return results
     run_start = time.monotonic()
     results = []
     with lock(store.root):
@@ -167,6 +171,9 @@ def run(store, cfg, force_retry=False, before_stage=None, transcribe_only=False)
                     "reason": "Durable recording commits remain saved. Run again to regenerate portable files.",
                 }
             )
+    if not transcribe_only and cfg.get('question_verification',{}).get('enabled'):
+        from .question_verification import run_checks
+        run_checks(store,cfg)
     return results
 
 

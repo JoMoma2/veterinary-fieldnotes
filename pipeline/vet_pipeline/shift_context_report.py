@@ -47,6 +47,7 @@ def render_report(root):
     body += '<p>Reasoning mode: ' + ('enabled' if experiment.get('thinking') else 'disabled') + '; maximum generated tokens: ' + str(experiment['provider']['max_output_tokens']) + '. This is a combined context/prompt/synthesis experiment, not a controlled measurement of context alone.</p>'
     if experiment.get('focusedEvidence'):
         body += '<p><strong>Focused-evidence variant:</strong> the complete night is retained, with extra copies of selected original passages near the writing task. Same model, context allocation and output allowance; source copies are budgeted without removing original context.</p>'
+    body += '<p><strong>Study question drafts require independent medical fact checking.</strong> Transcript citations establish what was said, not medical correctness. Use the Morning Review fact-checking report before studying these drafts.</p>'
     if experiment.get('medicalOnlyQuestions'):
         body += '<p><strong>Study policy:</strong> self-contained, transferable medical knowledge only; no case recall, case vignettes, names/dates, quotation completion or nonmedical workflow questions. Zero questions is acceptable. Passing citation checks is not medical verification.</p>'
     if experiment.get('repetitionExclusionThreshold'):

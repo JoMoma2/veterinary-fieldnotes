@@ -58,6 +58,11 @@ def candidate_preview(root):
         title = record.get('title') or record.get('prompt') or record.get('name') or record['id']
         body += '<details><summary>' + e(title) + '</summary><p>Permanent ID: ' + e(record['id']) + '</p>'
         body += '<p>Exact candidate SHA256: <code>' + record_hash(record) + '</code></p>'
+        if kind == 'questions':
+            from .question_verification import status
+            # This read-only adapter needs only the existing workspace root.
+            from types import SimpleNamespace
+            body += '<p>Independent medical verification: ' + e(status(SimpleNamespace(root=root),record)['status']) + '</p>'
         if kind == 'articles':
             body += '<pre>' + e(record['body']) + '</pre>'
         else:
@@ -117,6 +122,17 @@ class ReviewHandler(SimpleHTTPRequestHandler):
                 source = io.BytesIO(candidate_preview(root))
             except (OSError, ValueError, sqlite3.Error):
                 self.send_error(503); return None
+        elif relative == 'review/question-verification.html':
+            from types import SimpleNamespace
+            from .question_verification import document
+            connection = sqlite3.connect(f'file:{root}/jobs.sqlite3?mode=ro', uri=True, timeout=5)
+            connection.row_factory = sqlite3.Row
+            try:
+                source = io.BytesIO(document(SimpleNamespace(root=root, db=connection)).encode())
+            except (OSError, ValueError, KeyError, sqlite3.Error):
+                self.send_error(503); return None
+            finally:
+                connection.close()
         elif relative == 'review/index.html':
             content = candidate.read_bytes()
             try:
