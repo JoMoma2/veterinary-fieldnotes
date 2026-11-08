@@ -48,7 +48,7 @@ def assign_cluster(vector, roster, excluded, settings):
     return name, None, 'new or ambiguous voice cluster; unverified'
 
 
-def label_interval(start, end, turns):
+def label_interval(start, end, turns, speech_relative=False):
     """Assign only a clearly dominant voice; do not pretend word-level alignment."""
     if end <= start:
         return {'speaker': 'Unknown', 'candidates': [], 'reason': 'invalid interval'}
@@ -59,6 +59,19 @@ def label_interval(start, end, turns):
             scores[turn['speaker']] = scores.get(turn['speaker'], 0) + overlap
     ranked = sorted(scores.items(), key=lambda pair: pair[1], reverse=True)
     duration = end - start
+    if speech_relative:
+        # Whisper intervals can contain padding/silence. Judge dominance over
+        # detected speech, but retain a minimum coverage floor so a tiny sound
+        # cannot label a long, potentially hallucinated transcript passage.
+        total = sum(scores.values())
+        sufficient = total >= min(.5, duration * .7) and total / duration >= .2
+        if sufficient and ranked and ranked[0][0] != 'Unknown' and ranked[0][1] / total >= .85:
+            return {'speaker': ranked[0][0], 'candidates': [name for name, _ in ranked],
+                    'reason': 'dominant detected speech; padding excluded; unverified',
+                    'detectedSpeechFraction': round(min(total / duration, 1), 3)}
+        return {'speaker': 'Mixed/uncertain' if len(ranked) > 1 else 'Unknown',
+                'candidates': [name for name, _ in ranked], 'reason': 'insufficient or competing detected speech',
+                'detectedSpeechFraction': round(min(total / duration, 1), 3)}
     if ranked and ranked[0][0] != 'Unknown' and ranked[0][1] / duration >= .75 and (len(ranked) == 1 or ranked[1][1] / duration <= .15):
         return {'speaker': ranked[0][0], 'candidates': [name for name, _ in ranked], 'reason': 'dominant diarized voice; unverified'}
     return {'speaker': 'Mixed/uncertain' if len(ranked) > 1 else 'Unknown',
@@ -196,12 +209,12 @@ def run(root, model_manifest, engine=None, settings=None):
 def annotate(root):
     """Add reversible voice metadata without changing original words or offsets."""
     root = private_path(root); labels = load_json(root / 'speaker-labels.json')
-    sources = load_json(root / 'sources.json')
+    sources = load_json(root / 'sources.json'); experiment = load_json(root / 'experiment.json')
+    relative = experiment.get('speakerAlignment') == 'detected-speech-v2'
     for block in sources.values():
         turns = labels['turns'].get(block['recordingId'], [])
-        block['speakerSegments'] = [{**span, **label_interval(span['startSeconds'], span['endSeconds'], turns)} for span in block['segments']]
+        block['speakerSegments'] = [{**span, **label_interval(span['startSeconds'], span['endSeconds'], turns, relative)} for span in block['segments']]
     write_json(root / 'sources.json', sources)
-    experiment = load_json(root / 'experiment.json')
     experiment.update(sourcesSha256=digest_file(root / 'sources.json'), speakerLabels=True, medicalOnlyQuestions=True)
     write_json(root / 'experiment.json', experiment)
 
@@ -217,6 +230,19 @@ def render(root):
     body += '<p>Status: ' + e(progress['status']) + '; completed recordings: ' + e(progress.get('recordingsCompleted', 0)) + '/' + e(progress['recordings']) + '; anonymous clusters: ' + e(len(labels['speakers'])) + '.</p><p><a href="shift-context.html">Medical notes and study questions</a></p>'
     body += '<audio id="player" controls preload="none"></audio><p id="player-label"></p><p id="player-status"></p>'
     markdown = ['# Private shift speaker review', '', 'Unverified voice clusters, not identified people. No cross-shift roster.', '']
+    if (root / 'global-speaker-groups.json').exists():
+        audit = load_json(root / 'global-speaker-groups.json')
+        body += '<p><strong>Whole-shift grouping:</strong> ' + str(audit['localVoiceGroups']) + ' local voice groups compared together; ' + str(audit['globalGroups']) + ' resulting clusters; ' + str(audit['groupsSpanningRecordings']) + ' clusters span multiple recordings. Counts are not verified people or accuracy.</p>'
+        markdown += [f"Whole-shift groups: {audit['globalGroups']}; groups spanning recordings: {audit['groupsSpanningRecordings']}. Not verified people or accuracy.", '']
+    if (root / 'owner-reference-checks.json').exists():
+        checks = load_json(root / 'owner-reference-checks.json')
+        body += '<h2>Owner-confirmed reference checks</h2><p>' + e(checks['note']) + '</p>'
+        markdown += ['## Owner-confirmed reference checks', checks['note'], '']
+        for check in checks['checks']:
+            line = f"Recording {check['recording']} {check['start']:.2f}–{check['end']:.2f}s: " + (', '.join(check['detectedVoiceGroups']) or 'No detected voice') + f"; {check['detectedSpeechSeconds']:.2f}s detected speech."
+            body += '<p>' + e(line) + '</p>'; markdown += [line]
+        line = 'Clear references across files agree: ' + ('yes' if checks['clearReferencesAgree'] else 'not established — review needed')
+        body += '<p><strong>' + e(line) + '</strong></p>'; markdown += [line, '']
     for record in load_json(root / 'recordings.json'):
         rid = record['id']; turns = labels['turns'].get(rid)
         if turns is None:
@@ -225,7 +251,8 @@ def render(root):
         markdown += ['## Recording ' + str(record['number']), '']
         transcript = root / 'transcripts' / (rid + '.json')
         segments = load_json(transcript)['segments'] if transcript.exists() else []
-        rows = [dict(segment, **label_interval(segment['start'], segment['end'], turns)) for segment in segments]
+        relative = load_json(root / 'experiment.json').get('speakerAlignment') == 'detected-speech-v2'
+        rows = [dict(segment, **label_interval(segment['start'], segment['end'], turns, relative)) for segment in segments]
         if not rows:
             rows = [dict(turn, text='No valid parsed transcript; listen to this audio interval.') for turn in turns]
         for row in rows:

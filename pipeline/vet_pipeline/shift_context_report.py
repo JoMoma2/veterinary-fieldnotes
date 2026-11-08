@@ -49,6 +49,8 @@ def render_report(root):
         body += '<p><strong>Focused-evidence variant:</strong> the complete night is retained, with extra copies of selected original passages near the writing task. Same model, context allocation and output allowance; source copies are budgeted without removing original context.</p>'
     if experiment.get('medicalOnlyQuestions'):
         body += '<p><strong>Study policy:</strong> self-contained, transferable medical knowledge only; no case recall, case vignettes, names/dates, quotation completion or nonmedical workflow questions. Zero questions is acceptable. Passing citation checks is not medical verification.</p>'
+    if experiment.get('repetitionExclusionThreshold'):
+        body += '<p><strong>Repetition filter:</strong> consecutive phrases repeated ' + e(experiment['repetitionExclusionThreshold']) + ' or more times are excluded from AI input/evidence. Full original transcripts remain in the speaker/source review below. This heuristic can also exclude real repetition; it is not a hallucination detector.</p>'
     if experiment.get('speakerLabels'):
         body += '<p><a href="speakers.html">Speaker-labelled full transcript and audio review</a>. Voice labels are anonymous, shift-scoped and unverified. Mixed/unknown segments are not forced onto one person.</p>'
     if metrics:
@@ -155,6 +157,8 @@ def render_report(root):
             body += '<p id="' + e(key) + '"><strong>' + e(key) + ' · ' + e(f'{block["start"]:.2f}–{block["end"]:.2f}s') + '</strong> ' + e(block['text']) + '</p>'
             if block.get('speakerSegments'):
                 body += '<p>Voice estimates: ' + e('; '.join(f"{s['startSeconds']:.2f}–{s['endSeconds']:.2f}s {s['speaker']}" for s in block['speakerSegments'])) + '</p>'
+            if block.get('repeatExcludedSpans'):
+                body += '<p class="warning">Contains repeated wording excluded from AI input. The original text above is retained for review.</p>'
             if (root / 'inputs' / (block['recordingId'] + '.wav')).exists():
                 body += '<button data-audio="../inputs/' + e(block['recordingId']) + '.wav" data-start="' + str(block['start']) + '" data-label="Recording ' + str(block['recordingNumber']) + '">Listen at this source timestamp</button>'
         body += '</details>'

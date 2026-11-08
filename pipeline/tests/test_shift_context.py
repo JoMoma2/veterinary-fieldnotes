@@ -315,3 +315,16 @@ def test_owner_visible_review_is_standalone_escaped_and_outside_git(store, tmp_p
     assert '&lt;script&gt;' in html and '<script>' not in html
     assert 'untrusted source' in (owner / 'Medical-notes.md').read_text()
     assert (owner / 'Results.html').stat().st_mode & 0o077 == 0
+
+
+def test_excluded_repetition_is_not_reintroduced_as_context_or_citable_evidence(store, tmp_path, monkeypatch):
+    from vet_pipeline.repetition_filter import MARKER
+    root = prepared(store, tmp_path, monkeypatch); sources = load_json(root / 'sources.json')
+    original = sources['b0001']['text']
+    sources['b0001']['repeatExcludedSpans'] = [[0, len(original)]]
+    write_json(root / 'sources.json', sources)
+    assert MARKER in s.full_context(root) and original not in s.full_context(root)
+    assert 'Returning to Sample' in s.full_context(root)
+    with pytest.raises(ValueError, match='exact eligible'):
+        s.validate_evidence([{'source': 'b0001', 'quote': original}], sources)
+    assert sources['b0001']['text'] == original

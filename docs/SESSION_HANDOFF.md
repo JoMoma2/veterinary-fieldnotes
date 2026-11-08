@@ -1,5 +1,41 @@
 # Session handoff — whole-night context evaluation
 
+## Latest checkpoint — whole-shift voice correction and repetition exclusion
+
+Owner found voice labels effectively reset across files and then requested ignoring consecutive repetition at5+, preserving all source data. This supersedes prior provisional speaker-quality assumptions. Initial audit:215local embeddings ->214labels; the fixed-prototype online margin rule was inappropriate for the observed embedding scale, so it almost never reused an ID. The owner supplied known-self reference passages privately, including a warning about a possible fainter second voice. Do NOT put those quotes, source IDs, vectors or capability URLs in Git.
+
+**Implemented and running:** global_speakers.py performs offline joint grouping across all files, reusing the102saved segmentation checkpoints. Additional TitaNet-Large embedding candidate was downloaded from Sherpa's official public release (~97MiB; NVIDIA CC-BY-4.0 attribution recorded). CPU only, same isolated Python3.12environment. No ASR/segmentation rerun, paid inference, clinical upload, global model/driver/MMM/FCC change or deletion. The original WeSpeaker model/manifest and earlier run stay intact. Raw similarities vary by backend; unsupervised centering hurt known-owner similarity for TitaNet, so final v3 uses raw scores. Average linkage uses a .55merge threshold, .25minimum cross-pair floor and simultaneous-voice exclusions. These are provisional, NOT calibrated probabilities. Local groups are not assumed distinct identities merely because they share a chunk.
+
+**Owner references:** clear isolated references from two different files anchor the owner identity before automatic grouping. The final120acoustic groups include17groups spanning recordings; those clear owner references share one owner-anchored label. That agreement is SUPERVISED, not an independent recognition success/accuracy percentage. The first noisy reference has no detected voice; another short reference's local turn spans an exchange, so it is not used as an owner seed. No blind assumption that all people audible near a reference are the owner. Other matches and role annotations need listening review. No permanent client/coworker recognition roster or automatic named identity deployment.
+
+**Repetition:** repetition_filter.py masks consecutive normalized token phrases repeated5+times across/within Whisper segments, without changing saved transcripts. New shift input has40excluded runs. Source offsets stay stable; original wording is retained in private full-source/speaker review and raw archive. Evidence validation rejects excluded spans, including via citation repair. Focus packets also use filtered text to prevent reintroducing loops. Ordinary grounded-v2 future requests now do the same masking/evidence filtering, and do not derive deterministic unknown facts from excluded repetition. True repetitions can be excluded; nonrepeating hallucinations remain possible. Existing ASR-warning holds stay enforced. Old completed notes/cards are NOT erased/reprocessed automatically.
+
+**Exact locations:**
+- Final private root: ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/shift-wide-speakers-v3-20261108/
+- Visible results: ~/Fieldnotes-private-review/Shift-wide-speakers-20261108/Results.html (standalone, no links/server needed); Speaker-labelled-transcript.md, Medical-notes.md, Audio-review.html.
+- Worker: vet-fieldnotes-global-speakers-v3-20261108.service
+- Viewer: vet-fieldnotes-global-speakers-review-20261108.service
+- Reference/older still-running Qwen: speakers-medical-20261108/ and vet-fieldnotes-speakers-study-20261108.service. Leave it healthy; final job automatically waits for it to release GPU work, then runs fresh full-night extraction with new labels and5-repeat input policy. No user approval barrier or publication step.
+- Preserved early model-free trial: shift-wide-speakers-20261108/. Its worker was stopped ONLY while waiting, with no index/LLM request started. It has164centered-model clusters and failed reference agreement; do not present it as final. Its replacement embedding cache was reused by v3 without repeating inference.
+- Model manifest: ~/.local/share/vet-fieldnotes-ai/models/speakers/titanet-models.json. Default models.json was preserved. Owner calibration probes/annotations remain privately outside Git, scoped to this shift.
+
+Tests:235Python tests passed, including full-shift cross-file grouping, overlap/identity constraints, explicit owner seed handling, padding-aware speaker alignment, source retention/resume, exact5-repeat exclusion, preserved useful text between loops, masked citation refusal and raw-source archive preservation. Both final audio-enabled report routes return200. Neither grouping counts nor source quotations establish speaker/medical accuracy.
+
+### Next steps (do not repeat completed work)
+
+1. Inspect final worker/current experiment.json. Speaker stage is complete and reports are readable now. At launch checkpoint Qwen status is waiting-for-reference; it starts automatically when the original experiment stops running. Check current status before saying inference started/completed. No need to watch the full run.
+2. Read Results.html and owner-reference checks with the owner. Evaluate false splits/merges and missing speech;120clusters is NOT120known people. The label on the owner references is supervised; other membership is inferred. Do not claim the voice problem fully solved or relabel all original IDs in place.
+3. Review new medical-only questions and repeated-source exclusion against retained audio. The rule doesn't establish whether any particular repeated phrase was false speech. Keep all full transcripts/WAVs.
+4. If interrupted and no healthy worker owns the workspace, resume:
+```bash
+cd /home/quinten/vet-knowledge-library
+~/.local/share/vet-fieldnotes-ai/diarization-venv/bin/python scripts/review-shift-context.py run-global-speakers \
+  ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/shift-wide-speakers-v3-20261108 \
+  --models ~/.local/share/vet-fieldnotes-ai/models/speakers/titanet-models.json
+```
+5. Re-embedding, source-cache/model hashes, owner-reference inputs, grouping settings and inference calls are checkpoint-bound. Do not change them after calls/index.json exists; use a fresh experiment. No clinical publication/default-nightly voice-model promotion has been authorized. Main website remains empty of clinical data. Check latest commit/CI for this milestone.
+
+
 ## Latest active task — speakers and medical study questions, 2026-11-08
 
 Owner approved both changes and requested the SAME full last shift, preserving raw audio/transcripts, then explicitly asked not to watch the entire test for token reasons. After startup verification leave it running. They report much better large-context notes and want to focus on question quality. No publication or global service changes. Latest clarification: use ALL conversational context to propose doctor/staff/client roles and patient relationships, with subjective confidence and evidence; avoid invented identities, ownership from mere patient mentions, or confidence presented as fact. Persistent staff recognition is low priority/deferred; no client history/roster.

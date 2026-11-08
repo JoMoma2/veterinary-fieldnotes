@@ -11,6 +11,7 @@ import re
 import unicodedata
 from jsonschema import Draft202012Validator
 from .study_policy import MEDICAL_QUESTION_RULES, question_rejection
+from .repetition_filter import find_runs, extraction_text, quote_allowed
 
 VERSION = "grounded-v2"
 PROMPT = """Extract useful learning from the CURRENT recording, not from your medical knowledge.
@@ -43,7 +44,11 @@ a general medical principle independently of a particular patient or conversatio
 Otherwise use an empty question; case details remain useful notes, not study cards.
 Do not invent IDs or times.
 Example fact: {"source":"e-example", "kind":"clinical-suspicion", "quote":"Obstruction is a concern, not confirmed."}
-The example is format guidance, never evidence for the current recording.""" + '\n' + MEDICAL_QUESTION_RULES
+The example is format guidance, never evidence for the current recording.
+Consecutive wording repeated five or more times is masked by the application.
+Excluded-repetition markers are not clinical evidence; do not reconstruct the
+omitted words or derive facts, diagnoses, questions or patient links from them.
+""" + '\n' + MEDICAL_QUESTION_RULES
 
 
 def slug(text):
@@ -134,14 +139,24 @@ def association_denied(text):
     )
 
 
+def policy_sources(transcript):
+    sources = {key: dict(value) for key, value in source_map(transcript).items()}
+    spans, _ = find_runs(transcript['segments'], threshold=5)
+    for index, value in enumerate(sources.values()):
+        padding = len(value['text']) - len(value['text'].lstrip())
+        if index in spans:
+            value['repeatExcludedSpans'] = [[a + padding, b + padding] for a, b in spans[index]]
+    return sources
+
+
 def request(transcript, context, kinds):
-    sources = source_map(transcript)
+    sources = policy_sources(transcript)
     labels = list(
         dict.fromkeys(
-            label for s in sources.values() for label in case_labels(s["text"])
+            label for s in sources.values() for label in case_labels(extraction_text(s))
         )
     )
-    current_text = " ".join(v["text"] for v in sources.values())
+    current_text = " ".join(extraction_text(v) for v in sources.values())
     topics = {
         v["topicKey"]: v["title"]
         for v in context
@@ -200,7 +215,7 @@ def request(transcript, context, kinds):
     )
     payload = {
         "current_sources": [
-            {"id": key, "text": value["text"]} for key, value in sources.items()
+            {"id": key, "text": extraction_text(value)} for key, value in sources.items()
         ],
         "existing_topics": topics,
         "explicit_case_labels": labels,
@@ -225,7 +240,7 @@ def unknown_clauses(text):
 def project(raw, transcript, context, kinds):
     schema, _ = request(transcript, context, kinds)
     Draft202012Validator(schema).validate(raw)
-    sources = source_map(transcript)
+    sources = policy_sources(transcript)
     topics = request(transcript, context, kinds)[1]["existing_topics"]
     result = {k: [] for k in ["discussions", "articles", "cases", "questions"]}
     covered = set()
@@ -273,6 +288,8 @@ def project(raw, transcript, context, kinds):
                             "kind": "unique casing/whitespace citation repair",
                         }
                     )
+                if not quote_allowed(sources[f['source']], quote):
+                    raise ValueError('Fact quotation overlaps excluded consecutive repetition (five or more)')
                 if f["kind"] == "ai-explanation":
                     raise ValueError(
                         "Core extraction must preserve recorded facts, not generate explanations"
@@ -361,7 +378,7 @@ def project(raw, transcript, context, kinds):
                     "quotes": quotes,
                     "account": "Recorded discussion — source wording retained:\n\n"
                     + "\n\n".join(
-                        s["text"].strip()
+                        extraction_text(s).strip()
                         for s in sorted(selected, key=lambda s: s["start"])
                     ),
                     "facts": facts,
@@ -474,7 +491,7 @@ def project(raw, transcript, context, kinds):
     for token, segment in sources.items():
         if token in covered:
             continue
-        explicit_unknowns = unknown_clauses(segment["text"])
+        explicit_unknowns = unknown_clauses(extraction_text(segment))
         deterministic_unknowns += bool(explicit_unknowns)
         result["discussions"].append(
             {
@@ -503,6 +520,8 @@ def project(raw, transcript, context, kinds):
         "contextOnlySources": len(cited - covered),
         "deterministicUnknownSources": deterministic_unknowns,
         "fallbackSourceRecallCards": fallback_cards,
+        "repetitionExclusionThreshold": 5,
+        "repetitionSourcesFiltered": sum(bool(s.get('repeatExcludedSpans')) for s in sources.values()),
         "warnings": warnings,
         "repairs": repairs,
     }

@@ -78,6 +78,17 @@ def test_literal_recall_fallback_is_disabled_and_conversation_trivia_is_rejected
     assert not explicit['questions'] and quality['fallbackSourceRecallCards'] == 0
 
 
+def test_five_repeat_filter_masks_model_input_but_keeps_full_private_source():
+    t = transcript('Diagnosis unknown. ' * 5)
+    original = copy.deepcopy(t)
+    _, payload = request(t, [], KIND)
+    assert 'Diagnosis unknown' not in payload['current_sources'][0]['text']
+    data, quality = project({'discussions': [lesson(t, caseLabel=None)]}, t, [], KIND)
+    assert not data['articles'] and not data['questions']
+    assert data['discussions'][0]['quotes'][0]['text'] == t['segments'][0]['text']
+    assert not data['discussions'][0]['facts'] and t == original
+
+
 def test_model_cannot_add_a_source_id_or_timestamp():
     t = transcript()
     raw = {"discussions": [lesson(t)]}

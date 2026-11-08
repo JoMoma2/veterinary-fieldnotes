@@ -17,6 +17,10 @@ f = sub.add_parser('prepare-speakers')
 f.add_argument('reference', type=Path); f.add_argument('directory', type=Path)
 f = sub.add_parser('run-speakers')
 f.add_argument('directory', type=Path); f.add_argument('--models', type=Path, required=True)
+f = sub.add_parser('prepare-global-speakers')
+f.add_argument('reference', type=Path); f.add_argument('directory', type=Path)
+f = sub.add_parser('run-global-speakers')
+f.add_argument('directory', type=Path); f.add_argument('--models', type=Path, required=True)
 for name in ['run', 'report', 'watch-report', 'run-focused']:
     sub.add_parser(name).add_argument('directory', type=Path)
 args = p.parse_args()
@@ -35,6 +39,17 @@ try:
         print(shift_context.prepare_speaker_study(args.reference, args.directory))
     elif args.command == 'run-speakers':
         shift_context.run_speaker_study(args.directory, args.models)
+    elif args.command == 'prepare-global-speakers':
+        root = shift_context.prepare_speaker_study(args.reference, args.directory)
+        from vet_pipeline.util import load_json, write_json
+        experiment = load_json(root / 'experiment.json')
+        experiment.update(version='whole-shift-speakers-global-v2',
+                          baselineLabel='Previous fragmented speaker labels — these are NOT current identities')
+        write_json(root / 'experiment.json', experiment)
+        print(root)
+    elif args.command == 'run-global-speakers':
+        from vet_pipeline.global_speakers import run_after_reference
+        run_after_reference(args.directory, args.models)
     else:
         print(shift_context.render(args.directory))
 except ProcessingDeferred:

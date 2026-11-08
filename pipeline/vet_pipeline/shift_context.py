@@ -22,6 +22,7 @@ from .resources import check_resources, gpu_snapshot
 from .runner import ProcessingDeferred
 from .util import atomic_write, digest_file, load_json, lock, now, write_json
 from .study_policy import MEDICAL_QUESTION_RULES, question_rejection
+from .repetition_filter import extraction_text, quote_allowed
 
 VERSION = 'whole-shift-review-v3'
 
@@ -178,14 +179,14 @@ def full_context(root):
         for key in record['blocks']:
             block = sources[key]
             flag = '' if block['eligible'] else ' ASR-REVIEW-CONTEXT-ONLY'
-            text = block['text']
+            text = extraction_text(block)
             if block.get('speakerSegments'):
                 parts = []; last = None
                 for segment in block['speakerSegments']:
                     label = segment['speaker'].replace('Speaker_', 'S') if segment['speaker'].startswith('Speaker_') else '?'
                     if label != last:
                         parts.append('{' + label + '}'); last = label
-                    parts.append(text[segment['from']:segment['to']])
+                    parts.append(extraction_text(block, segment['from'], segment['to']))
                 text = ' '.join(parts)
             lines.append(f'[{key}{flag}] {text}')
     return '\n'.join(lines)
@@ -213,7 +214,7 @@ def validate_evidence(evidence, sources):
         raise ValueError('Evidence required')
     for ref in evidence:
         block = sources.get(ref['source'])
-        if not block or not block['eligible'] or not ref['quote'].strip() or ref['quote'] not in block['text']:
+        if not block or not block['eligible'] or not ref['quote'].strip() or not quote_allowed(block, ref['quote']):
             raise ValueError('Citation is not an exact eligible transcript quotation')
 
 
@@ -502,7 +503,7 @@ def focused_task(episode, sources, aliases, context, cfg, medical_only=False):
     tokenizer = Tokenizer.from_file(str(Path(cfg['provider']['tokenizer_path']).expanduser()))
     tokenizer.no_truncation(); tokenizer.no_padding()
     def build(count):
-        copies = '\n'.join('[' + key + '] ' + sources[key]['text'] for key in keys[:count])
+        copies = '\n'.join('[' + key + '] ' + extraction_text(sources[key]) for key in keys[:count])
         return base + '\nFOCUSED COPIES OF ORIGINAL EVIDENCE (the complete night remains above):\n' + copies + '\nUse these nearby originals to copy citations accurately. You may also use other eligible blocks in the full transcript. Copy short continuous exact quotations, including relevant negation/doses/units. Do not use ellipses, splice quotations, paraphrase inside quote fields or repair uncertain ASR wording. These are retrieval candidates, not proof of patient identity. Do not force questions or unsupported lessons.'
     best = 0; left = 0; right = len(keys)
     while left <= right:
