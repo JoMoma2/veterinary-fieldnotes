@@ -6,6 +6,7 @@ permanent library updates to the existing private master. Never uploads audio.
 import argparse, array, json, os, shutil, subprocess, time, wave
 from pathlib import Path
 from vet_pipeline.config import config
+from vet_pipeline.locations import location
 from vet_pipeline.recorder_setup import save_config, core_fingerprint, PROOF
 from vet_pipeline.private import initialize_private
 from vet_pipeline.recovery import recover_library
@@ -16,7 +17,7 @@ from vet_pipeline.util import REPO, load_json, write_json, digest_file
 p = argparse.ArgumentParser()
 p.add_argument('--audio-directory', type=Path, required=True)
 p.add_argument('--directory', type=Path, required=True)
-p.add_argument('--master-checkout', type=Path, default=Path.home() / 'vet-knowledge-master')
+p.add_argument('--master-checkout', type=Path, default=location('repositories', 'master'))
 p.add_argument('--sync-private', action='store_true')
 a = p.parse_args()
 os.umask(0o077)

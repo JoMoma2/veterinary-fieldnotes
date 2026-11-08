@@ -15,6 +15,23 @@ def page(title, body):
     return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; media-src \'self\' file:; script-src \'none\'"><title>' + E(title) + '</title><style>' + STYLE + '</style></head><body><h1>' + E(title) + '</h1>' + body + '</body></html>'
 
 
+
+def diagnostic_links(workspace, recording_id):
+    """Link existing diagnostic files; private viewers forbid directory listings."""
+    workspace = Path(workspace).resolve()
+    links = []
+    for folder, label in [('quality', 'Quality'), ('extractions', 'Extraction checkpoint')]:
+        directory = workspace / folder / recording_id
+        for item in sorted(directory.rglob('*.json')):
+            if not item.is_file() or workspace not in item.resolve().parents:
+                continue
+            href = '../../' + quote(item.relative_to(workspace).as_posix(), safe='/')
+            links.append('<li><a href="' + href + '">' + E(label + ': ' + item.relative_to(directory).as_posix()) + '</a></li>')
+    raw = workspace / 'transcription-details' / (recording_id + '.json')
+    if raw.is_file() and workspace in raw.resolve().parents:
+        links.append('<li><a href="../../transcription-details/' + quote(recording_id, safe='') + '.json">Full Whisper JSON</a></li>')
+    return '<details><summary>Private diagnostics</summary><ul>' + ''.join(links) + '</ul></details>' if links else '<p>No saved diagnostic files yet.</p>'
+
 def report(store, cfg, state):
     private_path(store.root)
     lib = current(store)
@@ -95,7 +112,7 @@ def report(store, cfg, state):
             body += '<pre>' + E(d['account']) + '</pre><ul>'
             body += ''.join('<li><strong>' + E(f['kind']) + '</strong>: ' + E(f['text']) + '</li>' for f in d['facts']) + '</ul></section>'
         body += '<p>Check medications, negation, evidence kinds, uncertain cases, omissions and source links. Valid quotes do not certify medical interpretation.</p>'
-        body += '<p>Private diagnostics: <a href="../../quality/' + rid + '/">quality files</a>, <a href="../../extractions/' + rid + '/">chunk checkpoints</a>, <a href="../../transcription-details/' + rid + '.json">full Whisper JSON</a>.</p>'
+        body += diagnostic_links(store.root, rid)
         atomic_write(root / 'recordings' / (rid + '.html'), page(j['source_name'], body))
         link = '<li><a href="recordings/' + rid + '.html">' + E(j['source_name']) + '</a> — ' + E(j['stage']) + ((' / ' + E(j['error'])) if j['error'] else '') + '</li>'
         groups.setdefault(j['shift_id'], []).append(link)

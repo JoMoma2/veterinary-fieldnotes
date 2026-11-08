@@ -103,3 +103,21 @@ def test_experiment_landing_reuses_context_report_without_a_live_ledger(tmp_path
         assert client.get(prefix + 'review/index.html').text == '<h1>Saved experiment</h1>'
     assert not (tmp_path / 'jobs.sqlite3').exists()
     assert not (tmp_path / 'review/index.html').exists()
+
+
+def test_diagnostics_link_actual_files_without_directory_listing_or_missing_json(tmp_path):
+    from vet_pipeline.morning import diagnostic_links
+    folder = tmp_path / 'quality/test'; folder.mkdir(parents=True)
+    (folder / 'step 1.json').write_text('{}')
+    secret = tmp_path.parent / 'outside.json'; secret.write_text('private')
+    (folder / 'escape.json').symlink_to(secret)
+    links = diagnostic_links(tmp_path, 'test')
+    assert 'quality/test/step%201.json' in links
+    assert 'escape.json' not in links and 'transcription-details' not in links
+    assert 'href="../../quality/test/"' not in links
+    (tmp_path / 'review/recordings').mkdir(parents=True)
+    (tmp_path / 'review/recordings/test.html').write_text(links)
+    with running(tmp_path) as (client, prefix):
+        assert client.get(prefix + 'quality/test/step%201.json').status_code == 200
+        assert client.get(prefix + 'quality/test/').status_code == 404
+    assert 'No saved diagnostic' in diagnostic_links(tmp_path, 'missing')

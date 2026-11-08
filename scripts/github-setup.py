@@ -1,6 +1,6 @@
 """Create the authorized two-repository layout. Dry run unless --create/--push are explicitly supplied."""
 
-import argparse, json, pathlib, re, shutil, subprocess
+import argparse, json, os, pathlib, re, shutil, subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 p = argparse.ArgumentParser()
@@ -8,7 +8,7 @@ p.add_argument("--owner", required=True)
 p.add_argument("--public-name", default="veterinary-fieldnotes")
 p.add_argument("--private-name", default="veterinary-fieldnotes-master")
 p.add_argument(
-    "--private-path", type=pathlib.Path, default=ROOT.parent / "vet-knowledge-master"
+    "--private-path", type=pathlib.Path, default=pathlib.Path(os.environ.get("FIELDNOTES_HOME", pathlib.Path.home() / "FieldNotes")).expanduser() / "repositories/master"
 )
 p.add_argument("--create", action="store_true")
 p.add_argument("--push", action="store_true")
