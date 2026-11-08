@@ -23,7 +23,16 @@ def live_status(root):
     finally:
         db.close()
     e = lambda v: html.escape(str(v), quote=True)
-    return '<section><h2>Live saved progress</h2><p>' + e(sum(counts.values())) + ' recordings imported so far. Stage counts: ' + e(counts) + '.</p><p>The detailed summary below is the last generated report; imports may still be running. Refresh this page to update saved counts.</p></section>'
+    extra = ''
+    from .util import load_json
+    for path in sorted((root / 'shift-extraction').glob('*/experiment.json')):
+        try:
+            experiment = load_json(path)
+            completed = list((path.parent / 'calls').glob('episode-[0-9][0-9][0-9].json'))
+            extra += '<p>Whole-shift AI: <strong>' + e(experiment['status']) + '</strong>; saved detailed episodes: ' + str(len(completed)) + '; context: ' + e(experiment['provider']['context_window']) + ' tokens. The first episode map may take time; unchanged recording counts do not mean inference has stopped.</p>'
+        except (OSError, ValueError, KeyError):
+            extra += '<p>Whole-shift progress is being updated; refresh shortly.</p>'
+    return '<section><h2>Live saved progress</h2><p>' + e(sum(counts.values())) + ' recordings imported so far. Stage counts: ' + e(counts) + '.</p>' + extra + '<p>The detailed summary below is the last generated report. Refresh this page to update saved counts.</p></section>'
 
 
 def candidate_preview(root):
