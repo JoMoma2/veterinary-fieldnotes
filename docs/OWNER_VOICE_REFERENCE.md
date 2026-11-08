@@ -58,6 +58,35 @@ contain several people. Case identity, ownership and professional roles need wor
 context and evidence beyond labels. The new uncertainty policy is versioned so
 legacy inference request fingerprints remain unchanged unless selected explicitly.
 
+## Blinded listening calibration
+
+After confirming the reference, prepare a small private listening pack:
+
+```bash
+python scripts/enroll-owner-voice.py calibration /absolute/private/reference \
+  --compare /absolute/private/compatible-shift-evaluation \
+  --models /absolute/private/speaker-models/models.json
+```
+
+The standalone report embeds short source-audio excerpts and hides model scores,
+old labels and sampling hints while the owner listens. Labels are Your voice,
+Someone else, Multiple voices, or Unsure. None are prefilled or inferred from memory.
+Answers stay in page memory until explicitly downloaded; there is no account,
+network request, server write or persistent browser tracking.
+
+Save the labels JSON privately, then analyze its local path:
+
+```bash
+python scripts/enroll-owner-voice.py evaluate /absolute/private/reference \
+  --labels /absolute/private/listening-labels.json
+```
+
+Pack hashes bind labels to exact audio/profile inputs. Evaluation reports local
+counts at candidate thresholds, never auto-selects/deploys one, and excludes mixed
+or unsure examples from binary identity counts. This selected calibration sample
+is not a population error-rate estimate. If no clear non-owner examples exist,
+false-match safety remains unmeasured. No uncertain memory is a negative label.
+
 ## Private output
 
 The workspace contains original/normalized audio, model/settings bindings,
