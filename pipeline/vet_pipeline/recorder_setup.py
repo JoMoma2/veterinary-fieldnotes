@@ -35,7 +35,7 @@ def save_config(path, cfg):
 
 
 def install_registration(target, contents, kind):
-    """Keep FieldNotes-owned unit/desktop files in the hub, with OS index links."""
+    """Keep definitions in the hub and refresh their native OS registrations."""
     stored = location('config', kind, target.name)
     stored.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     if target.exists() and target.read_text() != contents:
@@ -43,6 +43,11 @@ def install_registration(target, contents, kind):
     if stored.exists() and stored.read_text() != contents:
         raise ValueError('Existing Fieldnotes configuration differs; review owner settings before replacing it')
     atomic_write(stored, contents)
+    if kind == 'desktop':
+        # GNOME may cache commands for symlinked desktop entries even after the
+        # link is replaced. A small native copy lets its app monitor see edits.
+        atomic_write(target, contents)
+        return
     if target.is_symlink() and target.resolve() == stored.resolve():
         return
     # Replacing an identical regular registration only moves its contents into
@@ -73,7 +78,7 @@ def stage():
     register = f'"{python}" "{REPO / "scripts/register-recorder.py"}"'
     install_registration(apps / 'vet-fieldnotes-register.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Register Recorder\nComment=Register only your USB recorder and activate safe retained-source processing\nExec=' + register + '\nIcon=audio-input-microphone\nTerminal=false\nCategories=Education;\n', 'desktop')
     opener = f'"{python}" "{REPO / "scripts/open-morning-review.py"}"'
-    install_registration(apps / 'vet-fieldnotes-review.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Morning Review\nExec=' + opener + '\nIcon=accessories-text-editor\nTerminal=false\nCategories=Education;\n', 'desktop')
+    install_registration(apps / 'vet-fieldnotes-morning-review.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Morning Review\nExec=' + opener + '\nIcon=accessories-text-editor\nTerminal=false\nCategories=Education;\n', 'desktop')
     from .store import Store
     from .morning import report
     from .publication import review_template

@@ -31,6 +31,22 @@ def test_registrations_live_in_hub_and_preserve_owner_customizations(monkeypatch
     assert target.read_text() == 'same owner settings'
 
 
+def test_desktop_registration_replaces_link_with_native_copy(monkeypatch, tmp_path):
+    import pytest
+    from vet_pipeline.recorder_setup import install_registration
+    monkeypatch.setenv('FIELDNOTES_HOME', str(tmp_path / 'hub'))
+    stored=tmp_path/'hub/config/desktop/review.desktop'
+    stored.parent.mkdir(parents=True);stored.write_text('current command')
+    target=tmp_path/'applications/review.desktop'
+    target.parent.mkdir();target.symlink_to(stored)
+    install_registration(target,'current command','desktop')
+    assert not target.is_symlink()
+    assert target.read_text()==stored.read_text()=='current command'
+    install_registration(target,'current command','desktop')
+    with pytest.raises(ValueError,match='owner settings'):
+        install_registration(target,'different command','desktop')
+
+
 def test_old_paths_work_without_any_filesystem_shortcuts(monkeypatch, tmp_path):
     from vet_pipeline.locations import local_path
     from vet_pipeline.private import private_path
