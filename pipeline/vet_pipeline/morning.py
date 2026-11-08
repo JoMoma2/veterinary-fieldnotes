@@ -167,6 +167,11 @@ def report(store, cfg, state):
     body = '<p>Private local review. Audio, full transcripts and intermediate results are retained. Import batches are not verified recording dates; clock offsets remain recording-relative.</p>'
     if asr_flagged:
         body += '<section class="flag"><h2>Audio/transcription review required</h2><p>' + str(asr_flagged) + ' recordings have ASR quality warnings. Read the warnings on each recording page and compare with its audio. Previously generated notes and questions from flagged sources are unreviewed; successful processing does not establish accuracy.</p></section>'
+    if cfg.get('shift_context', {}).get('enabled'):
+        body += '<section><h2>Whole-shift extraction</h2><p>The available shift is processed together with a '+str(cfg['shift_context']['context_window'])+'-token context. Detailed episode checkpoints survive interruptions.</p>'
+        if (root/'whole-shift.html').exists():body += '<p><a href="whole-shift.html">Read full-context medical notes, questions and source evidence</a></p>'
+        else:body += '<p>Preparing transcripts or waiting for the first model result. Retained transcripts/audio are available below.</p>'
+        body += '</section>'
     body += '<h2>Processing summary</h2><pre>' + E(json.dumps(summary, indent=2)) + '</pre>'
     body += '<p>Per-job active time excludes unfinished interrupted attempts; worker time includes interruption/import/sync overhead but excludes timer waits. Last work/batch preserves meaningful activity rather than being overwritten by idle polls.</p>'
     body += '<h2>Shift / import batches</h2>'

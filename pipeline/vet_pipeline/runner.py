@@ -11,7 +11,10 @@ class ProcessingDeferred(Exception):
     """An unavailable/shared GPU should not consume a recording's retry budget."""
 
 
-def run(store, cfg, force_retry=False, before_stage=None):
+def run(store, cfg, force_retry=False, before_stage=None, transcribe_only=False):
+    if cfg.get("shift_context", {}).get("enabled") and not transcribe_only:
+        from .shift_workflow import run as run_shift
+        return run_shift(store, cfg, force_retry, before_stage)
     run_start = time.monotonic()
     results = []
     with lock(store.root):
@@ -46,6 +49,9 @@ def run(store, cfg, force_retry=False, before_stage=None):
                     write_json(store.root / 'transcription-quality' / f"{job['id']}.json", quality)
                     if quality['reviewRequired']:
                         raise TranscriptionReviewRequired('ASR repetition/quality warning; compare retained transcript with audio before extraction')
+                if transcribe_only and job["stage"] == "extract":
+                    results.append({"job": job["id"], "status": "transcript-ready", "timingSeconds": timings})
+                    continue
                 if job["stage"] == "extract":
                     if before_stage:
                         before_stage(job, "extract")

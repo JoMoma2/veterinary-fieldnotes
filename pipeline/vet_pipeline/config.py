@@ -52,6 +52,7 @@ DEFAULT = {
         "max_retry_seconds": 3600,
         "verify_interval_seconds": 3600,
     },
+    "shift_context": {"enabled": False, "context_window": 98304, "max_output_tokens": 32768, "gpu_layers": 32, "timeout_seconds": 3600},
     "retention": {"enabled": False, "days": 14, "require_remote": True,
                   "automatic_deletion": False, "retain_source_audio": True,
                   "retain_transcripts": True},

@@ -73,3 +73,12 @@ transcription_free_memory_mb = 6000 # Whisper must fit alongside any cached allo
 session_hours = 8 # Import-batch window, not a guessed clinical shift duration.
 timezone = "America/Detroit"
 inhibit_sleep = true
+
+# Optional tested local whole-shift workflow; transcribe first, then contextual
+# extraction into the same private library. No publication or cloud permission.
+[shift_context]
+enabled = false
+context_window = 98304
+max_output_tokens = 32768
+gpu_layers = 32
+timeout_seconds = 3600

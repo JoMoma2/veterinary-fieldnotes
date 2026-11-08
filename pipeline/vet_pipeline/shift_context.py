@@ -276,8 +276,8 @@ def validate_index(value, sources):
     return value
 
 
-def validate_detail(value, sources, medical_only=False, patient_labels=()):
-    Draft202012Validator(DETAIL_SCHEMA).validate(value)
+def validate_detail(value, sources, medical_only=False, patient_labels=(), response_schema=None):
+    Draft202012Validator(response_schema or DETAIL_SCHEMA).validate(value)
     value = copy.deepcopy(value)
     accepted = {**value, 'facts': [], 'practical_lessons': [], 'study_questions': []}; rejected = []
     repairs = []
@@ -382,7 +382,7 @@ def call(root, cfg, context, task, schema, key):
     count = len(tokenizer.encode(text, add_special_tokens=False).ids)
     maximum = cfg['provider']['max_output_tokens']
     if count + maximum + 512 > cfg['provider']['context_window']:
-        raise ValueError('Whole-shift request exceeds measured context budget; source was not truncated')
+        raise ContextBudgetError('Whole-shift request exceeds measured context budget; source was preserved without truncation')
     write_json(folder / (key + '-request.json'), {'promptSha256': fingerprint, 'promptTokens': count,
                                                 'reservedOutputTokens': maximum, 'context': cfg['provider']['context_window']})
     check_resources(cfg, 'extract')
@@ -432,7 +432,11 @@ def call(root, cfg, context, task, schema, key):
             labels = [episode['patient_label'] for episode in load_json(root / 'index-map.json')['episodes'] if episode['patient_label']] if experiment.get('medicalOnlyQuestions') else []
             aliases = load_json(root / 'owner-aliases.json') if (root / 'owner-aliases.json').exists() else {}
             labels += [name for group in aliases.values() for name in group]
-            data, rejected = validate_detail(data, sources, experiment.get('medicalOnlyQuestions', False), labels)
+            data, rejected = validate_detail(data, sources, experiment.get('medicalOnlyQuestions', False), labels, schema)
+            if experiment.get('libraryWorkflow'):
+                from .shift_workflow import validate_topics
+                data['knowledge_topics'], topic_rejections = validate_topics(data.get('knowledge_topics', []), sources, labels)
+                rejected += topic_rejections
             repairs = data.pop('_citationRepairs', [])
             if repairs:
                 write_json(folder / (key + '-repairs.json'), repairs)
@@ -442,6 +446,10 @@ def call(root, cfg, context, task, schema, key):
         return data
     finally:
         stop.set(); monitor.join(timeout=2)
+
+
+class ContextBudgetError(ValueError):
+    pass
 
 
 def bounded_call(root, cfg, context, task, schema, key):
@@ -454,6 +462,8 @@ def bounded_call(root, cfg, context, task, schema, key):
         entry['attempts'] += 1; write_json(state_file, attempts)
         try:
             return call(root, cfg, context, task, schema, key)
+        except ContextBudgetError:
+            raise
         except ProcessingDeferred:
             entry['attempts'] -= 1; write_json(state_file, attempts)
             raise
@@ -527,7 +537,7 @@ def focused_task(episode, sources, aliases, context, cfg, medical_only=False, ex
     return build(best), keys[:best]
 
 
-def run(root):
+def run(root, on_checkpoint=None):
     root = private_path(root)
     with lock(root):
         experiment = load_json(root / 'experiment.json')
@@ -553,6 +563,9 @@ def run(root):
             speaker_note = SPEAKER_ID_UNCERTAINTY if experiment.get('speakerIdentityPolicy') == 'uncertain-v2' else ''
             index_task = INDEX_TASK + ('\n' + SPEAKER_TASK if experiment.get('speakerLabels') else '') + ('\n' + speaker_note if speaker_note else '')
             schema = SPEAKER_INDEX_SCHEMA if experiment.get('speakerLabels') else INDEX_SCHEMA
+            if experiment.get('libraryWorkflow'):
+                from .shift_workflow import INDEX_RULES
+                index_task += '\n' + INDEX_RULES
             index = bounded_call(root, cfg, context, index_task, schema, 'index')
             write_json(root / 'index-map.json', index); render(root)
             failed = []
@@ -565,7 +578,12 @@ def run(root):
                     write_json(root / 'focus-packets' / f'episode-{number:03d}.json', {'duplicatedSourceIds': copied, 'fullNightRetained': True})
                 key = f'episode-{number:03d}'
                 try:
-                    bounded_call(root, cfg, context, task, DETAIL_SCHEMA, key)
+                    detail_schema = DETAIL_SCHEMA
+                    if experiment.get('libraryWorkflow'):
+                        from .shift_workflow import detail_contract
+                        task, detail_schema = detail_contract(root, task)
+                    bounded_call(root, cfg, context, task, detail_schema, key)
+                    if on_checkpoint: on_checkpoint(root)
                 except ProcessingDeferred:
                     raise
                 except Exception as error:
