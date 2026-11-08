@@ -9,6 +9,7 @@ import os
 import shutil
 import time
 from pathlib import Path
+from .locations import local_path
 from urllib.parse import urlparse
 from .audio_prepare import inspect_audio, normalize_copy
 from .config import config
@@ -119,7 +120,7 @@ def prepare(source, root, date, authorization_ref, origin="authorized-record"):
         raise ValueError(
             "Recording/processing origin and authorization reference are required"
         )
-    source = Path(source).expanduser().resolve()
+    source = local_path(source).expanduser().resolve()
     info = inspect_audio(source)
     if (
         source.suffix.lower() != ".wav"

@@ -1,12 +1,13 @@
 from __future__ import annotations
 import json, sqlite3
 from pathlib import Path
+from .locations import local_path
 from .util import now
 
 
 class Store:
     def __init__(self, root: Path):
-        self.root = root.resolve()
+        self.root = local_path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.db = sqlite3.connect(self.root / "jobs.sqlite3", timeout=30)
         self.db.row_factory = sqlite3.Row

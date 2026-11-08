@@ -4,6 +4,7 @@ No new audio/model inference. No permanent voice registry. Numeric thresholds ar
 provisional, not trained/calibrated identity confidence or an accuracy guarantee.
 """
 from pathlib import Path
+from .locations import local_path
 import time
 
 from .private import private_path
@@ -189,7 +190,7 @@ def reembed(reference, root, manifest):
     import sherpa_onnx as so
     from .speakers import unit, render
     reference = private_path(reference); root = private_path(root)
-    model = Path(load_json(private_path(manifest))['embedding'])
+    model = local_path(load_json(private_path(manifest))['embedding'])
     identity = {'modelSha256': digest_file(model), 'version': 'cached-turn-embedding-v1', 'threads': 4}
     target = root / 'global-embedding-session.json'
     if target.exists() and load_json(target) != identity:

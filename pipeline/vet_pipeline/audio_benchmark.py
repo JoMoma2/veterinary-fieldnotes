@@ -6,6 +6,7 @@ import re
 import time
 import wave
 from pathlib import Path
+from .locations import local_path
 
 from .hardware import ResourceSampler, inventory
 from .ingest import transcript_valid
@@ -107,7 +108,7 @@ def benchmark_audio(
         )
     if backend not in ["faster-whisper", "whisper-cpp"]:
         raise ValueError("Unknown transcription benchmark backend")
-    if backend == "whisper-cpp" and (not executable or not Path(model).is_file()):
+    if backend == "whisper-cpp" and (not executable or not local_path(model).is_file()):
         raise ValueError(
             "Configure an existing whisper.cpp executable and local model file; automatic downloads are disabled"
         )
@@ -216,7 +217,7 @@ def benchmark_audio(
         "backend": backend,
         "model": model,
         "threads": threads,
-        "modelSha256": digest_file(Path(model)) if Path(model).is_file() else None,
+        "modelSha256": digest_file(local_path(model)) if local_path(model).is_file() else None,
         "hardware": inventory(),
         "results": rows,
         "limitations": "Synthetic speech is a mechanical/terminology baseline, not representative clinical accuracy. First-file wall time includes model load; later Faster-Whisper files reuse the model. CPU/GPU utilization is host-wide; do not infer offload from GPU activity alone.",

@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 import time
 
+from .locations import local_path
 from .private import private_path
 from .util import digest_file, load_json, write_json, now
 
@@ -83,9 +84,9 @@ class CpuDiarizer:
         import sherpa_onnx as so
         config = so.OfflineSpeakerDiarizationConfig(
             segmentation=so.OfflineSpeakerSegmentationModelConfig(
-                pyannote=so.OfflineSpeakerSegmentationPyannoteModelConfig(model=models['segmentation'], window_shift_ratio=.1),
+                pyannote=so.OfflineSpeakerSegmentationPyannoteModelConfig(model=str(local_path(models['segmentation'])), window_shift_ratio=.1),
                 num_threads=settings['threads'], provider='cpu'),
-            embedding=so.SpeakerEmbeddingExtractorConfig(model=models['embedding'], num_threads=settings['threads'], provider='cpu'),
+            embedding=so.SpeakerEmbeddingExtractorConfig(model=str(local_path(models['embedding'])), num_threads=settings['threads'], provider='cpu'),
             clustering=so.FastClusteringConfig(num_clusters=-1, threshold=settings['localThreshold']),
             min_duration_on=.3, min_duration_off=.5)
         if not config.validate():

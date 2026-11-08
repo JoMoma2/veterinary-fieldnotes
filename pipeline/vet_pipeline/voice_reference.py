@@ -10,6 +10,7 @@ import html
 import json
 import os
 from pathlib import Path
+from .locations import local_path
 import shutil
 import time
 
@@ -28,7 +29,7 @@ def prepare(source, directory, library_workspace):
     """
     from .private import initialize_private
     from .source_purpose import register_reference
-    source = Path(source).expanduser().resolve()
+    source = local_path(source).expanduser().resolve()
     if source.suffix.lower() != '.wav' or not source.is_file():
         raise ValueError('Expected an existing owner-reference WAV')
     root = initialize_private(directory); before = source.stat()
@@ -93,7 +94,7 @@ def inspect(root, manifest, comparison=None, engine=None):
     models = load_json(private_path(manifest))
     settings = {**SETTINGS, 'chunkSeconds': 600}
     identity = {'version': VERSION, 'sourceSha256': source['sha256'], 'normalizedSha256': digest_file(normalized),
-                'models': {k: digest_file(Path(models[k])) for k in ['segmentation', 'embedding']},
+                'models': {k: digest_file(local_path(models[k])) for k in ['segmentation', 'embedding']},
                 'windowSeconds': 8, 'minimumSpeechFraction': .65, 'maximumOverlapFraction': .1,
                 'maximumClippingFraction': .01, 'minimumRms': .002, 'settings': settings}
     session_path = root / 'session.json'

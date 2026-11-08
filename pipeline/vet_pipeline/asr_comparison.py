@@ -1,5 +1,6 @@
 """Private retained-WAV comparison. No extraction, publication, or cloud saving."""
 from pathlib import Path
+from .locations import local_path
 import html
 import json
 import os
@@ -49,8 +50,8 @@ def prepare(source, output, cfg, authorization_ref):
                         'audioSha256': digest_file(audio), 'durationSeconds': duration_seconds(audio),
                         'baseline': str(baseline), 'baselineSha256': digest_file(baseline) if baseline.exists() else None})
     binding = {'schemaVersion': 1, 'source': str(source), 'authorizationRef': authorization_ref,
-               'settings': p, 'modelSha256': digest_file(Path(p['model']).expanduser()),
-               'executableSha256': digest_file(Path(p['executable']).expanduser()), 'recordings': records}
+               'settings': p, 'modelSha256': digest_file(local_path(p['model']).expanduser()),
+               'executableSha256': digest_file(local_path(p['executable']).expanduser()), 'recordings': records}
     manifest = output / 'session.json'
     if manifest.exists():
         if load_json(manifest) != binding:
@@ -73,8 +74,8 @@ def render(root, session):
             results.append(result)
         status = result.get('status', 'running' if progress.get('recordingId') == item['id'] else 'queued')
         body = '<a href="../../index.html">Comparison</a><p>Private, unreviewed ASR comparison. Fewer repetitions do not establish accurate speech.</p>'
-        body += '<p>Status: ' + e(status) + '</p><p>Original copy</p><audio controls preload="none" src="' + e(Path(item['original']).as_uri()) + '"></audio><p>Working copy used by Whisper</p><audio controls preload="none" src="' + e(Path(item['audio']).as_uri()) + '"></audio>'
-        for label, path in [('Candidate', folder / 'whisper.json'), ('Original baseline', Path(item['baseline']))]:
+        body += '<p>Status: ' + e(status) + '</p><p>Original copy</p><audio controls preload="none" src="' + e(local_path(item['original']).as_uri()) + '"></audio><p>Working copy used by Whisper</p><audio controls preload="none" src="' + e(local_path(item['audio']).as_uri()) + '"></audio>'
+        for label, path in [('Candidate', folder / 'whisper.json'), ('Original baseline', local_path(item['baseline']))]:
             body += '<h2>' + label + '</h2>'
             if path.exists():
                 raw = load_json(path)
@@ -85,7 +86,7 @@ def render(root, session):
                     start = offsets.get('from')
                     link = ''
                     if isinstance(start, (int, float)) and 0 <= start / 1000 < item['durationSeconds']:
-                        link = '<a href="' + e(Path(item['audio']).as_uri()) + '#t=' + str(start / 1000) + '">Listen at ' + str(start / 1000) + 's</a> '
+                        link = '<a href="' + e(local_path(item['audio']).as_uri()) + '#t=' + str(start / 1000) + '">Listen at ' + str(start / 1000) + 's</a> '
                     body += '<p>' + link + e(entry.get('text', '')) + '</p>'
                 body += '</details>'
             else:
@@ -114,7 +115,7 @@ def run(source, output, cfg, authorization_ref):
                 if any(not (folder / name).exists() or digest_file(folder / name) != sha for name, sha in old['artifacts'].items()):
                     raise ValueError('Saved comparison artifact changed; preserve and inspect it')
                 continue
-            if digest_file(Path(item['audio'])) != item['audioSha256']:
+            if digest_file(local_path(item['audio'])) != item['audioSha256']:
                 raise ValueError('Comparison audio changed; preserve and inspect it')
             raw_path = folder / 'whisper.json'
             started = time.monotonic()
@@ -133,7 +134,7 @@ def run(source, output, cfg, authorization_ref):
                 render(root, session)
                 print(json.dumps({'recording': item['number'], 'status': 'transcribing'}), flush=True)
                 try:
-                    transcript = transcribe_cpp(Path(item['audio']), {**cfg['transcription'], 'details_path': str(raw_path), 'quality_path': str(folder / 'quality.json')})
+                    transcript = transcribe_cpp(local_path(item['audio']), {**cfg['transcription'], 'details_path': str(raw_path), 'quality_path': str(folder / 'quality.json')})
                     write_json(folder / 'transcript.json', transcript)
                     result.update(status='review-required' if transcript['transcriptionQuality']['reviewRequired'] else 'completed-unreviewed', gpuConfirmed=transcript['transcriptionBackend']['gpuAccelerationConfirmed'])
                 except TranscriptionReviewRequired:
@@ -143,7 +144,7 @@ def run(source, output, cfg, authorization_ref):
                 result['seconds'] = round(time.monotonic() - started, 3)
             if raw_path.exists():
                 result['candidateQuality'] = assess_whisper(load_json(raw_path), item['durationSeconds'])
-            baseline = Path(item['baseline'])
+            baseline = local_path(item['baseline'])
             if baseline.exists():
                 result['baselineQuality'] = assess_whisper(load_json(baseline), item['durationSeconds'])
             result['artifacts'] = {p.name: digest_file(p) for p in folder.glob('*.json') if p.name != 'result.json'}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 import hashlib, io, json, os, shutil, subprocess, tarfile, tempfile, time, uuid
 from pathlib import Path
+from .locations import local_path
 from cryptography.fernet import Fernet, InvalidToken
 from .library import current_root, read_library, validate_library, materialize, current
 from .util import atomic_write, digest_file, load_json, write_json, now, lock
@@ -19,6 +20,7 @@ def create_key(path: Path):
 
 
 def cipher(keyfile):
+    keyfile = local_path(keyfile)
     if keyfile.stat().st_mode & 0o077:
         raise ValueError("Backup key must be readable only by its owner: chmod 600")
     return Fernet(keyfile.read_bytes().strip())
@@ -89,6 +91,7 @@ def create_backup(store, keyfile: Path, destination: Path):
 
 
 def inspect_backup(file: Path, keyfile: Path):
+    file = local_path(file)
     raw = cipher(keyfile).decrypt(file.read_bytes())
     entries = {}
     with tarfile.open(fileobj=io.BytesIO(raw), mode="r:gz") as archive:
@@ -176,7 +179,7 @@ def upload_backups(store, cfg):
         if a["attempts"] >= cfg["retry"]["max_attempts"]:
             continue
         try:
-            file = Path(a["path"])
+            file = local_path(a["path"])
             if digest_file(file) != a["sha256"]:
                 raise ValueError("Local backup was corrupted")
             dest = remote.rstrip("/") + "/" + file.name
@@ -241,8 +244,8 @@ def cleanup(store, cfg, apply=False):
                 continue
             if not any(
                 j["id"] in json.loads(a["applied_ids"])
-                and Path(a["path"]).is_file()
-                and digest_file(Path(a["path"])) == a["sha256"]
+                and local_path(a["path"]).is_file()
+                and digest_file(local_path(a["path"])) == a["sha256"]
                 for a in backups
             ):
                 continue
@@ -284,13 +287,13 @@ def backup_if_changed(store, keyfile, destination):
             (content_hash,),
         ):
             if (
-                Path(a["path"]).is_file()
-                and digest_file(Path(a["path"])) == a["sha256"]
+                local_path(a["path"]).is_file()
+                and digest_file(local_path(a["path"])) == a["sha256"]
             ):
                 inspect_backup(
-                    Path(a["path"]), keyfile
+                    local_path(a["path"]), keyfile
                 )  # A replaced/lost key must not silently pass a backup readiness check.
-                return Path(a["path"])
+                return local_path(a["path"])
     return create_backup(store, keyfile, destination)
 
 
@@ -317,7 +320,7 @@ def remote_storage_type(cfg):
         return "unknown"
     parser = configparser.ConfigParser(interpolation=None)
     try:
-        parser.read(Path(path).expanduser())
+        parser.read(local_path(path).expanduser())
         return parser.get(remote.split(":", 1)[0], "type", fallback="unknown")
     except (configparser.Error, OSError):
         return "unknown"
@@ -325,9 +328,9 @@ def remote_storage_type(cfg):
 
 def rclone_command(cfg, args):
     settings = cfg["backup"]
-    command = [str(Path(settings.get("executable", "rclone")).expanduser())]
+    command = [str(local_path(settings.get("executable", "rclone")).expanduser())]
     if settings.get("config_file"):
-        path = Path(settings["config_file"]).expanduser()
+        path = local_path(settings["config_file"]).expanduser()
         if not path.is_file() or path.stat().st_mode & 0o077:
             raise ValueError(
                 "rclone config must exist outside Git with owner-only permissions"
@@ -381,7 +384,7 @@ def fetch_backup(cfg, name, keyfile, destination, expected_sha256=None):
             raise ValueError(
                 "Downloaded backup hash differs from the recorded artifact"
             )
-        inspect_backup(temporary, Path(keyfile))
+        inspect_backup(temporary, local_path(keyfile))
         os.rename(temporary, destination)
     finally:
         temporary.unlink(missing_ok=True)

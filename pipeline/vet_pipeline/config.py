@@ -1,6 +1,7 @@
 from __future__ import annotations
 import copy, json, os, tomllib
 from pathlib import Path
+from .locations import local_path
 from urllib.parse import urlparse
 
 DEFAULT = {
@@ -84,7 +85,7 @@ DEFAULT = {
 def config(path: Path | None = None):
     out = copy.deepcopy(DEFAULT)
     if path:
-        with path.open("rb") as f:
+        with local_path(path).open("rb") as f:
             data = tomllib.load(f)
         for k, v in data.items():
             if k not in out or not isinstance(v, dict):

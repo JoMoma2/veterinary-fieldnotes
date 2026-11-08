@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import wave
 from pathlib import Path
+from .locations import local_path
 from .util import load_json, write_json
 
 
@@ -28,8 +29,8 @@ def parse_whisper_cpp(data):
 
 
 def transcribe_cpp(source: Path, settings):
-    executable = Path(settings["executable"]).expanduser()
-    model = Path(settings["model"]).expanduser()
+    executable = local_path(settings["executable"]).expanduser()
+    model = local_path(settings["model"]).expanduser()
     if not executable.is_file() or not model.is_file():
         raise ValueError(
             "whisper-cpp needs an existing local executable and model file"
@@ -45,7 +46,7 @@ def transcribe_cpp(source: Path, settings):
                 "whisper-cpp requires mono 16 kHz PCM16 WAV; convert a workspace copy first"
             )
     with tempfile.TemporaryDirectory(prefix="vet-whisper-cpp-") as tmp:
-        prefix = Path(tmp) / "transcript"
+        prefix = local_path(tmp) / "transcript"
         decoding = []
         if settings.get('max_text_context', -1) >= 0:
             decoding += ['-mc', str(settings['max_text_context'])]
@@ -76,11 +77,11 @@ def transcribe_cpp(source: Path, settings):
         )
         raw = load_json(prefix.with_suffix(".json"))
         if settings.get("details_path"):
-            write_json(Path(settings["details_path"]), raw)
+            write_json(local_path(settings["details_path"]), raw)
         from .asr_quality import assess_whisper, TranscriptionReviewRequired
         quality = assess_whisper(raw, duration)
         if settings.get('quality_path'):
-            write_json(Path(settings['quality_path']), quality)
+            write_json(local_path(settings['quality_path']), quality)
         if quality['invalidTimestampSegments'] or quality['outOfBoundsSegments']:
             raise TranscriptionReviewRequired('Retained Whisper output has invalid source timestamps; owner review required')
         transcript = parse_whisper_cpp(raw)

@@ -1,6 +1,6 @@
 # Optional independent encrypted backup setup
 
-The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical path values in saved artifacts are translated internally. Old shell paths no longer exist; use the current layout for commands and new work.
 
 **Deferred by owner decision.** Normal operation uses private GitHub as primary remote knowledge storage, the local computer as secondary copy, and Cloudflare for approved public content. No independent-provider account, encryption key or rclone credentials are required for processing or GitHub synchronization. The instructions below preserve optional future functionality; do not configure or enable it automatically.
 

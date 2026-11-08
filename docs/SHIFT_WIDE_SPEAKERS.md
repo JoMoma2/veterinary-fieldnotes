@@ -1,6 +1,6 @@
 # Whole-shift speaker correction and repetition exclusion
 
-The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical path values in saved artifacts are translated internally. Old shell paths no longer exist; use the current layout for commands and new work.
 
 This is still a private evaluation, not a verified identity system or a replacement
 for normal nightly processing. Original audio, full transcripts, previous speaker

@@ -7,6 +7,7 @@ import subprocess
 import hashlib
 import time
 from pathlib import Path
+from .locations import local_path
 from urllib.parse import urlparse
 
 from .library import current, materialize, validate_library, write_library
@@ -199,7 +200,7 @@ def sync_pending_master(store, cfg, *, force=False, checkout=None, allow_clinica
     settings = cfg["github"]
     if not settings["enabled"] and not force:
         return {"status": "disabled", "pending": False}
-    checkout = Path(checkout or settings["checkout"]).expanduser().resolve()
+    checkout = local_path(checkout or settings["checkout"]).resolve()
     clinical = settings["allow_clinical"] if allow_clinical is None else allow_clinical
     directory = store.root / "master-sync"
     statefile = directory / "state.json"

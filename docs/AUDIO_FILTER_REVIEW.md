@@ -1,6 +1,6 @@
 # Private clothing-rustle comparison
 
-The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical path values in saved artifacts are translated internally. Old shell paths no longer exist; use the current layout for commands and new work.
 
 Filtering is an experiment on **copies**, never a replacement for original audio.
 The owner has now explicitly enabled the combined profile for the retained-source

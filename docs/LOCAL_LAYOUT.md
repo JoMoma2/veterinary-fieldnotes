@@ -23,8 +23,9 @@ Do not initialize Git in the hub root. Clinical data, full transcripts, recordin
 
 ## Compatibility and required external locations
 
-The former source, reports, configuration and hidden data paths remain as filesystem symlinks. Their data now lives in the hub. This preserves old bookmarks, saved absolute paths, editable environment imports and hash-bound recovery artifacts. **Do not remove these compatibility links** until a deliberate migration proves no saved checkpoint uses them. Immutable model manifests, experiment settings, original reports and old request fingerprints are not rewritten merely to replace a valid path.
+The former source, reports, configuration and hidden data shortcuts have been removed at the owner's request. All actual data stays in the hub. The application translates known old FieldNotes path prefixes at filesystem access using `locations.local_path`; it does not rewrite serialized clinical evidence, frozen profiles, source/model bindings or request fingerprints. Existing saved JSON/settings can therefore contain historical path strings without requiring home-folder shortcuts. Use canonical paths in new commands; the old shell directories and executable paths no longer exist. Do not recreate the shortcuts.
 
+The installed Whisper ELF library search paths use `$ORIGIN`, so its executable and libraries work from their new directory without an old AI-folder shortcut. Historical ASR comparison executable checksums remain historical; new ASR configuration comparisons should use a fresh workspace, preserving old results.
 Ubuntu still discovers user units through `~/.config/systemd/user/` and launchers through `~/.local/share/applications/`; FieldNotes definitions there point into `config/systemd/` and `config/desktop/`. Shared Ollama model storage, GPU drivers, system Python/uv interpreters, browser caches and general account credentials remain in their standard locations. They may be used by other applications and are not FieldNotes-owned data.
 
 ## Working here

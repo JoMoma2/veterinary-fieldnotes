@@ -5,6 +5,7 @@ import copy
 import json
 import os
 from pathlib import Path
+from .locations import local_path
 import re
 import shutil
 import sqlite3
@@ -174,7 +175,7 @@ def prepare(source_workspace, shift_id, directory, profile_path):
                   'shiftId': shift_id, 'recordings': len(jobs), 'transcriptHashes': source_hashes,
                   'sourcesSha256': digest_file(root / 'sources.json'), 'recordingsSha256': digest_file(root / 'recordings.json'), 'audio': inputs,
                   'provider': cfg['provider'], 'gpuLayers': 40, 'modelDigest': verified_local_model(cfg),
-                  'thinking': True, 'profilePath': str(Path(profile_path).expanduser().resolve()), 'status': 'prepared'}
+                  'thinking': True, 'profilePath': str(local_path(profile_path).expanduser().resolve()), 'status': 'prepared'}
     write_json(root / 'experiment.json', experiment)
     render(root)
     return root
@@ -376,7 +377,7 @@ def call(root, cfg, context, task, schema, key):
         raise ValueError('Whole-shift evaluation permits local Ollama only')
     if verified_local_model(cfg) != experiment['modelDigest']:
         raise ValueError('Selected model digest changed during experiment')
-    tokenizer = Tokenizer.from_file(str(Path(cfg['provider']['tokenizer_path']).expanduser()))
+    tokenizer = Tokenizer.from_file(str(local_path(cfg['provider']['tokenizer_path']).expanduser()))
     tokenizer.no_truncation(); tokenizer.no_padding()
     count = len(tokenizer.encode(text, add_special_tokens=False).ids)
     maximum = cfg['provider']['max_output_tokens']
@@ -389,7 +390,7 @@ def call(root, cfg, context, task, schema, key):
     def sample():
         while not stop.wait(.5):
             try:
-                memory = dict(line.split(':', 1) for line in Path('/proc/meminfo').read_text().splitlines())
+                memory = dict(line.split(':', 1) for line in local_path('/proc/meminfo').read_text().splitlines())
                 samples.append({**gpu_snapshot(), 'ramAvailableKiB': int(memory['MemAvailable'].split()[0])})
             except (OSError, ValueError, ProcessingDeferred):
                 pass
@@ -510,7 +511,7 @@ def focused_task(episode, sources, aliases, context, cfg, medical_only=False, ex
     hints = name_hints(episode, sources, aliases) or {}
     keys = list(dict.fromkeys([*hints.get('literal_mention_blocks', []), *episode['sources'], *hints.get('nearby_context_blocks', [])]))
     keys = [key for key in keys if key in sources and sources[key]['eligible']]
-    tokenizer = Tokenizer.from_file(str(Path(cfg['provider']['tokenizer_path']).expanduser()))
+    tokenizer = Tokenizer.from_file(str(local_path(cfg['provider']['tokenizer_path']).expanduser()))
     tokenizer.no_truncation(); tokenizer.no_padding()
     def build(count):
         copies = '\n'.join('[' + key + '] ' + extraction_text(sources[key]) for key in keys[:count])
@@ -536,7 +537,7 @@ def run(root):
             raise ValueError('Immutable experiment source changed')
         if digest_file(root / 'recordings.json') != experiment['recordingsSha256']:
             raise ValueError('Immutable recording order changed')
-        cfg = local_config(Path(experiment['profilePath']))
+        cfg = local_config(local_path(experiment['profilePath']))
         cfg['provider'].update(experiment['provider'])
         if verified_local_model(cfg) != experiment['modelDigest']:
             raise ValueError('Selected model digest changed')

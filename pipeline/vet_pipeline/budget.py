@@ -5,13 +5,14 @@ import hashlib
 import json
 from functools import lru_cache
 from pathlib import Path
+from .locations import local_path
 
 
 @lru_cache(maxsize=8)
 def _tokenizer(path, modified, size, expected):
     from tokenizers import Tokenizer
 
-    file = Path(path)
+    file = local_path(path)
     if expected and hashlib.sha256(file.read_bytes()).hexdigest() != expected:
         raise ValueError("Configured tokenizer checksum does not match")
     tokenizer = Tokenizer.from_file(str(file))
@@ -26,7 +27,7 @@ def messages_budget(messages, provider):
     safety = provider.get("context_safety_tokens", 128)
     tokenizer = None
     if configured:
-        path = Path(configured).expanduser().resolve()
+        path = local_path(configured).expanduser().resolve()
         if not path.is_file():
             raise ValueError(
                 "Configured offline tokenizer file is missing; no automatic download is allowed"

@@ -41,7 +41,7 @@ a{{color:#15654e;text-underline-offset:3px}}li{{margin:10px 0}}.note{{color:#485
 </style><h1>FieldNotes</h1><p class="note">Your private local workspace. Opening this page does not start processing, upload or publish anything.</p>
 <section><h2>Review results</h2><p>Use <strong>Fieldnotes — Morning Review</strong> in the Ubuntu applications menu for the running local report. Saved reports and past experiments are below; their dates identify the run, not a newly generated result.</p><ul>{''.join(items) or '<li>No saved reports yet.</li>'}</ul></section>
 <section><h2>Find your files</h2><ul>{links}</ul><p><a href="{e(guide)}">Folder guide and operating notes</a></p></section>
-<p class="note">Keep this folder private. Source recordings and transcripts remain retained. Old location shortcuts preserve previous links and recovery checkpoints. Publication still requires explicit approval.</p></html>'''
+<p class="note">Keep this folder private. Source recordings and transcripts remain retained. Historical saved paths are handled internally; use this folder for new work. Publication still requires explicit approval.</p></html>'''
     atomic_write(root / 'Start.html', text)
     return root / 'Start.html'
 

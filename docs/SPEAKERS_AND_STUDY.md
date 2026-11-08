@@ -1,6 +1,6 @@
 # Private speaker and medical-question evaluation
 
-The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical path values in saved artifacts are translated internally. Old shell paths no longer exist; use the current layout for commands and new work.
 
 This opt-in experiment reuses the selected shift's saved audio and transcripts.
 It does not invoke Whisper again, replace the live library, publish anything,

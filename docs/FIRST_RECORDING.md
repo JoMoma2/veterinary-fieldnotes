@@ -1,6 +1,6 @@
 # First authorized recording: local pilot
 
-The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical path values in saved artifacts are translated internally. Old shell paths no longer exist; use the current layout for commands and new work.
 
 For the existing two-sample sensitivity pilot, use the **self-contained viewer** at `~/Fieldnotes-private-review/small-recorder-settings-test.html`. It embeds both short clips and their transcripts so Firefox does not need access to other hidden local files. Navigation and timestamp playback stay within that file. To regenerate a private pilot viewer, use `scripts/render-pilot-report.py PRIVATE_PILOT --output PRIVATE_REPORT.html`; inputs/outputs must stay outside Git. The generated HTML itself contains clinical audio/text: keep it private. This is bounded to 32 MiB of short-clip audio and is not a solution for embedding an entire shift. Original audio, immutable ASR and reference files remain separate and unchanged.
 

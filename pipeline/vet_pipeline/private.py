@@ -3,11 +3,12 @@
 from __future__ import annotations
 import os
 from pathlib import Path
+from .locations import local_path
 from .util import atomic_write
 
 
 def private_path(path):
-    path = Path(path).expanduser().resolve()
+    path = local_path(path).resolve()
     # Some managed environments have empty .git placeholder directories in /tmp;
     # only actual worktree markers/metadata establish a checkout boundary.
     if any(

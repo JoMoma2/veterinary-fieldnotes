@@ -6,6 +6,7 @@ import struct
 import uuid
 import wave
 from pathlib import Path
+from .locations import local_path
 from .util import digest_file
 
 
@@ -74,7 +75,7 @@ def _recorder_ima_timing(path):
 
 
 def inspect_audio(path):
-    path = Path(path)
+    path = local_path(path)
     stat = path.stat()
     import av
 
@@ -128,8 +129,8 @@ def inspect_audio(path):
 def normalize_copy(source, target, max_seconds=900):
     import av
 
-    source = Path(source)
-    target = Path(target)
+    source = local_path(source)
+    target = local_path(target)
     if source.resolve() == target.resolve() or target.exists():
         raise ValueError("Never overwrite the source or an existing normalized copy")
     info = inspect_audio(source)
