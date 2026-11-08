@@ -64,6 +64,14 @@ Use unknown/empty relationship when clues are weak or contradictory. No invented
 patient links or background. No persistent client profiles or cross-shift identification.
 Speaker labels in source tags are metadata and must not be copied into evidence quotes.
 '''
+SPEAKER_ID_UNCERTAINTY = '''SPEAKER ID UNCERTAINTY:
+Different speaker labels do NOT prove different people; one person may be split
+across several labels. The same label does NOT prove one person; different people
+may be merged into a cluster. Voice references and role estimates can also be wrong.
+Use the words, conversational context, evidence and uncertainty together. Do not
+split or merge clinical cases, infer patient ownership or assign professional roles
+solely because labels match or differ. Preserve unresolved speaker/case attribution.
+'''
 CLAIM = obj({'kind': {'enum': ['owner-report', 'observation', 'suspicion', 'confirmed-diagnosis', 'actual-treatment', 'proposed-treatment', 'outcome', 'recorded-reasoning', 'equipment', 'practical-technique', 'unknown']},
              'text': TEXT, 'evidence': {'type': 'array', 'items': EVIDENCE, 'minItems': 1}})
 LESSON = obj({'text': TEXT, 'limitations': TEXT, 'evidence': {'type': 'array', 'items': EVIDENCE, 'minItems': 1}})
@@ -483,20 +491,22 @@ def name_hints(episode, sources, aliases=None):
             'warning': 'Retrieval candidates only, NOT evidence that all mentions are the same patient. Consider every mention and its context, including later returns, explicit switches and conflicting identities. ASR-warning blocks remain context-only. Owner spelling aliases, when supplied, are annotations rather than clinical source evidence.'}
 
 
-def detail_task(episode, sources, aliases=None, medical_only=False):
+def detail_task(episode, sources, aliases=None, medical_only=False, extra_instructions=''):
     task = 'Write a detailed, readable learning account for this CANDIDATE episode, using the entire night for context. The index is a hypothesis, not evidence. Verify patient association against source text and explain uncertainty. Clearly distinguish reported facts from unknowns; summary must not add claims beyond cited facts. Preserve detailed reasoning actually discussed, diagnostic findings, treatments, practical/equipment instructions and unresolved contradictions. Teach only what was supported in this recording, not extra textbook recommendations. Generate zero to three worthwhile standalone medical/practical questions only when supported. No patient-name trivia or automatic quote-completion cards. Candidate episode:\n' + json.dumps(episode, ensure_ascii=False)
     hints = name_hints(episode, sources, aliases)
     if hints:
         task += '\nHIGH-RECALL SOURCE RETRIEVAL (not patient-link proof):\n' + json.dumps(hints, ensure_ascii=False)
     if medical_only:
         task += '\n' + MEDICAL_QUESTION_RULES
+    if extra_instructions:
+        task += '\n' + extra_instructions
     return task
 
 
-def focused_task(episode, sources, aliases, context, cfg, medical_only=False):
+def focused_task(episode, sources, aliases, context, cfg, medical_only=False, extra_instructions=''):
     """Duplicate relevant originals near the writing task, retaining the FULL night."""
     from tokenizers import Tokenizer
-    base = detail_task(episode, sources, aliases, medical_only)
+    base = detail_task(episode, sources, aliases, medical_only, extra_instructions)
     hints = name_hints(episode, sources, aliases) or {}
     keys = list(dict.fromkeys([*hints.get('literal_mention_blocks', []), *episode['sources'], *hints.get('nearby_context_blocks', [])]))
     keys = [key for key in keys if key in sources and sources[key]['eligible']]
@@ -539,7 +549,8 @@ def run(root):
         experiment.pop('lastErrorClass', None)
         experiment.update(status='running', lastStartedAt=now()); write_json(root / 'experiment.json', experiment)
         try:
-            index_task = INDEX_TASK + ('\n' + SPEAKER_TASK if experiment.get('speakerLabels') else '')
+            speaker_note = SPEAKER_ID_UNCERTAINTY if experiment.get('speakerIdentityPolicy') == 'uncertain-v2' else ''
+            index_task = INDEX_TASK + ('\n' + SPEAKER_TASK if experiment.get('speakerLabels') else '') + ('\n' + speaker_note if speaker_note else '')
             schema = SPEAKER_INDEX_SCHEMA if experiment.get('speakerLabels') else INDEX_SCHEMA
             index = bounded_call(root, cfg, context, index_task, schema, 'index')
             write_json(root / 'index-map.json', index); render(root)
@@ -547,9 +558,9 @@ def run(root):
             for number, episode in enumerate(index['episodes'], 1):
                 if time.monotonic() - started > 8 * 3600:
                     raise ProcessingDeferred('Eight-hour run allowance reached; saved episode checkpoints can resume')
-                task = detail_task(episode, sources, aliases, experiment.get('medicalOnlyQuestions', False))
+                task = detail_task(episode, sources, aliases, experiment.get('medicalOnlyQuestions', False), speaker_note)
                 if experiment.get('focusedEvidence'):
-                    task, copied = focused_task(episode, sources, aliases, context, cfg, experiment.get('medicalOnlyQuestions', False))
+                    task, copied = focused_task(episode, sources, aliases, context, cfg, experiment.get('medicalOnlyQuestions', False), speaker_note)
                     write_json(root / 'focus-packets' / f'episode-{number:03d}.json', {'duplicatedSourceIds': copied, 'fullNightRetained': True})
                 key = f'episode-{number:03d}'
                 try:
@@ -690,7 +701,7 @@ def prepare_speaker_study(reference, directory):
         if (reference / folder).exists():
             shutil.copytree(reference / folder, root / folder, copy_function=os.link)
     experiment = load_json(reference / 'experiment.json')
-    experiment.update(status='prepared', version='whole-shift-speakers-medical-v1', medicalOnlyQuestions=True,
+    experiment.update(status='prepared', version='whole-shift-speakers-medical-v1', medicalOnlyQuestions=True, speakerIdentityPolicy='uncertain-v2',
                       focusedEvidence=True, referenceExperiment=str(reference),
                       baselineLabel='Previous full-night output — older question policy', createdAt=now())
     for key in ['lastErrorClass', 'finishedAt', 'failedEpisodes', 'lastStartedAt', 'speakerLabels']:

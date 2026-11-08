@@ -283,6 +283,15 @@ def test_medical_question_policy_filters_case_recall_without_losing_notes(store,
     assert 'STUDY QUESTION POLICY' not in s.detail_task(index()['episodes'][0], load_json(root / 'sources.json'))
 
 
+def test_explicit_speaker_uncertainty_note_is_versioned_without_changing_old_requests(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch); sources = load_json(root / 'sources.json')
+    prior = s.detail_task(index()['episodes'][0], sources)
+    assert 'SPEAKER ID UNCERTAINTY' not in prior
+    revised = s.detail_task(index()['episodes'][0], sources, extra_instructions=s.SPEAKER_ID_UNCERTAINTY)
+    assert revised.startswith(prior) and 'Different speaker labels do NOT prove different people' in revised
+    assert 'The same label does NOT prove one person' in revised
+
+
 def test_speaker_metadata_preserves_all_original_words_and_roles_need_real_ids(store, tmp_path, monkeypatch):
     root = prepared(store, tmp_path, monkeypatch); sources = load_json(root / 'sources.json')
     sources['b0001']['speakerSegments'] = [{**sources['b0001']['segments'][0], 'speaker': 'Speaker_001'}]

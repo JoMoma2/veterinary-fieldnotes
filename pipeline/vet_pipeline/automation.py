@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from .ingest import ingest
 from .util import lock, load_json, write_json
+from .source_purpose import ReferenceOnlySource, exclusions
 
 
 def inventory():
@@ -79,6 +80,8 @@ def scan(store, cfg, source: Path, date: str, shift_id=None, observed_stability=
     device = hashlib.sha256(str(source).encode()).hexdigest()[:8]
     shift = shift_id or "s-" + date + "-" + device
     with lock(store.root):
+        # Fail closed before any import if a purpose registry is malformed.
+        exclusions(store.root)
         observation_file = store.root / "usb-observations.json"
         observations = load_json(observation_file) if observation_file.exists() else {}
         for path in files:
@@ -110,6 +113,8 @@ def scan(store, cfg, source: Path, date: str, shift_id=None, observed_stability=
                     occurrences.append(occurrence)
                     write_json(metadata_path, metadata)
                 results.append({"id": id, "imported": created})
+            except ReferenceOnlySource:
+                results.append({'status': 'reference-only-skipped', 'imported': False})
             except Exception as e:
                 results.append(
                     {

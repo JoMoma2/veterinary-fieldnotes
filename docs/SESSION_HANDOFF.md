@@ -1,5 +1,10 @@
 # Session handoff — whole-night context evaluation
 
+## Owner-reference tooling
+
+Local voice-reference preparation/comparison and ingestion-purpose exclusions are implemented. Public handoffs intentionally omit real enrollment locations, measurements, identities and progress. Detailed continuation notes belong in the private reference workspace's CONTINUATION.md, located through the private source-purpose registry. Do not commit that file, voice templates, source hashes, audio or reports. Explicit owner-only confirmation enrolls candidates for evaluation; it does not deploy an identity threshold. See OWNER_VOICE_REFERENCE.md.
+
+
 ## Latest checkpoint — whole-shift voice correction and repetition exclusion
 
 Owner found voice labels effectively reset across files and then requested ignoring consecutive repetition at5+, preserving all source data. This supersedes prior provisional speaker-quality assumptions. Initial audit:215local embeddings ->214labels; the fixed-prototype online margin rule was inappropriate for the observed embedding scale, so it almost never reused an ID. The owner supplied known-self reference passages privately, including a warning about a possible fainter second voice. Do NOT put those quotes, source IDs, vectors or capability URLs in Git.

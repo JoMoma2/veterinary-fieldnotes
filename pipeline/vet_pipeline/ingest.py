@@ -53,6 +53,9 @@ def ingest(
         raise ValueError("Accepts WAV or timestamped transcript JSON only")
     before = path.stat()
     sha = digest_file(path)
+    from .source_purpose import exclusions, ReferenceOnlySource
+    if sha in exclusions(store.root):
+        raise ReferenceOnlySource('Voice reference retained separately; not a knowledge recording')
     job_id = "r-" + sha[:24]
     existing = store.db.execute("SELECT * FROM jobs WHERE sha256=?", (sha,)).fetchone()
     if existing:
