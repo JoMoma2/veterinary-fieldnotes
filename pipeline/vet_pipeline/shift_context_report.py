@@ -45,6 +45,8 @@ def render_report(root):
     body += '<p>' + str(len(recordings)) + ' recordings selected; ' + str(sum(bool(r['blocks']) for r in recordings)) + ' parsed transcripts reused. ' + str(sum(r['status'] == 'context-only-ASR-warning' for r in recordings)) + ' parsed transcripts are context-only due to ASR warnings; ' + str(sum(not r['blocks'] for r in recordings)) + ' have no valid parsed transcript. No Whisper inference is run.</p>'
     body += '<p>' + e(experiment['provider']['model']) + '; context ' + str(experiment['provider']['context_window']) + ' tokens; requested GPU layers ' + str(experiment['gpuLayers']) + '; whole available parsed-night context supplied to each model request. Original recording clocks remain unverified.</p>'
     body += '<p>Reasoning mode: ' + ('enabled' if experiment.get('thinking') else 'disabled') + '; maximum generated tokens: ' + str(experiment['provider']['max_output_tokens']) + '. This is a combined context/prompt/synthesis experiment, not a controlled measurement of context alone.</p>'
+    if experiment.get('focusedEvidence'):
+        body += '<p><strong>Focused-evidence variant:</strong> the complete night is retained, with extra copies of selected original passages near the writing task. Same model, context allocation and output allowance; source copies are budgeted without removing original context.</p>'
     if metrics:
         body += '<p>Saved inference wall time: ' + e(round(sum(m.get('seconds', 0) for m in metrics), 1)) + ' s; maximum reported input tokens: ' + str(max(m.get('prompt_eval_count', 0) or 0 for m in metrics)) + '; peak sampled GPU allocation: ' + str(max(m.get('peakGpuMiB', 0) for m in metrics)) + ' MiB.</p>'
     if experiment.get('lastErrorClass'):
@@ -141,7 +143,7 @@ def render_report(root):
             if (root / 'inputs' / (block['recordingId'] + '.wav')).exists():
                 body += '<button data-audio="../inputs/' + e(block['recordingId']) + '.wav" data-start="' + str(block['start']) + '" data-label="Recording ' + str(block['recordingNumber']) + '">Listen at this source timestamp</button>'
         body += '</details>'
-    body += '</section><section id="baseline"><h2>Previous small-context output for comparison</h2><p>Saved library records touching the selected batch; an article may also contain historical additions. These were not edited or sent to the model as evidence.</p>'
+    body += '</section><section id="baseline"><h2>' + e(experiment.get('baselineLabel', 'Previous small-context output for comparison')) + '</h2><p>Saved records for comparison only; these were not edited or sent to the model as evidence. A historical library article may include older additions.</p>'
     baseline = load_json(root / 'baseline.json')
     for article in baseline['articles']:
         body += '<details><summary>' + e(article['title']) + '</summary><pre>' + e(article['body']) + '</pre></details>'

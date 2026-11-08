@@ -432,6 +432,29 @@ def detail_task(episode, sources, aliases=None):
     return task
 
 
+def focused_task(episode, sources, aliases, context, cfg):
+    """Duplicate relevant originals near the writing task, retaining the FULL night."""
+    from tokenizers import Tokenizer
+    base = detail_task(episode, sources, aliases)
+    hints = name_hints(episode, sources, aliases) or {}
+    keys = list(dict.fromkeys([*hints.get('literal_mention_blocks', []), *episode['sources'], *hints.get('nearby_context_blocks', [])]))
+    keys = [key for key in keys if key in sources and sources[key]['eligible']]
+    tokenizer = Tokenizer.from_file(str(Path(cfg['provider']['tokenizer_path']).expanduser()))
+    tokenizer.no_truncation(); tokenizer.no_padding()
+    def build(count):
+        copies = '\n'.join('[' + key + '] ' + sources[key]['text'] for key in keys[:count])
+        return base + '\nFOCUSED COPIES OF ORIGINAL EVIDENCE (the complete night remains above):\n' + copies + '\nUse these nearby originals to copy citations accurately. You may also use other eligible blocks in the full transcript. Copy short continuous exact quotations, including relevant negation/doses/units. Do not use ellipses, splice quotations, paraphrase inside quote fields or repair uncertain ASR wording. These are retrieval candidates, not proof of patient identity. Do not force questions or unsupported lessons.'
+    best = 0; left = 0; right = len(keys)
+    while left <= right:
+        midpoint = (left + right) // 2
+        count = len(tokenizer.encode(prompt(context, build(midpoint), DETAIL_SCHEMA, True), add_special_tokens=False).ids)
+        if count + cfg['provider']['max_output_tokens'] + 512 <= cfg['provider']['context_window']:
+            best = midpoint; left = midpoint + 1
+        else:
+            right = midpoint - 1
+    return build(best), keys[:best]
+
+
 def run(root):
     root = private_path(root)
     with lock(root):
@@ -460,6 +483,9 @@ def run(root):
                 if time.monotonic() - started > 8 * 3600:
                     raise ProcessingDeferred('Eight-hour run allowance reached; saved episode checkpoints can resume')
                 task = detail_task(episode, sources, aliases)
+                if experiment.get('focusedEvidence'):
+                    task, copied = focused_task(episode, sources, aliases, context, cfg)
+                    write_json(root / 'focus-packets' / f'episode-{number:03d}.json', {'duplicatedSourceIds': copied, 'fullNightRetained': True})
                 key = f'episode-{number:03d}'
                 try:
                     bounded_call(root, cfg, context, task, DETAIL_SCHEMA, key)
@@ -533,3 +559,53 @@ def watch_reports(root):
         if status not in ['prepared', 'running', 'deferred']:
             break
         time.sleep(20)
+
+
+def prepare_focused(reference, directory):
+    """Same dataset/index/runtime, fresh detail calls with focused evidence copies."""
+    reference = private_path(reference)
+    root = initialize_private(directory)
+    for name in ['sources.json', 'recordings.json', 'index-map.json', 'owner-aliases.json', 'owner-aliases-provenance.json']:
+        if (reference / name).exists():
+            shutil.copy2(reference / name, root / name)
+    for folder in ['inputs', 'transcripts', 'transcription-details']:
+        if (reference / folder).exists():
+            shutil.copytree(reference / folder, root / folder, copy_function=os.link)
+    (root / 'calls').mkdir(mode=0o700)
+    shutil.copy2(reference / 'calls/index.json', root / 'calls/index.json')
+    experiment = load_json(reference / 'experiment.json')
+    experiment.update(status='waiting-for-reference', focusedEvidence=True, referenceExperiment=str(reference),
+                      baselineLabel='Earlier whole-night attempt for comparison', createdAt=now())
+    for key in ['lastErrorClass', 'finishedAt', 'failedEpisodes', 'lastStartedAt']:
+        experiment.pop(key, None)
+    write_json(root / 'experiment.json', experiment)
+    write_json(root / 'baseline.json', reference_baseline(reference))
+    render(root)
+    return root
+
+
+def reference_baseline(reference):
+    baseline = {'articles': [], 'cases': [], 'questions': []}
+    for file in sorted((reference / 'calls').glob('episode-[0-9][0-9][0-9].json')):
+        value = load_json(file)['data']
+        body = value['summary'] + '\n\n' + '\n'.join('- ' + item['text'] for item in value['facts'])
+        baseline['articles'].append({'title': value['title'], 'body': body})
+        baseline['questions'] += value['study_questions']
+    return baseline
+
+
+def run_focused_after_reference(root):
+    root = private_path(root); experiment = load_json(root / 'experiment.json')
+    reference = private_path(experiment['referenceExperiment'])
+    while load_json(reference / 'experiment.json')['status'] in ['prepared', 'running', 'deferred']:
+        time.sleep(20)
+    for attempt in range(3):
+        try:
+            reproject_saved(reference)
+            break
+        except RuntimeError:
+            if attempt == 2:
+                raise
+            time.sleep(1)
+    write_json(root / 'baseline.json', reference_baseline(reference))
+    run(root)

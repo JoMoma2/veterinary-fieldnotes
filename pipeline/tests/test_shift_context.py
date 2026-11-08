@@ -234,3 +234,39 @@ def test_reprojection_preserves_raw_response_and_versions_original_checkpoint(st
     assert updated['data']['summary_evidence'][0]['quote'] == 'Sample patient is uncomfortable.'
     assert updated['projection']['version'] == 2
     assert s.reproject_saved(root) == 0
+
+
+def test_focused_variant_reuses_only_identical_global_map(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch)
+    value = index(); text = s.prompt(s.full_context(root), s.INDEX_TASK, s.INDEX_SCHEMA)
+    fp = s.request_fingerprint(text, load_json(root / 'experiment.json'))
+    write_json(root / 'index-map.json', value)
+    write_json(root / 'calls/index.json', {'promptSha256': fp, 'data': value, 'metrics': {'seconds': .1}})
+    focused = s.prepare_focused(root, root / 'focused')
+    assert s.call(focused, {}, s.full_context(focused), s.INDEX_TASK, s.INDEX_SCHEMA, 'index') == value
+    assert s.full_context(root) == s.full_context(focused)
+    assert not list((focused / 'calls').glob('episode-*.json'))
+    assert load_json(focused / 'experiment.json')['status'] == 'waiting-for-reference'
+
+
+def test_focused_packet_keeps_original_whole_context_and_budgets_extra_copies(store, tmp_path, monkeypatch):
+    from tokenizers import Tokenizer, models, pre_tokenizers
+    root = prepared(store, tmp_path, monkeypatch); sources = load_json(root / 'sources.json')
+    tokenizer = Tokenizer(models.WordLevel({'[UNK]': 0}, unk_token='[UNK]'))
+    tokenizer.pre_tokenizer = pre_tokenizers.Whitespace()
+    path = tmp_path / 'synthetic-tokenizer.json'; tokenizer.save(str(path))
+    cfg = {'provider': {'tokenizer_path': str(path), 'context_window': 81920, 'max_output_tokens': 32768}}
+    context = s.full_context(root) + '\n' + 'retained-whole-night ' * 1000
+    task, copied = s.focused_task(index()['episodes'][0], sources, {}, context, cfg)
+    assert copied == ['b0001', 'b0002']
+    assert 'Sample patient is uncomfortable.' in task
+    serialized = s.prompt(context, task, s.DETAIL_SCHEMA)
+    assert 'retained-whole-night ' * 1000 in serialized
+    assert len(tokenizer.encode(serialized).ids) + 32768 + 512 <= 81920
+    # Limit only the extra duplicate packet; the original night remains intact.
+    total = len(tokenizer.encode(s.prompt(context, task, s.DETAIL_SCHEMA, True), add_special_tokens=False).ids)
+    cfg['provider']['context_window'] = total + 32768 + 512 - 1
+    limited, copied = s.focused_task(index()['episodes'][0], sources, {}, context, cfg)
+    assert copied == ['b0001']
+    assert 'retained-whole-night ' * 1000 in s.prompt(context, limited, s.DETAIL_SCHEMA)
+    assert len(tokenizer.encode(s.prompt(context, limited, s.DETAIL_SCHEMA), add_special_tokens=False).ids) + 32768 + 512 <= cfg['provider']['context_window']

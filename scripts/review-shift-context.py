@@ -11,7 +11,9 @@ a.add_argument('--source-workspace', type=Path, required=True)
 a.add_argument('--shift-id', required=True)
 a.add_argument('--directory', type=Path, required=True)
 a.add_argument('--config', type=Path, required=True)
-for name in ['run', 'report', 'watch-report']:
+f = sub.add_parser('prepare-focused')
+f.add_argument('reference', type=Path); f.add_argument('directory', type=Path)
+for name in ['run', 'report', 'watch-report', 'run-focused']:
     sub.add_parser(name).add_argument('directory', type=Path)
 args = p.parse_args()
 try:
@@ -21,6 +23,10 @@ try:
         shift_context.run(args.directory)
     elif args.command == 'watch-report':
         shift_context.watch_reports(args.directory)
+    elif args.command == 'prepare-focused':
+        print(shift_context.prepare_focused(args.reference, args.directory))
+    elif args.command == 'run-focused':
+        shift_context.run_focused_after_reference(args.directory)
     else:
         print(shift_context.render(args.directory))
 except ProcessingDeferred:

@@ -152,13 +152,56 @@ match. The first named index episode missed other literal mentions; detail
 requests now explicitly point to every mention plus nearby context while retaining
 the whole night. This does not guarantee correct association.
 
-First two detailed episodes are available. One narrative passed citation restoration;
-another retains unresolved citations and is shown only in an explicitly unaccepted
-review section. Accepted cited facts/cards remain separate. Do not confuse a
-readable draft or real context allocation with validated clinical performance.
+Variant A completed the index and all5details. Saved inference wall times total
+2831.773s (~47.2min, excluding stopped trials/resource waits). Actual input counts
+39241–40415; peak22187MiBGPU. After citation projection44facts,8lessons,5questions
+remain;3narratives have accepted citations and2are explicitly unaccepted drafts.
+These are output/provenance counts, not medical accuracy or completeness. Larger
+context did not eliminate inaccurate quotes or attention omissions.
 
-Current regression suite:207Python tests pass, including unchanged source copies,
+Current regression suite:209Python tests pass, including unchanged source copies,
 full-context delivery, exact/unique same-recording citation restoration, refusal to
 rebind across recordings, optional alias hints, immutable request identity, bounded
 retry/resource deferral, partial failure isolation, versioned raw-preserving
 projections, and escaped unaccepted-narrative display.
+
+
+## Focused-evidence comparison (variant B)
+
+The owner explicitly prioritizes quality over speed. B keeps the same complete
+night in every request and copies selected eligible original source passages near
+the detail-writing instructions. This tests whether reducing the distance between
+original wording and the citation task improves quotation fidelity. Name matches,
+episode sources and neighboring blocks are retrieval candidates, never identity
+proof. Quotes must be short continuous exact spans, preserving relevant negations,
+doses/units; no ellipses, splicing or medically plausible ASR correction.
+
+Only the added duplicate copies are budgeted to remaining space, by tokenizing the
+complete serialized request plus32768output and512margin. The original full night
+is never trimmed. The first task budget is42331input tokens with20source copies.
+If even the complete base request cannot fit, inference refuses rather than
+silently truncating. No global Ollama change, reduced output room or new AI reviewer.
+
+B is under A's `focused-evidence/`, with separate fresh detail checkpoints/raw
+responses and `focus-packets/`. Only the identical global index is reused; its
+cached timing is historical, not new B inference. It waits for A to finish before
+using the GPU. A's final notes are a comparison baseline, not model evidence.
+
+```bash
+# A must already have its global index checkpoint. Use a NEW private B directory.
+uv run --project pipeline --extra evaluation python scripts/review-shift-context.py prepare-focused \
+  /absolute/private/reference-experiment /absolute/private/new-focused-experiment
+uv run --project pipeline --extra evaluation python scripts/review-shift-context.py run-focused \
+  /absolute/private/new-focused-experiment
+```
+
+Current B worker is `vet-fieldnotes-context-focused-20261107.service`. The existing
+private landing links both reports. `review/focused-context.html` is an inside-root
+link served read-only by A's loopback viewer; its audio/source routes use the same
+immutable input snapshots. No public data export exists. Reports update on saved
+calls, so refresh. Do not interpret pending details as completed/empty results.
+
+Evaluate citation failures, supported detail, patient continuity, missed knowledge
+and useful questions against audio/owner recollection before selecting a strategy.
+Even correct quotes can be misinterpreted. This is a local experiment, not proof
+that full-night extraction is clinically ready.

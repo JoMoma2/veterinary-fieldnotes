@@ -1,18 +1,50 @@
-# Session handoff — registered recorder and first-run compatibility fix
+# Session handoff — whole-night context evaluation
 
-**Current result checkpoint:** first two detailed episodes are saved and the named-patient third request is active. Its saved request fingerprint matches the full-night prompt plus all literal-name/owner-spelling retrieval hints. Episode1 has an89-word accepted cited summary,16facts,2lessons,2questions after audited citation projection. Episode2 has8accepted facts/1question, but its narrative still has unresolved citations; the report retains that narrative in an explicitly UNACCEPTED collapsed review section rather than presenting it as a validated account. Do not describe all results as high quality or finished. Source integrity receipt verifies72transcripts,78audio files and raw Whisper copies unchanged. All207Python tests passed. Remaining episodes run independently of the chat; report finalizer refreshes readable output after each checkpoint.
+## Latest checkpoint — 2026-11-08
 
-### Latest runtime/projection update
+The owner's priority is highest extraction quality, not speed. Work continues on the **Nov 7 import batch**, even after midnight; do not silently select a different shift. All changes are isolated from the ordinary nightly library, configuration, USB automation, global Ollama/MMM/FCC and public website. Raw source data is retained; clinical cloud/publication authorization remains off.
 
-The final80Kwhole-night index completed:39241actual input tokens,4788generated tokens,482.857s (38.002sprompt evaluation,442.088sgeneration),9286reasoning characters, peak22166MiBGPU, minimum55096MiBsystemRAM available. It produced5proposed episodes,1named/4unassigned;9invalid identity/citation items were rejected. Index-selected sources cover111/248eligible blocks, which is NOT a medical completeness score. Do not claim the whole night was clinically captured just because context fit. All original material is still reviewable.
+**Variant A completed successfully:** index plus all5detail requests, no failed episodes. Saved model-call times total2831.773s (~47.2min; excludes allocation trials, stops and resource waits). Actual requests39241–40415input tokens, peak22187MiBGPU. Readable projections retain44facts,8practical lessons,5questions.3of5narratives pass citation projection;2retain unresolved references and appear only as explicitly UNACCEPTED drafts. These counts establish execution/provenance, not semantic correctness, hallucination freedom or completeness. All-night attention still missed some literal patient mentions and made inaccurate quotations. Do not declare the problem solved.
 
-First detail completed:39834input tokens,4934generated tokens,463.979s, peak22172MiB. Initial strict projection rejected its summary for a capitalization mismatch plus two facts with wrong block IDs despite uniquely matching quotations in the same recording. Added deterministic citation restoration: unique case/space match in the cited block, or unique exact match within the SAME recording. No fuzzy wording/other-recording rebinding and no ASR-warning evidence. Raw responses remain unchanged; derived projections are explicitly versioned and old checkpoint bytes/rejection reports archived under projection-history/. First detail's repaired view has89summary words,16facts,2lessons,2questions; one unrepairable item remains excluded. This is provenance repair, not independent medical verification.
+**Variant B is running sequentially after A:** same whole-night/index/model/context/output budget, fresh detail inference with extra copies of relevant eligible original passages beside the writing task. This tests citation fidelity without shortening the full-night source text. The first task duplicated20source blocks and budgets42331input tokens +32768output +512margin within81920. Actual saved metrics/results must be read from B, not inferred from this launch checkpoint. B reuses only the identical global index, not A's detail responses. Both reports and all original responses remain available. Do not interrupt healthy inference to reload documentation or inspect progress.
 
-A new transient **model-free** finalizer `vet-fieldnotes-context-report-finalizer-20261107.service` invokes `review-shift-context.py watch-report PRIVATE_ROOT`, scans only completed response checkpoints, applies audited projection revisions and refreshes readable files every20s. It self-exits when the experiment completes/stops. It does not call models, touch source transcripts/audio/index, or change model input. This allows improved citation projection without repeatedly interrupting ongoing model inference. Original/derived checkpoint versions must not be conflated.
+Private root A: `~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/`.
+Private root B: the `focused-evidence/` subdirectory of A.
+Owner-facing landing: **`~/Fieldnotes-private-review/Last-night-context-review.html`**, containing links to both reports. A report is `review/shift-context.html`; B is linked via `review/focused-context.html` inside A's loopback viewer. Both include source/audio controls and readable prose. B's `readable-notes.md` is also available within its private root. The normal Morning Report is intentionally unchanged.
 
-The initial named episode indexed only some literal name mentions. Added `name_hints`/`detail_task`: enumerate all exact label mentions and neighboring blocks across the night; owner-supplied spelling aliases are separate private annotations, not patient-identity proof. No automatic case merge follows from a name match. A single checkpoint-boundary reload at the first completed detail enabled these hints for remaining calls; index/first-detail checkpoint hashes stayed identical at reload (see boundary-reload.json). Later deliberate derived-projection changes are separately versioned. Never put actual name aliases/provenance in Git. Current worker PID has changed, so inspect systemd live rather than copying a historicalPID.
+Transient user units:
+- `vet-fieldnotes-context-20261107.service`: A finished/inactive.
+- `vet-fieldnotes-context-report-finalizer-20261107.service`: model-free projection finalizer finished/inactive.
+- `vet-fieldnotes-context-focused-20261107.service`: B worker; inspect current state.
+- `vet-fieldnotes-context-review-20261107.service`: read-only loopback viewer, active.
 
-Integrity check passed: all72selected parsed transcript hashes, all78retained working-audio hashes, and copied raw Whisper JSONs match their original live-workspace files. Private receipt: integrity-check.json. Normal live library/config/public content remain untouched; experimental source text was not truncated and Whisper was not run. Current code regression:207tests passed, including the new projection and safe unaccepted-narrative display tests. Firefox actual retained-audio playback and mobile-width report checks previously passed; repeat if UI changes warrant it.
+Check without printing patient text:
+```bash
+systemctl --user show vet-fieldnotes-context-focused-20261107.service -p ActiveState -p SubState -p MainPID
+cd /home/quinten/vet-knowledge-library
+# Resume B if interrupted; leave a healthy running worker alone.
+uv run --project pipeline --extra evaluation python scripts/review-shift-context.py run-focused   ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/focused-evidence
+# Re-render saved results without inference.
+uv run --project pipeline --extra evaluation python scripts/review-shift-context.py report   ~/.local/share/vet-fieldnotes-evaluations/whole-night-context-20261107/focused-evidence
+```
+
+For aggregate metrics inspect `experiment.json`, `calls/index.json`, exact `calls/episode-NNN.json` checkpoints, `*-rejected.json` and `*-repairs.json`, and B's `focus-packets/`. Avoid counting timestamped raw responses as extra completed calls or claiming index reuse consumed fresh inference time. `readable-notes.md` and HTML are clinical/private. Never commit any of these, actual aliases, private IDs or capability URLs.
+
+Regression: **209Python tests pass**. Both A and B report routes return200 with audio controls; prior Firefox nonempty-report citation navigation, retained-audio playback/seeking and mobile390px layout passed. Source integrity receipt verifies72transcripts,78audio files and raw Whisper copies unchanged. No Whisper/external API/model download/global model setting change. Completed code milestone fc058a1 was pushed and CI passed; the focused variant is the next milestone (inspect git log/CI for its final hash).
+
+### Exact next steps
+
+1. Let B finish; check completed per-episode files and worker status. Resource deferral preserves checkpoints; ordinary fatal errors are bounded. Do not replace A's saved results or reset the live ledger.
+2. Read both reports with the owner, especially the patient-continuity example, uncertain switches, accepted vs unaccepted narratives and clinical usefulness of questions. Compare source audio; quotation matching alone does not prove a claim is entailed.
+3. Compute simple A/B provenance/coverage/rejection comparisons from actual completed outputs. Separate same-index reuse from new detail inference. No accuracy percentage without a reference/owner review.
+4. If both still miss substantial knowledge, address index coverage/citation design from demonstrated failures; do not merely enlarge allocation or weaken validation. No additional large model download, default nightly promotion or new multi-agent review system is needed now.
+5. Only after owner approval consider integrating a successful strategy into nightly processing. Public publication and clinical third-party storage need their existing separate authorization. Retain all audio/transcripts and existing ASR holds.
+
+### Preserved implementation details
+
+The final80Kindex used39241input/4788generated tokens in482.857s, peak22166MiBGPU. It proposed5episodes (1named/4unassigned);9identity/citation items rejected. Index-selected111/248eligible blocks is NOT a medical completeness score. First detail used39834input/4934generated tokens in463.979s. A single checkpoint-boundary reload enabled all literal-name/owner-alias mention hints for remaining details; saved index/first-detail hashes stayed identical at that reload. Later deliberate derived projection revisions are separately versioned under `projection-history/`, with raw replies and original checkpoint bytes retained.
+
+Citation repair is restricted to unique case/spacing matches inside the cited block or a unique exact quotation in the SAME recording; no fuzzy wording/other-file guesses or flagged-source acceptance. Unsupported summaries/claims/questions stay excluded while rejected narratives remain explicitly visible for review. The model-free report finalizer never changed inference input/index. An exact name or owner spelling alias is only a retrieval candidate, never proof that intervening discussions are the same patient.
 
 ## Active whole-night context experiment — 2026-11-07 evening
 
