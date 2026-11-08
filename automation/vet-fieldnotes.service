@@ -6,14 +6,14 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 UMask=0077
-WorkingDirectory=%h/vet-knowledge-library
-Environment=VET_WORKSPACE=%h/.local/share/vet-fieldnotes-live
-EnvironmentFile=-%h/.config/vet-fieldnotes/environment
-ExecStart=%h/vet-knowledge-library/pipeline/.venv/bin/vet-pipeline --config %h/.config/vet-fieldnotes/pipeline.toml unattended
+WorkingDirectory=%h/FieldNotes/app
+Environment=VET_WORKSPACE=%h/FieldNotes/data/library
+EnvironmentFile=-%h/FieldNotes/config/environment
+ExecStart=%h/FieldNotes/app/pipeline/.venv/bin/vet-pipeline --config %h/FieldNotes/config/pipeline.toml unattended
 TimeoutStartSec=infinity
 Nice=10
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ReadWritePaths=%h/.local/share/vet-fieldnotes-live -%h/vet-knowledge-master
+ReadWritePaths=%h/FieldNotes/data/library -%h/FieldNotes/repositories/master
 # Recorder mounts and model caches need read access. First cache the chosen model with the owner account.

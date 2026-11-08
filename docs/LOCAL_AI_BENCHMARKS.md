@@ -1,5 +1,7 @@
 # Local AI results — resumed development, 2026-11-02
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 **Owner-reference evaluation tools:** separate-window comparisons and standalone private audio review are available. Private enrollment measurements are intentionally omitted. Synthetic regressions pass (243tests); actual speaker accuracy and false-match rates need authorized positive/negative validation. See OWNER_VOICE_REFERENCE.md.
 
 

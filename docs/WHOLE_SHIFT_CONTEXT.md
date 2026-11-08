@@ -1,5 +1,7 @@
 # Whole-night context experiment
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 This is a separate private evaluation, not the default nightly extractor or a public
 publication path. It reuses saved transcripts and does not invoke Whisper, edit the
 live library, change global Ollama configuration, download models, or upload clinical

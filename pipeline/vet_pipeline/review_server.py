@@ -95,6 +95,11 @@ class ReviewHandler(SimpleHTTPRequestHandler):
             candidate = (root / relative).resolve()
         except (OSError, ValueError):
             self.send_error(404); return None
+        # Experiments have a shift-context report rather than a live-job index.
+        # Keep the saved landing URL useful without rewriting frozen reports.
+        if relative == 'review/index.html' and not candidate.exists():
+            relative = 'review/shift-context.html'
+            candidate = (root / relative).resolve()
         preview = relative == 'review/publication-preview.html'
         if not parts or parts[0] not in allowed or '..' in parts or root not in candidate.parents or candidate.suffix.lower() not in allowed[parts[0]] or (not preview and not candidate.is_file()):
             self.send_error(404); return None
@@ -162,16 +167,36 @@ def server(workspace, capability, port=0):
     return http
 
 
+
+def saved_endpoint(workspace):
+    """Reuse a private endpoint after relocation without breaking existing bookmarks.
+
+    Never follow a configured host or expose a capability in logs. Bind only
+    loopback; an occupied saved port fails safely rather than changing the URL.
+    """
+    import json
+    state = Path(workspace) / 'review-server.json'
+    data = json.loads(state.read_text())
+    u = urlsplit(data['url'])
+    match = re.fullmatch(r'/([A-Za-z0-9_-]{32,100})/review/index[.]html', u.path)
+    if (u.scheme != 'http' or u.hostname != '127.0.0.1' or u.username or u.password
+            or u.query or u.fragment or not u.port or not match
+            or data.get('loopbackOnly') is not True):
+        raise ValueError('Invalid saved private loopback endpoint')
+    return match.group(1), u.port
+
+
 def main():
     import argparse
     import os
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--workspace', type=Path, required=True)
+    p.add_argument('--reuse-state', action='store_true', help='Keep an existing private review URL after moving its workspace')
     args = p.parse_args()
     os.umask(0o077)
     root = private_path(args.workspace)
-    token = secrets.token_urlsafe(32)
-    http = server(root, token)
+    token, port = saved_endpoint(root) if args.reuse_state and (root / 'review-server.json').exists() else (secrets.token_urlsafe(32), 0)
+    http = server(root, token, port)
     url = f'http://127.0.0.1:{http.server_port}/{token}/review/index.html'
     write_json(root / 'review-server.json', {'url': url, 'pid': os.getpid(), 'loopbackOnly': True})
     print('Private read-only review server ready on loopback.', flush=True)

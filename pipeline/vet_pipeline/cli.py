@@ -3,6 +3,7 @@ import argparse, json, os, sys
 from datetime import datetime
 from pathlib import Path
 from .config import config
+from .locations import location
 from .store import Store
 from .util import lock
 
@@ -15,7 +16,7 @@ def main():
         "--workspace",
         type=Path,
         default=Path(
-            os.environ.get("VET_WORKSPACE", Path.home() / ".local/share/vet-fieldnotes")
+            os.environ.get("VET_WORKSPACE", location("data", "workspace"))
         ),
     )
     p.add_argument("--config", type=Path)

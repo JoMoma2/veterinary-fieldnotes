@@ -1,5 +1,7 @@
 # Operation, configuration, and recovery
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 Run commands from the application checkout with a current Node release and uv. Keep local config, credentials, private workspaces, and backup keys outside the repositories.
 
 ## Configure the private pipeline

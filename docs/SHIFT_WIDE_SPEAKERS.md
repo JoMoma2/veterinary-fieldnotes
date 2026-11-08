@@ -1,5 +1,7 @@
 # Whole-shift speaker correction and repetition exclusion
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 This is still a private evaluation, not a verified identity system or a replacement
 for normal nightly processing. Original audio, full transcripts, previous speaker
 maps and model responses are retained. No publication or clinical cloud upload.

@@ -5,11 +5,12 @@ from pathlib import Path
 from .automation import inventory
 from .config import config
 from .private import private_path
+from .locations import location
 from .util import REPO, atomic_write, load_json
 
-LIVE = Path.home() / '.local/share/vet-fieldnotes-live'
-CONFIG = Path.home() / '.config/vet-fieldnotes/pipeline.toml'
-PROOF = Path.home() / '.local/share/vet-fieldnotes-setup/synthetic-test.json'
+LIVE = location('data', 'library')
+CONFIG = location('config', 'pipeline.toml')
+PROOF = location('tools', 'setup', 'synthetic-test.json')
 
 
 def core_fingerprint():
@@ -32,31 +33,47 @@ def save_config(path, cfg):
     path.chmod(0o600)
 
 
+
+def install_registration(target, contents, kind):
+    """Keep FieldNotes-owned unit/desktop files in the hub, with OS index links."""
+    stored = location('config', kind, target.name)
+    stored.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if target.exists() and target.read_text() != contents:
+        raise ValueError('Existing Fieldnotes registration differs; review owner settings before replacing it')
+    if stored.exists() and stored.read_text() != contents:
+        raise ValueError('Existing Fieldnotes configuration differs; review owner settings before replacing it')
+    atomic_write(stored, contents)
+    if target.is_symlink() and target.resolve() == stored.resolve():
+        return
+    # Replacing an identical regular registration only moves its contents into
+    # the hub. Unrelated or customized registrations were refused above.
+    link = target.with_name(target.name + '.fieldnotes-link')
+    link.symlink_to(stored)
+    os.replace(link, target)
+
 def stage():
     os.umask(0o077)
     private_path(LIVE)
     LIVE.mkdir(parents=True, exist_ok=True, mode=0o700)
     if not CONFIG.exists():
         cfg = config(REPO / 'config/benchmarks/local-vulkan.example.toml')
-        cfg['github'].update(enabled=True, checkout=str(Path.home() / 'vet-knowledge-master'), allow_clinical=False)
+        cfg['github'].update(enabled=True, checkout=str(location('repositories', 'master')), allow_clinical=False)
         cfg['usb'].update(roots=[f'/media/{getpass.getuser()}', f'/run/media/{getpass.getuser()}'], automount_read_only=True)
         save_config(CONFIG, cfg)
     units = Path.home() / '.config/systemd/user'
     units.mkdir(parents=True, exist_ok=True)
-    for name in ['vet-fieldnotes.service', 'vet-fieldnotes.timer']:
+    for name in ['vet-fieldnotes.service', 'vet-fieldnotes.timer', 'vet-fieldnotes-review.service']:
         target = units / name
         source = (REPO / 'automation' / name).read_text()
-        if target.exists() and target.read_text() != source:
-            raise ValueError('Existing Fieldnotes unit differs; review it rather than overwriting owner settings')
-        atomic_write(target, source)
+        install_registration(target, source, 'systemd')
     subprocess.run(['systemctl', '--user', 'daemon-reload'], check=True)
     apps = Path.home() / '.local/share/applications'
     apps.mkdir(parents=True, exist_ok=True)
     python = REPO / 'pipeline/.venv/bin/python'
     register = f'"{python}" "{REPO / "scripts/register-recorder.py"}"'
-    atomic_write(apps / 'vet-fieldnotes-register.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Register Recorder\nComment=Register only your USB recorder and activate safe retained-source processing\nExec=' + register + '\nIcon=audio-input-microphone\nTerminal=false\nCategories=Education;\n')
-    # xdg-open remains local; there is no listening web service.
-    atomic_write(apps / 'vet-fieldnotes-review.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Morning Review\nExec=xdg-open ' + str(LIVE / 'review/index.html') + '\nIcon=accessories-text-editor\nTerminal=false\nCategories=Education;\n')
+    install_registration(apps / 'vet-fieldnotes-register.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Register Recorder\nComment=Register only your USB recorder and activate safe retained-source processing\nExec=' + register + '\nIcon=audio-input-microphone\nTerminal=false\nCategories=Education;\n', 'desktop')
+    opener = f'"{python}" "{REPO / "scripts/open-morning-review.py"}"'
+    install_registration(apps / 'vet-fieldnotes-review.desktop', '[Desktop Entry]\nType=Application\nName=Fieldnotes — Morning Review\nExec=' + opener + '\nIcon=accessories-text-editor\nTerminal=false\nCategories=Education;\n', 'desktop')
     from .store import Store
     from .morning import report
     from .publication import review_template
@@ -84,7 +101,7 @@ def register(mount, authorization_ref, activate=False, storage_ref=''):
     cfg['github']['allow_clinical'] = bool(storage_ref.strip())
     cfg['backup']['allow_clinical_remote'] = bool(storage_ref.strip())
     if storage_ref.strip():
-        cfg['github'].update(enabled=True, checkout=cfg['github']['checkout'] or str(Path.home() / 'vet-knowledge-master'))
+        cfg['github'].update(enabled=True, checkout=cfg['github']['checkout'] or str(location('repositories', 'master')))
     if not any(mount == Path(p).resolve() or Path(p).resolve() in mount.parents for p in cfg['usb']['roots']):
         cfg['usb']['roots'].append(str(mount.parent))
     from .unattended import validate

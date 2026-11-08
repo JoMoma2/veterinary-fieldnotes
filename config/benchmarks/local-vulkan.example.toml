@@ -9,7 +9,7 @@ allow_remote = false
 allow_paid = false
 timeout_seconds = 300
 context_window = 8192
-tokenizer_path = "~/.local/share/vet-fieldnotes-ai/tokenizers/qwen3/tokenizer.json"
+tokenizer_path = "~/FieldNotes/ai/tokenizers/qwen3/tokenizer.json"
 tokenizer_sha256 = "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
 max_output_tokens = 4096
 repeat_penalty = 1.0
@@ -21,8 +21,8 @@ transcript_char_limit = 12000
 
 [transcription]
 kind = "whisper-cpp"
-executable = "~/.local/share/vet-fieldnotes-ai/whisper.cpp-v1.9.5/build-vulkan/bin/whisper-cli"
-model = "~/.local/share/vet-fieldnotes-ai/models/ggml-large-v3.bin"
+executable = "~/FieldNotes/ai/whisper.cpp-v1.9.5/build-vulkan/bin/whisper-cli"
+model = "~/FieldNotes/ai/models/ggml-large-v3.bin"
 language = "en"
 threads = 4
 gpu_device = 0

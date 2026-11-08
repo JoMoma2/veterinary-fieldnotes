@@ -1,5 +1,7 @@
 # Private speaker and medical-question evaluation
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 This opt-in experiment reuses the selected shift's saved audio and transcripts.
 It does not invoke Whisper again, replace the live library, publish anything,
 upload clinical data, or change global Ollama, GPU drivers, ROCm, MMM or FCC.

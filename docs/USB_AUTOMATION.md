@@ -1,5 +1,7 @@
 # USB automation and morning review
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 **Current activation (2026-11-06):** owner requested resuming the registered recorder for the full private pipeline after reviewing filtered clips. Main timer is enabled. All audio/transcripts and intermediates are retained; no device deletion or cleanup is enabled. Public publication is explicitly on hold until morning approval. The recorder currently has35WAVs; import reads can be slow and all files are copied before AI begins. Leave the recorder plugged in until imports finish. The private Morning Review application launcher now uses the read-only loopback viewer; a publication-preview link shows saved candidate records without publishing anything. See latest SESSION_HANDOFF.md for current run status.
 
 ## Current status

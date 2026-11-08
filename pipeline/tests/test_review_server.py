@@ -72,3 +72,34 @@ def test_rejects_git_root_and_nonrandom_capability(tmp_path):
     (tmp_path / '.git').mkdir(); (tmp_path / '.git/HEAD').write_text('ref: refs/heads/main')
     with pytest.raises(ValueError, match='outside every Git'):
         server(tmp_path, 't' * 43)
+
+
+def test_saved_endpoint_preserves_bookmarks_after_move(tmp_path):
+    import json
+    from vet_pipeline.review_server import saved_endpoint
+    state = {'url': 'http://127.0.0.1:52139/' + 'a' * 43 + '/review/index.html', 'loopbackOnly': True}
+    (tmp_path / 'review-server.json').write_text(json.dumps(state))
+    assert saved_endpoint(tmp_path) == ('a' * 43, 52139)
+    for bad in ['https://127.0.0.1:52139/', 'http://external.example:80/' + 'a' * 43 + '/review/index.html',
+                state['url'] + '?other=1', state['url'].replace('127.0.0.1', 'name@127.0.0.1'),
+                state['url'].replace('a' * 43, 'short')]:
+        (tmp_path / 'review-server.json').write_text(json.dumps({**state, 'url': bad}))
+        with pytest.raises(ValueError):
+            saved_endpoint(tmp_path)
+
+
+def test_old_workspace_symlink_keeps_audio_links_working(tmp_path):
+    moved = tmp_path / 'organized'; moved.mkdir()
+    old = tmp_path / 'old-workspace'; old.symlink_to(moved, target_is_directory=True)
+    (moved / 'inputs').mkdir(); (moved / 'inputs/test.wav').write_bytes(b'old audio')
+    with running(old) as (client, prefix):
+        assert client.get(prefix + 'inputs/test.wav').content == b'old audio'
+
+
+def test_experiment_landing_reuses_context_report_without_a_live_ledger(tmp_path):
+    (tmp_path / 'review').mkdir()
+    (tmp_path / 'review/shift-context.html').write_text('<h1>Saved experiment</h1>')
+    with running(tmp_path) as (client, prefix):
+        assert client.get(prefix + 'review/index.html').text == '<h1>Saved experiment</h1>'
+    assert not (tmp_path / 'jobs.sqlite3').exists()
+    assert not (tmp_path / 'review/index.html').exists()

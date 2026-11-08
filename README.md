@@ -1,5 +1,7 @@
 # Fieldnotes — Veterinary Knowledge Library
 
+For the organized owner-local installation, open `~/FieldNotes/Start.html`. See [Local folder layout](docs/LOCAL_LAYOUT.md) for source, reports, retained recordings and configuration.
+
 A local-first veterinary learning system: authorized recordings become source-linked discussions, case records, additive knowledge notes, and pre-generated study questions. Private processing and public publication are separate.
 
 **Current state:** a working static website, resumable Python pipeline, synthetic end-to-end workflow, tested encrypted backup/restore, and configurable USB/systemd, GitHub, and Cloudflare integrations. Production starts with **zero** articles, cases, shifts, discussions, or questions. No cloud clinical upload, recorder deletion, or background service is enabled. The empty production website is live at https://veterinary-fieldnotes.pages.dev; the private GitHub archive contains synthetic durability-test records only.
@@ -9,7 +11,7 @@ A local-first veterinary learning system: authorized recordings become source-li
 Use Node **24 LTS** (or Node ≥22.23.4) and npm ≥9.6.5. Older Node releases will not run the pinned Astro version. This host initially had Node 22.22.1. `./scripts/local-node.sh` supplies a user-local Node 24 toolchain when needed, without replacing system Node or changing shell setup. For example: `./scripts/local-node.sh ci` and `./scripts/local-node.sh run dev`.
 
 ```bash
-cd /home/quinten/vet-knowledge-library
+cd /home/quinten/FieldNotes/app
 npm ci
 npm run dev
 ```

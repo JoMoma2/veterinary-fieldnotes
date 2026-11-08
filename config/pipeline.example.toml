@@ -29,7 +29,7 @@ base_delay_seconds = 30
 # No Google Drive/rclone credentials or encryption key are needed for GitHub sync.
 [github]
 enabled = false
-checkout = "" # e.g. "/home/YOUR_USER/vet-knowledge-master"; dedicated main-branch checkout
+checkout = "" # e.g. "/home/YOUR_USER/FieldNotes/repositories/master"; dedicated main-branch checkout
 allow_clinical = false # Requires separate storage authorization AND backup.allow_clinical_remote.
 retry_seconds = 60
 max_retry_seconds = 3600

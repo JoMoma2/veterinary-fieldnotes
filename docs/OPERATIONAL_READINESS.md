@@ -1,5 +1,9 @@
 # Operational readiness — local AI r2, 2026-11-02
 
+**Organization / operator pause:** the owner-local installation now lives under `~/FieldNotes`. Source checkout: `app/`; retained audio, full transcripts and checkpoints: `data/`; private reports: `reports/`; profiles: `config/`; models: `ai/`; isolated tools: `tools/`; private master checkout: `repositories/master/`. Start with `~/FieldNotes/Start.html` and `docs/LOCAL_LAYOUT.md`. The hub itself MUST NOT become a Git checkout. New private work goes outside `app/` and all other Git worktrees. Old filesystem shortcuts deliberately preserve immutable checkpoint/profile bindings and old links; do not remove them or mass-rewrite saved artifacts. Shared Ollama/GPU/Python infrastructure stays outside the hub. Processing was explicitly paused by the owner before organization; do not restart workers/timers as part of path maintenance or validation. Read-only review viewers may run. Confirm current operator intent before resuming inference. Detailed machine-specific migration records stay private under the hub's `maintenance/` directory.
+
+Historical paths below remain supported through compatibility shortcuts; use the canonical layout for new work.
+
 **Owner-reference capability:** private content-hash exclusions can isolate reference recordings from clinical ingestion. Preserve the purpose registry across workspace resets. Explicit owner-only confirmation and positive/negative speaker validation are prerequisites for identity deployment. Actual operational progress belongs in private continuation notes, not public documentation. See OWNER_VOICE_REFERENCE.md.
 
 

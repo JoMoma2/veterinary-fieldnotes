@@ -1,5 +1,6 @@
 """Open the local private report without hidden-file restrictions in Snap browsers."""
 import json
+from vet_pipeline.locations import location
 from pathlib import Path
 import subprocess
 import time
@@ -7,7 +8,7 @@ from urllib.parse import urlsplit
 import webbrowser
 
 subprocess.run(['systemctl', '--user', 'start', 'vet-fieldnotes-review.service'], check=True)
-state = Path.home() / '.local/share/vet-fieldnotes-live/review-server.json'
+state = location('data', 'library', 'review-server.json')
 for _ in range(30):
     if state.is_file():
         url = json.loads(state.read_text())['url']

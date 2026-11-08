@@ -1,5 +1,7 @@
 # Private clothing-rustle comparison
 
+The organized installation lives in `~/FieldNotes/`; see [Local layout](LOCAL_LAYOUT.md). Historical paths in this document still work through compatibility shortcuts. Use the new layout for new work.
+
 Filtering is an experiment on **copies**, never a replacement for original audio.
 The owner has now explicitly enabled the combined profile for the retained-source
 private run; general defaults remain unfiltered. Public publication is on hold. Reducing contact with the microphone

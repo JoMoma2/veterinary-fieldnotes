@@ -3,6 +3,7 @@
 import argparse, hashlib, json
 from pathlib import Path
 import httpx
+from vet_pipeline.locations import location
 from vet_pipeline.util import atomic_write, write_json
 
 FILES = {
@@ -21,7 +22,7 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--directory",
     type=Path,
-    default=Path.home() / ".local/share/vet-fieldnotes-ai/tokenizers",
+    default=location("ai", "tokenizers"),
 )
 a = p.parse_args()
 with httpx.Client(timeout=120, follow_redirects=True, trust_env=False) as client:

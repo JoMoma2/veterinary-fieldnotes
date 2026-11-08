@@ -1,8 +1,8 @@
 # Authenticate first with scripts/configure-backup.sh, using your own desktop OAuth client.
 # The remote name must match your interactive configuration. No clinical storage is enabled.
 [backup]
-executable = "~/.local/share/vet-fieldnotes-tools/rclone"
-config_file = "~/.config/vet-fieldnotes/rclone.conf"
+executable = "~/FieldNotes/tools/maintenance/rclone"
+config_file = "~/FieldNotes/config/rclone.conf"
 remote = "vet-backup-drive:VeterinaryFieldnotesEncrypted"
 allow_clinical_remote = false
 timeout_seconds = 300
