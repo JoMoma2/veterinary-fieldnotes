@@ -90,16 +90,25 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         port = self.server.server_port
         if self.headers.get('Host') not in [f'127.0.0.1:{port}', f'localhost:{port}']:
             self.send_error(403); return None
-        origin = self.headers.get('Origin')
-        if origin and origin not in [f'http://127.0.0.1:{port}', f'http://localhost:{port}']:
-            self.send_error(403); return None
-        if self.headers.get('Sec-Fetch-Site') == 'cross-site':
-            self.send_error(403); return None
         path = unquote(urlsplit(self.path).path)
         prefix = '/' + self.server.capability + '/'
         if not path.startswith(prefix):
             self.send_error(404); return None
         relative = path[len(prefix):] or 'review/index.html'
+        # Opening an owner-local HTML launcher can produce a cross-site top-level
+        # navigation. Permit that document transition with the valid capability;
+        # never permit cross-site fetches, embeds, audio or JSON requests.
+        document_navigation = (self.command == 'GET'
+                               and self.headers.get('Sec-Fetch-Mode') == 'navigate'
+                               and self.headers.get('Sec-Fetch-Dest') == 'document'
+                               and relative.startswith('review/')
+                               and Path(relative).suffix.lower() == '.html')
+        origin = self.headers.get('Origin')
+        if (origin and origin not in [f'http://127.0.0.1:{port}', f'http://localhost:{port}']
+                and not (origin == 'null' and document_navigation)):
+            self.send_error(403); return None
+        if self.headers.get('Sec-Fetch-Site') == 'cross-site' and not document_navigation:
+            self.send_error(403); return None
         parts = Path(relative).parts
         allowed = {'review': {'.html', '.json'}, 'inputs': {'.wav'}, 'normalized': {'.wav'},
                    'filtered': {'.wav'}, 'transcripts': {'.json'}, 'transcription-details': {'.json'},

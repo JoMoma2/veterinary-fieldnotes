@@ -132,3 +132,28 @@ def test_fact_check_report_reflects_new_candidates_without_rerunning_inference(s
         result=client.get(prefix+'review/question-verification.html')
         assert result.status_code==200 and 'PENDING' in result.text
         assert 'not clinical certification' in result.text
+
+
+def test_local_launcher_navigation_works_without_cross_site_data_access(tmp_path):
+    (tmp_path/'review').mkdir()
+    (tmp_path/'review/comparison.html').write_text('<h1>Private ASR comparison</h1>')
+    (tmp_path/'review/private.json').write_text('{"private":true}')
+    (tmp_path/'inputs').mkdir();(tmp_path/'inputs/test.wav').write_bytes(b'private audio')
+    nav={'Sec-Fetch-Site':'cross-site','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'}
+    with running(tmp_path) as (client,prefix):
+        url=prefix+'review/comparison.html'
+        response=client.get(url,headers=nav)
+        assert response.status_code==200 and 'Private ASR comparison' in response.text
+        assert response.headers['X-Frame-Options']=='DENY'
+        assert 'Access-Control-Allow-Origin' not in response.headers
+        assert client.get(url,headers={**nav,'Origin':'null'}).status_code==200
+        assert client.get(url,headers={'Origin':'null'}).status_code==403
+        assert client.get(url,headers={**nav,'Origin':'https://outside.example'}).status_code==403
+        assert client.get(url,headers={**nav,'Sec-Fetch-Mode':'cors','Sec-Fetch-Dest':'empty'}).status_code==403
+        for dest in ('iframe','image','audio','script'):
+            assert client.get(url,headers={**nav,'Sec-Fetch-Dest':dest}).status_code==403
+        assert client.head(url,headers=nav).status_code==403
+        assert client.get(prefix+'review/private.json',headers=nav).status_code==403
+        assert client.get(prefix+'inputs/test.wav',headers=nav).status_code==403
+        assert client.get('/invalid-capability/review/comparison.html',headers=nav).status_code==404
+        assert client.get(url,headers={**nav,'Host':'outside.example'}).status_code==403
