@@ -1,0 +1,229 @@
+{
+  "account": "A cat referred to only by the affectionate descriptor 'Kitty Cat' / 'kitty catty' was handled during a busy shift. The cat's coat was described as sticky, matted, and malodorous ('smells like a cow'), with the owner/staff noting it appeared to have been licking itself extensively. An IV catheter was placed (possibly two were considered), and the cat was held for approximately 24 hours. A methadone order of 0.1 mg IV was confirmed, with explicit discussion that the nurse would not alter the dose the doctor had prescribed. The cat was described as 'stabilized' (b0239), though the string 'DNR' in the same block is unclear and may be an ASR artifact. The cat also bit a staff member, triggering a discussion about the absence of a Veterinary clinic-specific SOP for animal injuries. No underlying diagnosis, full set of orders, or owner-reported history for this cat is captured in the available blocks. The identity of this cat relative to any other named patient on the shift (Donut, Patient X, Pickles, Pickles, Bella, etc.) is not established by the text.\n\n[observation] The cat's coat was sticky and greasy to the touch, with matted/stuck-together fur. Two staff members independently confirmed the stickiness. The cat had a strong odor, described as 'like a cow that goes in the basement.'\n[observation] Staff noted the cat appeared to have been licking itself extensively, which may explain the matted, sticky coat and odor. The fur was described as 'mad' (likely ASR for 'matted').\n[observation] The cat was described as 'pretty big' relative to typical cats handled at that station.\n[observation] The cat was described as 'stabilized.' The adjacent text 'DNR' in the same block is unclear; it may be an ASR artifact or refer to a status code not otherwise explained in the transcript.\n[actual-treatment] An IV catheter was being set up for the cat. At least one catheter was placed; the team discussed whether one or two were needed. Practical difficulties with the setup (items 'upside down,' a bandage needed to cover the site) are noted.\n[actual-treatment] Methadone 0.1 mg IV was the prescribed order for the cat. The nurse explicitly confirmed she would administer the dose as ordered by the doctor and would not alter it.\n[proposed-treatment] The cat was to be held for approximately 24 hours. One staff member confirmed the 24-hour hold and noted they were already in overtime and 'all good' on that point.\n[observation] The cat bit a staff member. This triggered a discussion in which the team discovered that Veterinary clinic did not have a specific SOP for animal bite injuries, and one staff member spent significant time looking through policy documents with colleagues to determine what, if anything, was required.\n[unknown] The underlying diagnosis or reason for the cat's admission, the full set of orders beyond the 0.1 mg methadone IV, and any owner-reported history are not captured in the available blocks for this patient.\n[practical-technique] The IV catheter setup involved practical challenges: items were oriented 'upside down,' a bandage was needed to cover the site, and there was a comment about the fit of the equipment ('holy shit, who made this for Great Dane?'), suggesting the standard supplies were poorly sized for this patient.\n[observation] The cat was described as having 'cooling' (possibly a fan or cooling device) applied, though the exact context is garbled. The team also discussed labeling the setup and a procedure step.\n[unknown] The string 'He's gonna go into a panel' is unclear. It may refer to a recovery pen/room or be an ASR error. The cat was to receive a bandage to cover the IV site.\n[observation] The phrase 'Matted bird' appears in b0241 and is likely an ASR rendering of 'matted fur' or a similar description of the cat's coat condition.\n[unknown] The strings 'beta dying,' 'beta dine sc,' and 'beta dine scrubs' in b0242 are unintelligible as transcribed and do not correspond to any clearly identifiable medical term or procedure in context.\n[observation] The cat was referred to as 'Fania' in b0241, immediately after 'kitty catty. Three. Mm-hmm. Matted bird.' This may be an ASR artifact, a call sign, or a garbled name; it is not confirmed as a patient name.\n[observation] A separate cat (Pickles) was discussed in a different part of the shift as dehydrated with a very high PCV (74%) and diabetic ketoacidosis. This is a different patient from the 'Kitty Cat' and should not be conflated.\n[observation] The team discussed whether the cat's IV catheter or related equipment needed to be labeled, and one person mentioned checking if a proper procedure was being followed.\n[suspicion] The extensive self-licking and matted, sticky, malodorous coat raised concern in the handlers, though no specific dermatologic or systemic diagnosis was stated in the available blocks.\n\nWhen a veterinarian prescribes a specific drug dose (here, 0.1 mg methadone IV), the administering nurse confirmed explicitly that she would not alter the order. The principle is that dose modifications require a new or amended order from the prescribing veterinarian, not unilateral adjustment by the person administering. Limitations: This is a single instance of a nurse affirming she would follow the order as written. The full rationale and any policy behind it are not elaborated in the transcript.\nWhen a patient bites a staff member in a practice that lacks a specific written SOP for animal injuries, the response can be uncertain and time-consuming. In this case, one staff member reported spending about an hour with colleagues searching policy documents before concluding no formal protocol existed. This highlights a gap: practices should ideally have a clear, accessible procedure for occupational animal bites. Limitations: This is one staff member's account of what happened. The final conclusion ('we actually don't have tests to keep it out') is garbled by ASR and may not precisely reflect the policy finding. No formal policy document is cited.\nIV catheter setup on a cat with a matted, thick coat can present practical sizing and access challenges. In this case, items were oriented incorrectly ('upside down'), a bandage was needed to secure the site, and the equipment fit was questioned ('who made this for Great Dane?'). Staff should anticipate that standard catheter and dressing sizes may not suit all patients and should have alternatives available. Limitations: The transcript is garbled around the specific equipment steps. The 'Great Dane' comment may be figurative rather than a literal reference to a specific product size.\n\nUncertainties: The identity of the 'Kitty Cat' relative to any named patient on the shift is not established. The descriptors 'Kitty Cat,' 'kitty catty,' and 'Fania' do not match any confirmed patient name in the transcript.; The string 'DNR' in b0239 ('Since C is a stabilized DNR') is unexplained. It may be an ASR artifact, a status code, or a misheard phrase. No resuscitation-status discussion is evident elsewhere in the blocks for this cat.; The underlying diagnosis, the reason for methadone (analgesia, anxiolysis, withdrawal management, or other), and the full order set are not stated in the available blocks.; The phrase 'He's gonna go into a panel' (b0241) is unclear; it may refer to a recovery pen, a medical panel, or be an ASR error.; The strings 'beta dying / beta dine sc / beta dine scrubs' (b0242) are unintelligible and do not resolve to a recognizable medical or operational term.; It is probable but not textually confirmed that the cat that bit a staff member (b0243) is the same 'Kitty Cat,' based only on conversational proximity.; The 'Matted bird' in b0241 is almost certainly an ASR rendering of 'matted fur' or similar, but the exact intended phrase is uncertain.; Whether the 24-hour hold was for observation, additional treatment, or both is not explicitly stated.; The role of the staff member discussing overtime (b0241) relative to the treating team is unclear; they may be a nurse, a technician, or another support role.",
+  "articleIds": [
+    "p-3995d0f39cb30eff521426dc",
+    "p-1467f3e9b365ae1f3ed593f9",
+    "p-ed0372d9ca5dc4ee15861018"
+  ],
+  "caseIds": [],
+  "conclusions": "The cat is called only 'Kitty Cat,' 'kitty catty,' or 'kitty cat' across blocks b0239–b0242. None of these is a registered patient name; they are generic descriptors for a cat. No block in the available shift text provides a literal patient-name match linking this cat to Donut, Patient X, Pickles, Pickles, Bella, or any other named individual. The dehydrated cat discussed in b0269–b0270 is explicitly identified as Pickles (a diabetic ketoacidosis case) and is a different patient. The cat that bit a staff member (b0243) is most likely this 'Kitty Cat' given the immediate conversational context, but the pronoun 'that cat' is not an explicit name. Identity therefore remains unassigned to any named patient.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat's coat was sticky and greasy to the touch, with matted/stuck-together fur. Two staff members independently confirmed the stickiness. The cat had a strong odor, described as 'like a cow that goes in the basement.'"
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "Staff noted the cat appeared to have been licking itself extensively, which may explain the matted, sticky coat and odor. The fur was described as 'mad' (likely ASR for 'matted')."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat was described as 'pretty big' relative to typical cats handled at that station."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat was described as 'stabilized.' The adjacent text 'DNR' in the same block is unclear; it may be an ASR artifact or refer to a status code not otherwise explained in the transcript."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "An IV catheter was being set up for the cat. At least one catheter was placed; the team discussed whether one or two were needed. Practical difficulties with the setup (items 'upside down,' a bandage needed to cover the site) are noted."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "Methadone 0.1 mg IV was the prescribed order for the cat. The nurse explicitly confirmed she would administer the dose as ordered by the doctor and would not alter it."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat was to be held for approximately 24 hours. One staff member confirmed the 24-hour hold and noted they were already in overtime and 'all good' on that point."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat bit a staff member. This triggered a discussion in which the team discovered that Veterinary clinic did not have a specific SOP for animal bite injuries, and one staff member spent significant time looking through policy documents with colleagues to determine what, if anything, was required."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The underlying diagnosis or reason for the cat's admission, the full set of orders beyond the 0.1 mg methadone IV, and any owner-reported history are not captured in the available blocks for this patient."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "[practical-technique] The IV catheter setup involved practical challenges: items were oriented 'upside down,' a bandage was needed to cover the site, and there was a comment about the fit of the equipment ('holy shit, who made this for Great Dane?'), suggesting the standard supplies were poorly sized for this patient."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat was described as having 'cooling' (possibly a fan or cooling device) applied, though the exact context is garbled. The team also discussed labeling the setup and a procedure step."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The string 'He's gonna go into a panel' is unclear. It may refer to a recovery pen/room or be an ASR error. The cat was to receive a bandage to cover the IV site."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The phrase 'Matted bird' appears in b0241 and is likely an ASR rendering of 'matted fur' or a similar description of the cat's coat condition."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The strings 'beta dying,' 'beta dine sc,' and 'beta dine scrubs' in b0242 are unintelligible as transcribed and do not correspond to any clearly identifiable medical term or procedure in context."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The cat was referred to as 'Fania' in b0241, immediately after 'kitty catty. Three. Mm-hmm. Matted bird.' This may be an ASR artifact, a call sign, or a garbled name; it is not confirmed as a patient name."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "A separate cat (Pickles) was discussed in a different part of the shift as dehydrated with a very high PCV (74%) and diabetic ketoacidosis. This is a different patient from the 'Kitty Cat' and should not be conflated."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The team discussed whether the cat's IV catheter or related equipment needed to be labeled, and one person mentioned checking if a proper procedure was being followed."
+    },
+    {
+      "kind": "clinical-suspicion",
+      "sourceDiscussionIds": [
+        "p-9f7e7a0c46c09ceb95264791"
+      ],
+      "text": "The extensive self-licking and matted, sticky, malodorous coat raised concern in the handlers, though no specific dermatologic or systemic diagnosis was stated in the available blocks."
+    }
+  ],
+  "id": "p-9f7e7a0c46c09ceb95264791",
+  "order": 4400237,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.295153Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 553.816,
+      "recordingId": "p-b5df0f245625736d98fff721",
+      "startSeconds": 493.224
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 634.488,
+      "recordingId": "p-b5df0f245625736d98fff721",
+      "startSeconds": 554.456
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 77.512,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 0.36000000000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 260.52,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 78.52799999999999
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 349.096,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 260.672
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 378.024,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 349.32
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 584.6160000000001,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 378.50399999999996
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 631.944,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 585.352
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 560.68,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 361.608
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 599.208,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 562.4879999999999
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Sticky/matted cat ('Kitty Cat') – IV catheter, 0.1 mg methadone IV, 24-hour hold; matted and malodorous coat",
+  "topics": [
+    "p-d2222d70e8a98144b26a5e8c",
+    "p-f7dd7f6e142d15c47ea6a2ab",
+    "p-918bf2cb855c8e0826376b29"
+  ]
+}

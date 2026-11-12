@@ -1,0 +1,122 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "The owner reports two days of appetite loss, complete anorexia on the day of presentation, lethargy, shivering, hazy and 'goopy' eyes, and two episodes of bilious vomiting without diarrhea. The owner is unsure what the dog may have eaten or gotten into."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "Recorded vitals: temperature 103.3 °F (febrile), respiratory rate 30. The dog weighs 3.5 kg."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "The dog was rescued approximately four weeks ago. The owner states there is a sibling also rescued from the same situation, described as a 'shitsu hoarder' who 'had like four yellows' (ASR-uncertain count/description)."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "Previous medical history includes periodontal disease and a second condition transcribed as 'T-pold' (ASR-uncertain; possibly dental-related or another condition). Vaccines are current, but the dog is not on any medications or flea/tick/worm preventatives."
+    },
+    {
+      "kind": "confirmed-diagnosis",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "Blood work showed an elevated neutrophil count, supporting a suspected infection or inflammatory process. However, no specific source of infection was identified at the time of discharge."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "In-hospital treatment included IV fluids and maropitant (an antiemetic, ASR variants: 'meropotent' in b0186, 'Moropitin' in b0187)."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "Discharged with: liquid amoxiclav (broad-spectrum antibiotic) every 12 hours for 10 days; Entice (appetite stimulant); Optic Care eye gel (ocular lubricant); tobramycin eye drops (ASR: 'Tobromycin'). The first dose of amoxiclav was not given in-hospital; the owner was instructed to start it at home, ideally that evening to establish a schedule."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "Dietary and activity instructions: bland diet (white rice, boiled white chicken breast) to help with GI upset, restricted exercise for 3–5 days to allow rest and recovery, and recheck with the primary veterinarian in 3–5 days."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "[recorded-reasoning] The staff member explicitly warned the owner that vomiting within 24 hours of receiving maropitant would be a concerning sign, because the dog 'really should not be vomiting' after an antiemetic was administered, and urged immediate return to the hospital if it occurred."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "[practical-technique] For administering the liquid amoxiclav to a 3.5 kg dog, the staff member recommended trying to get the medication directly into the dog's mouth. If that is not possible, pouring it over a small amount of wet food is acceptable, but the key is ensuring the full dose is consumed. The syringe has a fill line marked on it, and the volume is described as 'a very tiny amount.'"
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "The board summary in b0009 characterizes Spot's presentation simply as 'just ain't doing right,' reflecting the nonspecific nature of the initial complaint."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-2ba24e1a571cb9a043ed277c"
+      ],
+      "text": "The specific etiology of the elevated neutrophil count and the suspected infection was not identified before discharge. The staff member acknowledged this explicitly."
+    }
+  ],
+  "id": "p-e7619b9cad1968776702b225",
+  "linkBasis": "Name 'Spot' (also ASR variants 'Spot') is directly stated with breed, age, weight, temperature, and the full discharge medication list in the same clinical thread.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Spot",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.219109Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-2ba24e1a571cb9a043ed277c"
+  ],
+  "species": "Unknown",
+  "summary": "A 5-year-old neutered male Shih Tzu (3.5 kg), rescued approximately four weeks prior, presented with two days of appetite loss, complete anorexia on the day of visit, lethargy, shivering, hazy and 'goopy' eyes, and two episodes of bilious vomiting without diarrhea. Vitals recorded a temperature of 103.3 °F and a respiratory rate of 30. Medical history included periodontal disease and an additional condition described in the transcript as 'T-pold' (ASR-uncertain). Vaccines were current; the dog was not on any medications or preventatives. Blood work revealed an elevated neutrophil count, consistent with a suspected but not-yet-identified infection. In-hospital treatment included IV fluids and maropitant (ASR: 'meropotent'/'Moropitin'). The dog was discharged home with liquid amoxiclav (broad-spectrum antibiotic, every 12 hours for 10 days, first dose to be started at home), Entice (appetite stimulant), Optic Care eye gel (lubricant), and tobramycin eye drops (ASR: 'Tobromycin'), along with instructions for a bland diet (white rice, boiled chicken), restricted exercise for 3–5 days, and a recheck with the primary veterinarian in 3–5 days. The owner was specifically warned that vomiting within 24 hours of receiving maropitant should prompt immediate return to the hospital.",
+  "title": "Spot – 5-yo Shih Tzu with fever, lethargy, GI signs; discharged with antibiotics and eye care",
+  "topics": [
+    "p-e4233e2bc8e95ec67ceee5d4",
+    "p-28c556c7a8e9f51514b94736",
+    "p-18e0fcdc5795b356a3764f91"
+  ],
+  "uncertainties": [
+    "The term 'T-pold' in the previous medical history (b0008) is an ASR-uncertain abbreviation; it could refer to a dental condition, a behavioural issue, or another diagnosis. It is reported as transcribed and not interpreted.",
+    "The specific cause of the elevated neutrophil count was not identified before discharge; the infection source remains unknown as of the recorded conversation.",
+    "The owner's description of the rescue situation ('four yellows' in b0194) is ASR-uncertain and may not accurately reflect the number of dogs or the circumstances.",
+    "The exact volume of the liquid amoxiclav dose is described only as 'a very tiny amount' (b0190); the precise millilitre value is not stated in the transcript.",
+    "The 'Tobromycin' in b0188 is transcribed as such in the ASR; it is almost certainly tobramycin (an aminoglycoside antibiotic eye preparation), but the transcript does not confirm the spelling or concentration.",
+    "The source of the suspected infection (gastrointestinal, dental/periodontal, ocular, or other) is not specified; the team noted periodontal disease in the history but did not confirm it as the cause of the neutrophilia.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

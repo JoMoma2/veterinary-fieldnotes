@@ -1,0 +1,71 @@
+{
+  "account": "In a brief, partially garbled exchange within a multi-patient busy shift, a staff member notes that the orders include 'point one milligrams methadone IV' and raises the possibility of changing it. A colleague responds with the principle that one should not change what the doctor ordered. The first speaker then clarifies that their concern was not to alter the dose but to question whether the doctor actually ordered only 0.1 mg methadone, suggesting the order may have been incomplete or misread. The patient to whom this order belongs is not named or identified in the cited blocks. The surrounding recording context involves a cat ('kitty cat') receiving an IV catheter and a 24-hour hospitalation discussion, but no explicit link is made between that cat and the methadone order in the cited text. No clinical rationale for the methadone dose is discussed.\n\n[recorded-reasoning] A staff member questioned whether a 0.1 mg methadone IV order was the correct/complete order as written by the doctor, rather than intending to independently modify the dose.\n[recorded-reasoning] A colleague stated the principle that one should not change what the doctor ordered.\n[unknown] The patient to whom the 0.1 mg methadone IV order applies is not identified in the cited blocks. The surrounding context mentions a cat and a Great Dane, but no explicit patient-order link is made in b0244–b0245.\n[unknown] The clinical reason for the methadone order (analgesia, end-of-life comfort, or other indication) is not stated in the cited blocks.\n\nWhen a medication order appears unusual or incomplete, the appropriate response is to verify with the ordering physician rather than independently modifying the dose or quantity. In this exchange, the staff member's concern was resolved by questioning the completeness of the order rather than altering it. Limitations: The exchange is garbled and very brief. It is unclear whether the order was ultimately confirmed, corrected, or left as written. No further documentation of the resolution is present in the cited blocks.\n\nUncertainties: The patient receiving the 0.1 mg methadone IV order is not identified in the cited text. Surrounding blocks mention a cat ('kitty cat') and a Great Dane, but no block explicitly links the methadone order to either.; The clinical indication for methadone (pain management, end-of-life comfort, sedation) is not stated.; Whether the order was ultimately confirmed as written, corrected by the physician, or left unresolved is not documented in the cited blocks.; The 0.1 mg dose is noted but no medical rationale, dosing calculation, or weight-based justification is discussed.; Speaker roles (nurse, technician, physician) for the two participants in this exchange are not explicitly stated, though the phrasing 'what the doctor ordered' implies one speaker is not the ordering physician.",
+  "articleIds": [
+    "p-1de35bb3336fe293c74c4c57"
+  ],
+  "caseIds": [],
+  "conclusions": "The methadone order is not explicitly tied to a named patient in b0244 or b0245. The surrounding blocks in Recording 46 discuss a cat referred to as 'kitty cat' receiving an IV catheter (b0240–b0242) and a separate 'Great Dane' (b0241), but no block in the cited range states which patient the 0.1 mg methadone IV order belongs to. The association remains unassigned.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb3393e9732a81a1317f0fb"
+      ],
+      "text": "[recorded-reasoning] A staff member questioned whether a 0.1 mg methadone IV order was the correct/complete order as written by the doctor, rather than intending to independently modify the dose."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb3393e9732a81a1317f0fb"
+      ],
+      "text": "[recorded-reasoning] A colleague stated the principle that one should not change what the doctor ordered."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6cb3393e9732a81a1317f0fb"
+      ],
+      "text": "The patient to whom the 0.1 mg methadone IV order applies is not identified in the cited blocks. The surrounding context mentions a cat and a Great Dane, but no explicit patient-order link is made in b0244–b0245."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6cb3393e9732a81a1317f0fb"
+      ],
+      "text": "The clinical reason for the methadone order (analgesia, end-of-life comfort, or other indication) is not stated in the cited blocks."
+    }
+  ],
+  "id": "p-6cb3393e9732a81a1317f0fb",
+  "order": 4500243,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.281490Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 584.6160000000001,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 378.50399999999996
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 631.944,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 585.352
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Order clarification – Do not modify a doctor's methadone dose without authorization",
+  "topics": [
+    "p-729754ec6068dab68f3ec8d6"
+  ]
+}

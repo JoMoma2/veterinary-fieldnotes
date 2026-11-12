@@ -1,0 +1,71 @@
+{
+  "account": "During a shift, a staff member is reminded that printed documents bearing client identifying information (name, address) must not be discarded in regular trash. The instruction specifically covers triage sheets, CPR forms, and essentially any form that prints client details, because 'most of our forms are going to print off their client info, which is going to have the address.' Two secure-recycling locations are identified: one near the doctors' area and one at the front. The rationale given is that these documents constitute personal identifying information.\n\n[practical-technique] Printed forms containing client name and address constitute personal identifying information and must not be thrown away in regular waste.\n[practical-technique] Such documents should be placed in a designated secure recycling bin rather than standard trash.\n[equipment] Two secure-recycling locations are identified: one by the doctors' area and one up front at the reception area.\n[practical-technique] The scope of the instruction covers triage sheets, CPR forms, and essentially any printed document, because most hospital forms print client information including the address.\n\nAny printed document that includes a client's name or address should be disposed of in a secure recycling bin, not a regular trash can. This applies broadly to triage sheets, CPR forms, discharge paperwork, and essentially any form in the clinic system that prints client identifying details. Two secure bins are located by the doctors' area and at the front reception. Limitations: The instruction was given as a verbal reminder in a specific Veterinary clinic clinic context. The exact regulatory or corporate policy basis is not stated in the transcript. The ASR rendering of the closing phrase is garbled ('Romanoshot'), so the precise final wording of the instruction is uncertain. No specific legal citation (e.g., state privacy law) is referenced.\n\nUncertainties: The final phrase in b0212 is garbled by ASR ('Romanoshot'); the intended wording of the closing instruction is unclear and cannot be reliably reconstructed.; It is not stated whether this is a corporate Veterinary clinic policy, a state privacy requirement, or a clinic-specific practice.; The exact scope of 'secure recycling' (e.g., cross-cut shredding, pulping, certified destruction vendor) is not specified; the transcript only says 'secure recycling bin.'; It is unclear whether the staff member receiving this instruction was new to the clinic or simply reminded of an existing rule.",
+  "articleIds": [
+    "p-b159ab402dacfef54eb9d38d"
+  ],
+  "caseIds": [],
+  "conclusions": "This exchange is unassigned to any specific patient or clinical case. It occurs in a hallway or transition area between clinical rooms and is a general administrative/privacy instruction directed at a staff member (possibly new or in training). No patient name, room number, or clinical context anchors it to a particular case. The speaker giving the instruction references 'these' (forms) in the context of cleaning up after a patient discharge, but the instruction itself is a standing practice reminder rather than a case-specific action.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-94371ec28658616522f86326"
+      ],
+      "text": "[practical-technique] Printed forms containing client name and address constitute personal identifying information and must not be thrown away in regular waste."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-94371ec28658616522f86326"
+      ],
+      "text": "[practical-technique] Such documents should be placed in a designated secure recycling bin rather than standard trash."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-94371ec28658616522f86326"
+      ],
+      "text": "[equipment] Two secure-recycling locations are identified: one by the doctors' area and one up front at the reception area."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-94371ec28658616522f86326"
+      ],
+      "text": "[practical-technique] The scope of the instruction covers triage sheets, CPR forms, and essentially any printed document, because most hospital forms print client information including the address."
+    }
+  ],
+  "id": "p-94371ec28658616522f86326",
+  "order": 3900210,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.293299Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 529.4480000000001,
+      "recordingId": "p-8dbcd7618a00d80b15776fe7",
+      "startSeconds": 464.05600000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 550.152,
+      "recordingId": "p-8dbcd7618a00d80b15776fe7",
+      "startSeconds": 530.072
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Privacy – Secure disposal of forms containing client PII",
+  "topics": [
+    "p-9544e9a195551e178b5baf26"
+  ]
+}

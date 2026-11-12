@@ -1,0 +1,162 @@
+{
+  "account": "Patient X, a patient with a known history of heart murmur, was triaged as lethargic and not eating or drinking. During a heavily occupied shift, the team needed to place an IV catheter in Patient X but faced a logistical conflict: ICU personnel were needed back at the station in case further emergencies arrived, so the owner was asked to transport Patient X to the treatment area. The owner's primary concern was whether Patient X would be sedated for the procedure. The team clarified that no sedation would be used, that the procedure would involve only setting a quick IV catheter and running saline, and that Patient X would be returned to the room within approximately five to ten minutes. Patient X was difficult to move due to his lethargy, and the owner had to physically carry him. The IV setup was confirmed to be in ICU, and the team was preparing the line.\n\n[owner-report] Patient X presented lethargic, not eating or drinking, with a known history of heart murmur.\n[observation] Patient X was lethargic and difficult to transport; the owner noted that when the door opened, Patient X would try to bolt, and the handler had to carry him physically.\n[owner-report] Patient X has a self-taught habit of covering himself with a blanket at home, which the owner described as cute and something they wish their dog would do.\n[proposed-treatment] The plan was to place an IV catheter in Patient X and run saline through it. No sedation was planned; the procedure was described as a 'quick line' lasting approximately five to ten minutes.\n[recorded-reasoning] The IV could not be done in Patient X's room because ICU personnel needed to remain at the station in case further emergencies arrived during an already heavily occupied shift.\n[owner-report] The owner's main concern was that Patient X might come back sedated after the procedure; this concern was explicitly addressed and dismissed by the team.\n[actual-treatment] The IV setup was located in ICU, and the team was preparing the IV line (referred to as 'the youth line' in the ASR, likely 'IV line').\n[unknown] The reason for the IV catheter beyond maintaining vascular access is not stated in the available blocks. No medication other than saline was mentioned for the initial line. The underlying cause of the lethargy and the significance of the heart murmur in the current presentation are not discussed.\n[unknown] Patient X's species is not explicitly stated in any block. The owner's comparison of Patient X's blanket behavior to what they wish their dog would do strongly implies Patient X is a cat, but no block says 'cat' or 'feline' in direct reference to Patient X.\n\nWhen a patient owner expresses concern about sedation for a procedure, directly addressing the concern by specifying that no sedation will be used and describing exactly what will happen (quick catheter placement, saline only, short duration) can resolve the objection and gain cooperation. Limitations: This is a single observed interaction, not a documented protocol. The effectiveness of this specific communication approach is not evaluated in the transcript.\nTransporting a lethargic small animal that may bolt at sudden stimuli (such as an opening door) requires the owner or a handler to be physically ready to restrain or carry the animal, and the team should anticipate that the animal may not walk cooperatively. Limitations: This is one observed instance of difficult transport; no specific restraint technique or protocol is described.\n\nUncertainties: Patient X's species is strongly implied to be a cat by the owner's comparison to their dog, but no block explicitly states 'cat' or 'feline' for Patient X.; The medical reason for needing IV access beyond saline maintenance is not stated in the available blocks. No diagnosis, fluid plan, or cardiac workup is discussed.; The heart murmur is listed as history in the triage summary, but its current clinical significance, severity, or any planned cardiac evaluation is not addressed in the available recordings.; The b0162 mention of Patient X ('I my guess is that Patient X did not eat it') occurs in a block focused on euthanasia paperwork and paw-print supplies; it is unclear whether this refers to the same Patient X or is an unrelated aside.; The b0278 reference ('Room is Pickles Patient X') appears in the context of a different patient (Pickles, a diabetic cat) and a new patient (Patient X); this 'Patient X' is almost certainly not the same patient.; The outcome of Patient X's ICU stay, the IV placement, and any subsequent treatment or disposition are not captured in the available blocks.; The term 'youth line' in b0093 is almost certainly an ASR error for 'IV line,' but this is an inference, not a verified correction.",
+  "articleIds": [],
+  "caseIds": [
+    "p-93c92d0cc3bc3ec8fd92646f"
+  ],
+  "conclusions": "The name 'Patient X' appears in the triage summary (b0009), the IV placement discussion (b0086-b0093), and a brief passing mention in b0162 ('I my guess is that Patient X did not eat it'). The b0162 reference occurs in a block clearly focused on euthanasia paperwork and paw-print supplies, making the connection to Patient X's IV episode uncertain; it may be an unrelated aside or an ASR artifact. A separate mention in b0278 ('Room is Pickles Patient X') appears in the context of a different patient (Pickles, a diabetic cat) and a new patient (Patient X, a nine-year-old intact male DSH), and is almost certainly not the same Patient X. The core episode (b0086-b0093) is internally consistent: same patient name, same owner interaction, same procedure being discussed. Species is not explicitly stated but is strongly implied to be a cat by the owner's remark 'I want to teach my dog how to do that. He taught himself' (b0089), which contrasts Patient X's blanket-covering behavior with dog behavior.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X presented lethargic, not eating or drinking, with a known history of heart murmur."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X was lethargic and difficult to transport; the owner noted that when the door opened, Patient X would try to bolt, and the handler had to carry him physically."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X has a self-taught habit of covering himself with a blanket at home, which the owner described as cute and something they wish their dog would do."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The plan was to place an IV catheter in Patient X and run saline through it. No sedation was planned; the procedure was described as a 'quick line' lasting approximately five to ten minutes."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "[recorded-reasoning] The IV could not be done in Patient X's room because ICU personnel needed to remain at the station in case further emergencies arrived during an already heavily occupied shift."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The owner's main concern was that Patient X might come back sedated after the procedure; this concern was explicitly addressed and dismissed by the team."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The IV setup was located in ICU, and the team was preparing the IV line (referred to as 'the youth line' in the ASR, likely 'IV line')."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The reason for the IV catheter beyond maintaining vascular access is not stated in the available blocks. No medication other than saline was mentioned for the initial line. The underlying cause of the lethargy and the significance of the heart murmur in the current presentation are not discussed."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X's species is not explicitly stated in any block. The owner's comparison of Patient X's blanket behavior to what they wish their dog would do strongly implies Patient X is a cat, but no block says 'cat' or 'feline' in direct reference to Patient X."
+    }
+  ],
+  "id": "p-6b6ec6f9e4130bc85f7641d6",
+  "order": 100008,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.286215Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 275.71999999999997,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 156.472
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 371.88000000000005,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 311.98400000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 406.184,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 372.0
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 429.272,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 407.688
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 463.68,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 430.68
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 509.56,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 465.032
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 547.72,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 509.99199999999996
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 586.248,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 548.832
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 143.0,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 9.016
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 470.472,
+      "recordingId": "p-fed7c4b559943c3e3832899d",
+      "startSeconds": 53.128
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Patient X – Cat with heart murmur and lethargy; IV catheter placement logistics in a busy ICU",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "account": "A 13-year-old female spayed domestic shorthair cat, referred to variously as Donut, Donut, Donut, or (possibly by ASR error) Donut, presented with seizure-like neurologic episodes and an unknown possible toxin exposure. On arrival the cat received midazolam for acute seizure control and a Nova blood work panel was run; the panel reportedly did not reveal anything overtly abnormal. The working differential was toxin versus an intrinsic brain/CNS problem, with no definitive cause identified. Two treatment estimates were presented: a hospitalization plan (approximately $2,776.35, including 24-hour monitoring, blood work, x-rays, fluids) and an outpatient plan consisting of the already-completed diagnostics, an IV bolus of Kepra (levetiracetam), and a liquid oral Kepra prescription to take home. The owners indicated financial constraints and chose the outpatient option, paying $553.93 via Care Credit. The cat was given an IV bolus of Kepra, dispensed liquid Kepra (0.6 mL every 8 hours for 3 days, first dose the following morning at 8 AM), instructed to restrict activity and keep the cat calm, and told to follow up with their primary veterinarian in two to three days. A phone update noted the cat had vomited prior to arrival but was otherwise stable. The cat was discharged and described as 'gone' later in the shift.\n\n[owner-report] The cat presented with seizure-like neurologic signs; the owners could not identify a specific toxin the cat may have ingested.\n[observation] The cat was described as a 13-year-old female spayed domestic shorthair.\n[observation] The cat was exhibiting 'weird seizure neuro things' upon arrival and was described as somewhat improved after receiving midazolam.\n[actual-treatment] Midazolam was administered once on arrival for acute seizure control.\n[actual-treatment] A Nova blood work panel was performed; the results did not show anything overtly abnormal.\n[actual-treatment] Kepra (levetiracetam) was given as an IV bolus in the ER, not merely a subcutaneous injection.\n[proposed-treatment] The outpatient plan included liquid Kepra to take home, dosed at 0.6 mL every 8 hours for 3 days, with the first dose the following morning at 8 AM.\n[recorded-reasoning] The working differential was between an unknown toxin exposure and an intrinsic brain/CNS problem; the basic blood work did not narrow it down.\n[owner-report] The owners indicated they could not afford the hospitalization option and chose the outpatient Kepra plan.\n[proposed-treatment] Post-discharge instructions included restricting activity, monitoring, keeping the cat calm for rest, and following up with the primary veterinarian in two to three days. Records were noted to be sent automatically to the primary vet.\n[owner-report] A later phone update noted the cat had vomited prior to arrival but was otherwise stable and nothing had changed.\n[outcome] The cat was discharged and later confirmed as gone from the hospital.\n[unknown] The specific cause of the seizure-like episodes was never identified during this visit. The toxicity, if present, was unspecified, and the blood work was described as not showing anything obviously abnormal.\n\nKepra (levetiracetam) can be administered as an IV bolus for immediate onset in an acute seizure setting, followed by a liquid oral formulation for home continuation in cats, when a pill may not be practical. Limitations: This reflects the administration method chosen for one specific cat in one ER visit. The dosing (0.6 mL q8h for 3 days) is specific to this patient's size and prescription and should not be generalized. The transcript does not provide weight or exact mg/kg dosing.\nWhen a cat presents with seizure-like neurologic signs and a basic blood panel is unremarkable, the differential commonly includes toxin exposure versus intrinsic CNS disease, and definitive diagnosis may require further workup beyond emergency bloodwork. Limitations: This was the clinical team's stated reasoning for one cat. No further diagnostic workup (e.g., MRI, CSF analysis, specific toxin screens) was performed or discussed as having been done. The absence of a definitive diagnosis in this case does not establish a general diagnostic algorithm.\nMidazolam was used as an acute anti-seizure agent on arrival before transitioning to Kepra for ongoing management. Limitations: The transcript does not specify the dose, route, or number of midazolam administrations beyond 'once.' It is described as an 'anti seizure' agent in this context, but the transcript does not elaborate on the pharmacologic rationale beyond its use for acute seizure control.\n\nUncertainties: The cat's name is inconsistent across the transcript: 'Donut,' 'Donut,' 'Donut,' and possibly 'Donut' (b0062). It is assumed to be the same 13-year-old DSH cat based on the continuous clinical thread, but no literal identity confirmation exists in the text.; The specific toxin (if any) that may have caused the seizure-like episode was never identified. The owner could not recall what the cat might have ingested.; The cause of the neurologic signs remains undetermined: the team's working differential was toxin versus intrinsic brain/CNS disease, with no definitive diagnosis reached during this visit.; The Nova blood work panel was described as a 'small' panel that 'didn't see anything super obvious,' but the specific analytes and values are not detailed in the transcript beyond 'Nova Blood Gas.'; The exact Kepra dose in mg is not stated; only the volume (0.6 mL) and frequency (q8h for 3 days) are given. The cat's weight is not recorded in the available blocks.; Whether the cat's condition was due to a one-time event or a recurring neurologic problem is unknown; the team recommended primary follow-up for long-term management.; The 'Donut' reference in b0062 could theoretically be a different patient, though the immediately following b0063 confirms 'Donut' and 'Thirteen' in the same context, making a different-patient interpretation unlikely.",
+  "articleIds": [
+    "p-ce54be43479165c3c085047b",
+    "p-28ad48062ed300fc90c8e3f8"
+  ],
+  "caseIds": [],
+  "conclusions": "The identity of this cat is uncertain due to multiple name variants across the transcript: 'Donut' (b0005, b0084, b0117, b0177, b0185, b0264), 'Donut' (b0063, b0116, b0135), 'Donut' (b0135), and 'Donut' (b0062). The b0062/b0063 sequence strongly suggests the same 13-year-old DSH cat is being discussed, with 'Donut' likely an ASR misrendering of 'Donut' or 'Donut' given the identical clinical context (toxicity, two estimates, financial constraints, Kepra). No deterministic identity validation was possible. The association to this candidate episode is based on the consistent clinical thread (seizure/neuro presentation, Nova, midazolam, Kepra, financial discussion, discharge) rather than a confirmed name match.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The cat presented with seizure-like neurologic signs; the owners could not identify a specific toxin the cat may have ingested."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The cat was described as a 13-year-old female spayed domestic shorthair."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The cat was exhibiting 'weird seizure neuro things' upon arrival and was described as somewhat improved after receiving midazolam."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "Midazolam was administered once on arrival for acute seizure control."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "A Nova blood work panel was performed; the results did not show anything overtly abnormal."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "Kepra (levetiracetam) was given as an IV bolus in the ER, not merely a subcutaneous injection."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The outpatient plan included liquid Kepra to take home, dosed at 0.6 mL every 8 hours for 3 days, with the first dose the following morning at 8 AM."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "[recorded-reasoning] The working differential was between an unknown toxin exposure and an intrinsic brain/CNS problem; the basic blood work did not narrow it down."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The owners indicated they could not afford the hospitalization option and chose the outpatient Kepra plan."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "Post-discharge instructions included restricting activity, monitoring, keeping the cat calm for rest, and following up with the primary veterinarian in two to three days. Records were noted to be sent automatically to the primary vet."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "A later phone update noted the cat had vomited prior to arrival but was otherwise stable and nothing had changed."
+    },
+    {
+      "kind": "outcome",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The cat was discharged and later confirmed as gone from the hospital."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-ab01d766f8960246293ca8fe"
+      ],
+      "text": "The specific cause of the seizure-like episodes was never identified during this visit. The toxicity, if present, was unspecified, and the blood work was described as not showing anything obviously abnormal."
+    }
+  ],
+  "id": "p-ab01d766f8960246293ca8fe",
+  "order": 4,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.282376Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 540.712,
+      "recordingId": "p-c5e5cee7ad764f77dfa0d305",
+      "startSeconds": 265.464
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 275.71999999999997,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 156.472
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 177.768,
+      "recordingId": "p-28636f62e4d4a238bba9b1e4",
+      "startSeconds": 148.088
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 210.36,
+      "recordingId": "p-28636f62e4d4a238bba9b1e4",
+      "startSeconds": 177.408
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 265.416,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 218.552
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 280.76000000000005,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 265.96000000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 310.744,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 281.144
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 543.088,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 506.96000000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 579.0,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 543.72
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 622.472,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 579.592
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 113.048,
+      "recordingId": "p-f6e3ed47b79a3f65e1dae9bf",
+      "startSeconds": 13.144
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 172.632,
+      "recordingId": "p-f6e3ed47b79a3f65e1dae9bf",
+      "startSeconds": 115.704
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 256.152,
+      "recordingId": "p-f6e3ed47b79a3f65e1dae9bf",
+      "startSeconds": 173.488
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 359.576,
+      "recordingId": "p-f6e3ed47b79a3f65e1dae9bf",
+      "startSeconds": 256.96799999999996
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 60.312,
+      "recordingId": "p-52a4c8a62f015c05c6fb37cb",
+      "startSeconds": 1.336
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 185.368,
+      "recordingId": "p-438a7d83ad35df18437f8596",
+      "startSeconds": 45.175999999999995
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 205.168,
+      "recordingId": "p-438a7d83ad35df18437f8596",
+      "startSeconds": 185.784
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 241.144,
+      "recordingId": "p-438a7d83ad35df18437f8596",
+      "startSeconds": 205.4
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 279.72,
+      "recordingId": "p-438a7d83ad35df18437f8596",
+      "startSeconds": 242.264
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 374.904,
+      "recordingId": "p-438a7d83ad35df18437f8596",
+      "startSeconds": 281.752
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 348.568,
+      "recordingId": "p-dab13e4acd244a5f531120c2",
+      "startSeconds": 138.00799999999998
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 475.624,
+      "recordingId": "p-4c695ae7569c55fc21dd3a77",
+      "startSeconds": 413.112
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Donut/Donut (possibly 'Donut') – 13-year-old DSH cat with seizure-like neuro signs and unknown possible toxicity; discharged on outpatient Kepra",
+  "topics": [
+    "p-e17355d9d7fd6b9c3c9c18dc",
+    "p-19b955abe0da120bdccf38b1"
+  ]
+}

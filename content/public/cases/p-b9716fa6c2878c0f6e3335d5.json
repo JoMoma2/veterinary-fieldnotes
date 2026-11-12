@@ -1,0 +1,123 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "Spot was noted to be more 'dainty' and careful over the prior couple of days, whereas he normally jumps fences easily. He was also slightly more lethargic but still eating and drinking normally, with no vomiting or diarrhea."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "The dog had been on an over-the-counter topical flea/tick product applied down the back, which the owner believed was not controlling fleas; they had found fleas on him."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "Spot was inherited from another family approximately five months before the visit; no known allergy history. Vaccination status was uncertain; the owner was not confident Spot was current."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "On examination the ears were painful to touch and discharge was present in the ear canal. The examining clinician could not see deeply enough into the canal to assess for heavy ceruminous buildup; no 'super waxy buildup' was visible on the limited external inspection."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "Temperature was 102.1 °F, described by the clinician as within normal range for a dog. Heart rate was 170 bpm, which the triage clinician attributed to the dog being excited."
+    },
+    {
+      "kind": "clinical-suspicion",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "The working clinical impression was otitis externa (ear infection), described as 'almost certainly' an ear infection based on pain and discharge, but the clinician explicitly noted that ear cytology had not been performed and therefore a definitive etiology (bacterial vs. yeast) was not confirmed."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "Posatex (otic antibiotic solution): eight drops in the ear, every 24 hours. Hydromorphone (oral opioid analgesic): one tablet every 8 hours for 3 days. The owner was instructed to give the hydromorphone first, wait for it to take effect, then thoroughly clean both ears before applying the Posatex."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "[recorded-reasoning] The initial oral dosing instructions given to the owner were incorrect (Posatex every 12 hours, hydromorphone every 24 hours). The staff member explicitly corrected these before discharge, stating the correct frequencies are Posatex every 24 hours and hydromorphone every 8 hours, and apologized for the earlier error."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "[practical-technique] The Posatex formulation does not come with a standard dropper that dispenses in clear drop units. One staff member described applying it by inserting the tip into the canal and squeezing an approximate volume, 'kind of have a feel for it.' Another staff member described using the needle end to measure roughly the equivalent of the prescribed number of drops. The owner was told eight drops were prescribed and advised to clean the ears thoroughly first because the solution does not distribute well through debris."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "[equipment] A controlled-substance acknowledgment form was required because hydromorphone is a controlled substance; the owner was asked to provide name, driver's license ID, and date of birth. The staff noted they do not review the form but it is required by regulation."
+    },
+    {
+      "kind": "outcome",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "Spot was discharged home with the Posatex and hydromorphone, instructions to clean the ears before applying drops, and a recommendation to follow up with the primary veterinarian. The owner was advised to give the first doses that evening or the following morning (it was approximately 1 AM)."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-2cc59ec9cdd15cd5296daf4f"
+      ],
+      "text": "No ear cytology or culture was performed, so the specific microbial etiology (bacterial species, yeast, mixed) was not identified. The clinician stated there was 'not really anything else that could be' but acknowledged the diagnostic limitation."
+    }
+  ],
+  "id": "p-b9716fa6c2878c0f6e3335d5",
+  "linkBasis": "Name 'Spot' is stated during owner intake, the triage-to-doctor handoff, and the discharge summary. The ear/neck pain history, Posatex and hydromorphone prescriptions, and controlled-substance form are all in the same thread.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Spot",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.219859Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-2cc59ec9cdd15cd5296daf4f"
+  ],
+  "species": "Unknown",
+  "summary": "Spot is a 2- or 3-year-old intact male dog (owner unsure of exact age; approximately 25.4–25.6 kg / ~55 lb), inherited from another family about five months prior. The owner reported that pain began in the right ear earlier in the week, then progressed to the left ear and the back of the neck, with the dog whimpering loudly when touched in those areas. Spot was described as unusually dainty (normally jumps fences), slightly more lethargic, but still eating and drinking normally with no vomiting or diarrhea. On examination, the ears were painful and discharge was present in the ear canal; the examining clinician could not see deeply enough to confirm or exclude heavy ceruminous buildup. Temperature was 102.1 °F (reported as normal for a dog); heart rate was 170 bpm, which the triage clinician attributed to excitement. Flea/tick prevention (an over-the-counter topical applied down the back) was reportedly not controlling fleas. Vaccination status was unknown/likely out of date. No ear cytology was performed. The working diagnosis was otitis externa, described as 'almost certainly' an ear infection but acknowledged as not cytologically confirmed. Treatment was Posatex (otic antibiotic) eight drops every 24 hours plus hydromorphone one tablet every 8 hours for 3 days for pain. The clinician instructed the owner to administer the hydromorphone first, allow it to take effect, then thoroughly clean both ears before applying the Posatex, because the solution does not distribute well through debris. Initial dosing instructions were stated incorrectly (Posatex every 12 h, hydromorphone every 24 h) and were explicitly corrected to Posatex every 24 h and hydromorphone every 8 h before the owner left. The owner was told to follow up with the primary veterinarian. A controlled-substance acknowledgment form was required for the hydromorphone.",
+  "title": "Spot – 2–3-yo intact dog with bilateral ear and neck pain; ear infection treatment",
+  "topics": [
+    "p-839abaec89ca200b69686ae4",
+    "p-e3d7fa6c802df6316f1fa346"
+  ],
+  "uncertainties": [
+    "Exact age of Spot is unknown; the owner said 'two or three, we're not really sure' (b0196).",
+    "No ear cytology or culture was performed. The diagnosis of otitis externa is a clinical working impression based on pain and canal discharge, not a microbiologically confirmed diagnosis. The clinician explicitly noted this limitation (b0227).",
+    "The extent of ear canal disease, whether the tympanic membrane is intact, and whether there is any middle-ear involvement are unknown; the clinician could not visualize deeply enough (b0201, b0214).",
+    "Vaccination status is uncertain; the owner was not confident Spot was current (b0198).",
+    "The over-the-counter flea product brand and specific active ingredient were not identified; the owner only described it as a topical applied down the back (b0198).",
+    "The phrase 'Back for Spot. Going home. Have a good night.' in b0194 appears at the end of the Spot discharge and is contextually ambiguous. It may be an ASR artifact, a passing reference, or a different patient. It does not align with the subsequent blocks showing Spot still in the ER, so it is not treated as evidence of a prior Spot discharge.",
+    "The heart rate of 170 bpm was attributed by the triage clinician to excitement, but no alternative explanation (pain, anxiety, hypovolemia) was ruled out in the recorded discussion (b0206).",
+    "Whether Spot's neck pain is related to the ear pathology (referred pain, cervical lymphadenopathy, or a separate process) is not clarified in the transcript. The clinician grouped it with the ear findings but did not elaborate on a differential for the neck component.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

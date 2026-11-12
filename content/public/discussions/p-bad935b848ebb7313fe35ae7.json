@@ -1,0 +1,204 @@
+{
+  "account": "No fully cited summary accepted. Review the individually cited details below.\n\n[owner-report] This is not the cat's first urinary blockage; the owner describes the situation as recurring and stress-related.\n[observation] The cat is currently blocked (unable to urinate). The attending noted the bladder is still small, indicating early detection of the obstruction.\n[recorded-reasoning] The attending explained that the clinic's usual standard for a blocked cat is 48 hours of hospitalization or discharge; the reason they felt comfortable offering an outpatient option this time was the early detection and small bladder size.\n[owner-report] The owner cited financial limitations due to their own medical problems from the prior summer (neuro-related, involving MRIs and neurology appointments) and selected the outpatient plan.\n[unknown] Pickles's exact age, breed, weight, intact/neutered status, and detailed clinical findings (beyond 'blocked' and 'bladder still small') are not stated in the available blocks for this patient. The blocks b0248 and b0266 mention diagnostics (x-rays for crystals/stones, urinalysis for concentration, kidney disease concern) in the broader shift context but cannot be definitively attributed to Pickles.\n[outcome] Pickles was still in a hospital room during the shift (location confirmed by staff). The ultimate outcome (whether the catheter was placed, x-ray results, or whether the owner saw the primary vet) is not recorded in the available blocks for this patient.\n[unknown] The name 'Tav' in b0248 and 'Clickin' may refer to Pickles or to staff/patient shorthand; the link to Pickles's x-ray/urinalysis diagnostics is plausible but not explicitly confirmed. Similarly, b0266's reference to 'kidney disease' as a 'biggest worry' may or may not pertain to Pickles.\n\nThe attending articulated the clinical reasoning for deviating from the default 48-hour inpatient protocol: early detection of urethral obstruction with a still-small bladder was the specific factor making outpatient management acceptable in this case. This reasoning was communicated to the owner to build confidence in the chosen plan. Limitations: This is the stated reasoning of one attending for one case; it is not presented as a universally validated guideline, and the transcript does not include the specific bladder measurements or criteria used.\n\nUncertainties: Pickles's exact age, breed, weight, and intact/neutered status are not stated in the available blocks. The cat is confirmed as a male cat by context ('a cat comes in blocked,' 'his'), but no further demographics are given.; It is unclear whether the x-rays and urinalysis mentioned in b0248 ('Label for Tav,' 'Crystals stones,' 'urinasis would be like concentration') are part of Pickles's plan or a different patient's. The x-rays for Pickles are confirmed in b0262–b0263, but the urinalysis and stone/crystal specifics from b0248 are not explicitly linked to Pickles.; The 'kidney disease' concern in b0266 ('Definitely kidney disease is my biggest worry') may or may not relate to Pickles; it could be a different cat (the blockage case or the DKA cat Pickles).; The name 'Kincaid' in b0265 is unverified as a Pickles alias or a separate patient.; The ultimate clinical outcome for Pickles (catheter placement, x-ray findings, blood work results, discharge, or return to primary vet) is not recorded in the available shift blocks.; The owner's identity and exact name are not clearly stated in the Pickles-specific blocks. The discussion of 'my siblings' and 'neuro things' in b0260–b0261 refers to the owner's personal medical history but does not provide a name.",
+  "articleIds": [],
+  "caseIds": [
+    "p-fc18f7b0939b45b1dad06945"
+  ],
+  "conclusions": "The name 'Pickles' is explicitly stated in b0261 ('Pickles here to make a deposit on the outpatient treatment plan') and b0277 ('Pickles. Where's a Pickles? Where is Pickles? He's back here.'). The treatment-plan discussion in b0249–b0263 immediately precedes the deposit statement in b0261, and the clinical details (recurrent blockage, stress-related, male cat, bladder still small, catheter + x-rays + blood work) form a coherent single-episode thread. The association is strong but rests on conversational continuity rather than a single block that names Pickles alongside all clinical details. No competing patient with the name 'Pickles' appears in the shift. The nearby 'Pickles' cat (b0277, b0278–b0293) is clearly a different patient (9-year-old male intact DSH, DKA, euthanasia). The name 'Kincaid' in b0265 is unverified as a Pickles alias. Blocks b0248 ('Label for Tav') and b0266 (kidney disease concern) may or may not relate to Pickles; they are treated as uncertain.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "This is not the cat's first urinary blockage; the owner describes the situation as recurring and stress-related."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "The cat is currently blocked (unable to urinate). The attending noted the bladder is still small, indicating early detection of the obstruction."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "[recorded-reasoning] The attending explained that the clinic's usual standard for a blocked cat is 48 hours of hospitalization or discharge; the reason they felt comfortable offering an outpatient option this time was the early detection and small bladder size."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "The owner cited financial limitations due to their own medical problems from the prior summer (neuro-related, involving MRIs and neurology appointments) and selected the outpatient plan."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "Pickles's exact age, breed, weight, intact/neutered status, and detailed clinical findings (beyond 'blocked' and 'bladder still small') are not stated in the available blocks for this patient. The blocks b0248 and b0266 mention diagnostics (x-rays for crystals/stones, urinalysis for concentration, kidney disease concern) in the broader shift context but cannot be definitively attributed to Pickles."
+    },
+    {
+      "kind": "outcome",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "Pickles was still in a hospital room during the shift (location confirmed by staff). The ultimate outcome (whether the catheter was placed, x-ray results, or whether the owner saw the primary vet) is not recorded in the available blocks for this patient."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-bad935b848ebb7313fe35ae7"
+      ],
+      "text": "The name 'Tav' in b0248 and 'Clickin' may refer to Pickles or to staff/patient shorthand; the link to Pickles's x-ray/urinalysis diagnostics is plausible but not explicitly confirmed. Similarly, b0266's reference to 'kidney disease' as a 'biggest worry' may or may not pertain to Pickles."
+    }
+  ],
+  "id": "p-bad935b848ebb7313fe35ae7",
+  "order": 4700247,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.287496Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 283.448,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 236.328
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 297.72,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 284.424
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 332.664,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 299.12800000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 344.296,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 333.48
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 377.272,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 344.76000000000005
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 399.384,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 377.536
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 428.776,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 400.69599999999997
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 456.59999999999997,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 429.2
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 490.032,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 459.76800000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 519.2239999999999,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 491.25600000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 553.6080000000001,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 521.048
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 583.88,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 554.2
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 631.816,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 589.056
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 70.424,
+      "recordingId": "p-dab13e4acd244a5f531120c2",
+      "startSeconds": 3.224
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 134.808,
+      "recordingId": "p-dab13e4acd244a5f531120c2",
+      "startSeconds": 71.368
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 368.968,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 228.96800000000002
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 233.944,
+      "recordingId": "p-3afe4a4132728921a158c05d",
+      "startSeconds": 44.888
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 547.016,
+      "recordingId": "p-dab13e4acd244a5f531120c2",
+      "startSeconds": 494.61600000000004
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Pickles – Male cat with recurrent stress-related urinary blockage; outpatient catheter and diagnostics",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ]
+}

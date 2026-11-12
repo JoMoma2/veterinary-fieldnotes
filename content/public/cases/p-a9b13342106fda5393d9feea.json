@@ -1,0 +1,142 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "Spot is approximately eight years old, male, chemically castrated at eight and a half weeks old. The owner states the dog's testicles never came down and the chemical castration was done because the breeder did not want him to breed. The owner purchased the dog for $12, described as half the price of the rest of the litter (which was $25 each)."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "Spot does not eat commercial dog food. He is fed only people food, specifically McDonald's items (Egg McMuffin that morning). The owner shares all his own food with the dog. This dietary fact was flagged as not being written on the triage sheet."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "After the fall, the dog appeared alert and was watching neighbors. The owner gave him water; after drinking, he vomited all of his breakfast. The vomitus was described as completely undigested—the egg patty was still a patty and the McMuffin bread crust was visible—after at least eight hours. The owner found this unusual."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The owner explicitly denied marijuana ingestion, stating personal experience with the dog's prior marijuana exposures. He described the prior episodes as the dog being sluggish, still responsive ('he's still a Spot'), but unable to coordinate feeding (missing the food). He stated this acute collapse with incontinence, seizure-like event, and inability to walk was 'totally different' from prior marijuana episodes."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The owner reported heavy drooling ('Lots of drool. Lots of drool.') during the episode. A fan in the room irritated the dog rather than helping. The dog also had a history of eating non-food items (ate a spoon once, which passed)."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "On triage, gums were assessed as 'maybe a tiny bit pale, but I still call them pink.' No flinchiness was noted. The dog was described as wobbly. A reading of 'two point three' was noted alongside the gum color but its meaning (temperature 102.3°F or other) is unclear from context."
+    },
+    {
+      "kind": "clinical-suspicion",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The triage board listed 'possible seizure' as a presenting concern, but the interviewer noted the owner did not use the word 'seizure' during the initial conversation. The seizure-like event was reported by the girlfriend (witness), not the owner present."
+    },
+    {
+      "kind": "clinical-suspicion",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "During ultrasound of the chest and abdomen region, the doctor thought he saw some fluid in the chest but could not get a great view. The stated concern was that fluid in the chest was 'not good things... bad things.' The doctor wanted radiographs to confirm the presence, amount, and cause of any fluid."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The initial full diagnostic plan included: emergency consult, chest radiographs (with sedation and external reading), and a Heska comprehensive blood panel (liver, kidney, GI, heart, lung values, electrolytes, oxygen, glucose). Total: $1,552.30. The speaker noted that medications to go home would 'most likely be added later' on top of that number."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "A reduced plan was offered: chest radiographs (billed as 'pre/post' at $161 instead of the diagnostic rate of ~$800) plus the emergency exam, totaling $1,010.30. The speaker explained the pre/post billing code was used because the x-rays were much cheaper under that code, and clarified that no surgery was planned—'We're not doing surgery on Spot just yet.'"
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "Thoracentesis was identified as the likely next procedure if radiographs confirmed thoracic fluid. The speaker described it as a procedure to 'suck the fluid out.' Cost was listed at $334. The speaker noted that if fluid was seen on x-rays, they would 'probably want to get that out.'"
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The owner stated he had $500 in his pocket, was paid weekly, and could pay the remainder by Friday. He also stated 'there's no money amount he wouldn't pay' for the dog. He ultimately did not approve the full treatment plan at that time. The speaker offered Care Credit as a financing option."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "[recorded-reasoning] The speaker (doctor or clinical lead) expressed that if the dog did have fluid in his chest, the prognosis was likely poor: 'Honestly, the answer's yes, probably yes' (referring to moving toward euthanasia). The case was then explicitly moved to the euthanasia track."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "[practical-technique] The dog was transported into the hospital by two people lifting him under the chest and rear, then transferred onto a gurney and strapped down to prevent falling or jumping off during movement. The staff described using four-corner lift and gurney straps for a dog that could not walk."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-76071d8d5816a8b5ac6c15d6"
+      ],
+      "text": "The underlying cause of the acute neurological collapse was never confirmed in this transcript. The differential included possible toxin (though marijuana was denied by the owner and the presentation was described as different from prior cannabis exposure) and brain issues. The 'two point three' reading noted at triage is ambiguous in context (possibly temperature 102.3°F, but unconfirmed). No definitive diagnosis was rendered before the euthanasia decision."
+    }
+  ],
+  "id": "p-a9b13342106fda5393d9feea",
+  "linkBasis": "Name 'Spot' (ASR variants 'Spot', 'Spot') is stated during history-taking, room assignment, clinical concern about thoracic fluid, treatment-plan discussion, and the euthanasia decision. The long owner narrative (Egg McMuffin, collapse, seizure, incontinence) is explicitly linked by the interviewer asking to recap 'the whole story of this morning' for Spot.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Spot",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.220602Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-76071d8d5816a8b5ac6c15d6"
+  ],
+  "species": "Unknown",
+  "summary": "No fully cited summary accepted. Review the individually cited details below.",
+  "title": "Spot – Large dog with acute neurological collapse, suspected thoracic fluid; euthanasia",
+  "topics": [
+    "p-32f89cc299bb4f61daed6008"
+  ],
+  "uncertainties": [
+    "The exact nature of the 'two point three' reading noted at triage (b0021: 'Pink gums. two point three') is unclear. It could represent a temperature of 102.3°F, a partial blood pressure reading, or another parameter, but no explicit label was given in the transcript.",
+    "The owner's girlfriend reported a seizure-like event (rolling, limb tremors, head thrown), but the triage board entry 'possible seizure' was noted as not matching the owner's own description. No video was confirmed to exist. The event was never classified definitively as a seizure versus a convulsive episode or other neurological event.",
+    "The underlying etiology of the acute collapse was never confirmed. The differential in the transcript included 'toxin or brain issues' (b0084), and the owner denied marijuana but acknowledged prior non-specific gummy ingestion. No toxicology screen, CSF analysis, or neuroimaging was mentioned as performed or planned.",
+    "The ultrasound showed possible thoracic fluid, but the view was poor and the finding was unconfirmed. Whether radiographs were ultimately performed and what they showed is not documented in this transcript before the euthanasia decision.",
+    "The euthanasia decision (b0159-b0160, b0184) appears to have been made on clinical grounds (poor prognosis for thoracic fluid and the neurological presentation), but the specific reasoning shared with the owner beyond 'it's difficult to hear' is not fully captured in the transcript.",
+    "The dog's sex is not explicitly confirmed as male in a single unambiguous statement. The owner's discussion of chemical castration and the use of 'he' throughout strongly implies male, but no veterinary record statement like 'male neutered' appears in the transcript for this patient.",
+    "The 'cat that's got kittens' mentioned in b0014 is contextually unclear and may refer to a different patient or be an ASR artifact. It does not appear to be part of the Spot case.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "Bella was a 12-year-old female Golden Doodle who had been running five miles a day until last year, when she 'retired herself.' She was described as very active and in good health. She had a well-check a couple of weeks prior to presentation."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "On the morning of presentation Bella was normal. She had a normal breakfast, attended a grooming appointment at 1 pm, and was picked up at approximately 3 pm. The groomer reported that she had vomited once. She appeared wobbly and weak when the owner was picking her up and walking her to the car."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "After arriving home, Bella lay on her bed and did not move for four to five hours. She had one bowel movement in the bed. The owners noted this was highly unusual for her. When they tried to lift her to clean the bed, she stood up but could not walk—falling to the right and left, splaying her legs."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "Bella showed no tail-wag when her owner's partner came home, no acknowledgement, and no interest in food. The owners emphasized these behaviors were very unusual for her."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The euthanasia was performed using two injections: the first was a sedation injection so the animal would not feel anything, followed by a second injection of the euthanasia solution. The state of Michigan required the staff to ask whether the animal had bitten anyone in the preceding ten days."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "A catheter with saline was in place at the time of euthanasia preparation, and medication was drawn up. The team waited for the owners to be ready before proceeding, using a doorbell for communication."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners noted it was Bella's birthday and requested to wait approximately one hour before the procedure so she would not die on her birthday. The staff accommodated this request."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners chose private cremation with a scattering-style urn. They were uncertain which specific urn design they wanted, so the staff recorded the order with a satin pouch so the owners could select an urn externally. The owners indicated they would call the next day (within a 72-hour window) to confirm the urn selection after consulting with family."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "[practical-technique] For the euthanasia positioning, the team lifted the animal onto a padded surface, noting the need for careful handling. The process involved a catheter line with saline, drawn-up medication, and a two-injection protocol. The staff used a doorbell system to coordinate timing with the owners."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The specific underlying cause of Bella's sudden collapse was not identified or stated in the available transcript. The team discussed the Giardia finding but characterized it as an incidental detection inconsistent with the acute presentation. No definitive diagnosis for the collapse was recorded in the blocks reviewed. The staff noted they did not know what condition the dog came in at when discussing the owners' initial calmness."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners reported that the dog's previous veterinary care included a well-check a couple of weeks prior where a few Giardia organisms were found in the stool. The five-day metronidazole course (and possibly an additional product referred to as 'flagell') was completed the day of presentation. The owners also noted the dog was not an adventurous eater, did not visit dog parks, and the family was with her constantly."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The transcript references a 'flagell' product in addition to metronidazole for the Giardia treatment. The exact identity of this product is unclear from the ASR text and could not be confirmed. It may be a misspelling or ASR error for another anti-parasitic agent."
+    }
+  ],
+  "id": "p-5f1aaad8113868145dfbcae4",
+  "linkBasis": "Name 'Bella' is stated in the history intake, the summary given to the doctor, the euthanasia authorization, and aftercare/cremation discussions. The giardia finding, groomer visit, and sudden inability to walk are all narrated in the same thread.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Bella",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:01:57.058771Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-ca1353b60a50b13b458da11e"
+  ],
+  "species": "Unknown",
+  "summary": "No fully cited summary accepted. Review the individually cited details below.",
+  "title": "Bella – 12-yo Golden Doodle with sudden collapse; euthanasia and aftercare planning",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ],
+  "uncertainties": [
+    "The specific underlying cause of Bella's sudden collapse (inability to walk, splaying legs, lack of responsiveness) was not identified in the available transcript blocks. The team noted they did not know the condition and discussed the Giardia finding as likely incidental, but no definitive diagnosis was recorded.",
+    "The product referred to as 'flagell' in the Giardia treatment (b0053) could not be confirmed from the ASR text. It may be a transcription error for another anti-parasitic agent. The exact treatment regimen beyond the metronidazole is uncertain.",
+    "The phrase 'They are a rule letter' in b0054 is unclear in context and may be an ASR error. Its intended meaning is unknown.",
+    "The b0042 reference to 'Stabilized DNR room eleven doctor. Ninety nine point three.' is likely referring to Bella given the room assignment and DNR context, but the 'ninety nine point three' value is not explicitly identified as a vital sign type (temperature, blood pressure, etc.) in the transcript.",
+    "The transcript does not record whether any diagnostic workup (blood work, imaging, toxicology) was performed on Bella before the euthanasia decision, or what findings, if any, contributed to the decision.",
+    "The owners' initial calm demeanor was noted by staff (b0055), but the full scope of the discussion between the veterinary team and the owners regarding the severity of the situation is not captured in the available blocks.",
+    "The 'GRD of rare live eggs' phrase in b0051 is ASR-uncertain and may not accurately represent the fecal test result terminology.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

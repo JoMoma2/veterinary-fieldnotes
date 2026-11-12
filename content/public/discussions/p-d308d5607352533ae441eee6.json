@@ -1,0 +1,162 @@
+{
+  "account": "No fully cited summary accepted. Review the individually cited details below.\n\n[owner-report] Dog X presented for decreased drinking and general malaise; the triage abbreviation used was 'ADR.'\n[observation] A fever was recorded; the ASR renders it as 'one of four seven,' which in context almost certainly represents 104.7°F, though the exact digits are garbled by the transcription.\n[observation] Multiple ticks were found on Dog X during the examination; the staff described removing or treating them ('trying to roll that out').\n[actual-treatment] A 4DX panel was sent and was still running at the time of the recorded discussion; results are not reported in any available block.\n[actual-treatment] The dog was discharged with some medication, described in passing as something that 'works pretty quickly, even just a little medication.' The specific drug is not named in the available blocks.\n[owner-report] The owner had the money but chose to use Care Credit for a payment plan; approximately seventy dollars could be deferred.\n[recorded-reasoning] The treating clinician was [private detail removed], who was preparing the discharges while the owner's concern was being addressed.\n[unknown] The meaning of 'ADR' is never expanded in the available blocks. It is used as the triage reason but its full form is not stated.\n[unknown] The 4DX results, any confirmed diagnosis, and the identity of the medication dispensed at discharge are not captured in the available transcript blocks.\n\nCare Credit can be used as a payment method for veterinary services; the owner in this case had the funds but preferred the financing option to spread the cost, and a small balance (around seventy dollars) was deferred. Limitations: This reflects one owner's preference and the clinic's acceptance of Care Credit. It does not constitute a clinical recommendation.\n\nUncertainties: The abbreviation 'ADR' is used at triage but never expanded in any available block; its meaning cannot be confirmed from the transcript alone.; The fever reading is garbled by ASR ('one of four seven'); while 104.7°F is the most plausible reading, the exact value cannot be stated with certainty.; The 4DX panel was sent but its results are never reported in the available blocks; no diagnosis is confirmed.; The specific medication dispensed at discharge is described only as something that 'works pretty quickly'; its identity is not named.; The total amount of the bill and whether the Care Credit application was approved on the spot are not clearly resolved in the available text.; It is unclear whether the ticks were removed in-clinic or whether the owner was instructed to remove them at home; the phrase 'trying to roll that out' is ambiguous.",
+  "articleIds": [],
+  "caseIds": [
+    "p-33b5e949e3b88422a02e17cd"
+  ],
+  "conclusions": "Dog X is explicitly named in b0009 (triage summary), b0126 (greeting during the barking incident), and b0127 (draw-up/discharge context). The b0060–b0061 blocks discuss 'Dog X' by name and reference the same ADR/fever/ticks/4DX constellation, confirming they belong to the same patient. The b0125–b0129 blocks describe the discharge of the same dog: the barking complaint (b0125), the owner's anger about the dog being left alone (b0128), and the Care Credit payment discussion (b0125, b0129) all follow directly after the name is spoken in b0126–b0127. No other patient is interposed between these blocks in the recording order, so the association is explicit and unbroken. However, the 4DX results, the specific medication dispensed, and any confirmed diagnosis are never stated in the available text.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "Dog X presented for decreased drinking and general malaise; the triage abbreviation used was 'ADR.'"
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "A fever was recorded; the ASR renders it as 'one of four seven,' which in context almost certainly represents 104.7°F, though the exact digits are garbled by the transcription."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "Multiple ticks were found on Dog X during the examination; the staff described removing or treating them ('trying to roll that out')."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "A 4DX panel was sent and was still running at the time of the recorded discussion; results are not reported in any available block."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The dog was discharged with some medication, described in passing as something that 'works pretty quickly, even just a little medication.' The specific drug is not named in the available blocks."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The owner had the money but chose to use Care Credit for a payment plan; approximately seventy dollars could be deferred."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "[recorded-reasoning] The treating clinician was [private detail removed], who was preparing the discharges while the owner's concern was being addressed."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The meaning of 'ADR' is never expanded in the available blocks. It is used as the triage reason but its full form is not stated."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The 4DX results, any confirmed diagnosis, and the identity of the medication dispensed at discharge are not captured in the available transcript blocks."
+    }
+  ],
+  "id": "p-d308d5607352533ae441eee6",
+  "order": 100008,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.290571Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 275.71999999999997,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 156.472
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 102.192,
+      "recordingId": "p-28636f62e4d4a238bba9b1e4",
+      "startSeconds": 23.624
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 143.91199999999998,
+      "recordingId": "p-28636f62e4d4a238bba9b1e4",
+      "startSeconds": 103.392
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 263.624,
+      "recordingId": "p-28636f62e4d4a238bba9b1e4",
+      "startSeconds": 228.616
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 238.56799999999998,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 186.984
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 303.192,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 239.416
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 446.632,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 317.608
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 512.776,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 452.424
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 563.8960000000001,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 513.5920000000001
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 623.816,
+      "recordingId": "p-12a205d8407aa60c6af4c85d",
+      "startSeconds": 600.36
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Dog X – Dog with fever, ticks, ADR; brief stay and discharge with owner upset",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ]
+}

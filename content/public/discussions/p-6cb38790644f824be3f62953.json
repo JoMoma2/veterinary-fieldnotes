@@ -1,0 +1,78 @@
+{
+  "account": "A staff member was bitten by a cat during their shift and, when trying to determine what follow-up steps were required, discovered through a search lasting approximately half an hour (conducted with at least three colleagues) that no standard operating procedure for animal-bite or animal-injury reporting exists at this Veterinary clinic location. The speaker contrasts this with a previous job where such a protocol was in place and describes the absence as surprising given they considered it the industry norm. The specific cat responsible for the bite is not identified in the transcript, and no clinical workup, treatment, or medical decision for the bitten staff member is documented.\n\n[observation] A staff member was bitten by a cat while working at this clinic.\n[practical-technique] After the bite, the staff member attempted to determine whether they needed to seek medical follow-up and looked for a governing protocol but could not find one.\n[observation] The staff member spent approximately half an hour with at least three named colleagues (Person, Person, Person) searching through documents and concluded no SOP for animal injuries exists at this location.\n[recorded-reasoning] The speaker states that having a protocol for animal bites was standard at their previous job, framing the absence at this Veterinary clinic location as a gap. The phrase 'industry standard' is used, though the surrounding ASR is garbled and the exact referent of 'that' is ambiguous.\n[unknown] The specific cat that caused the bite is not identified in the transcript. No clinical assessment, wound care, tetanus/rabies prophylaxis discussion, or occupational-health referral for the bitten staff member is recorded.\n\nIn the absence of a written SOP for occupational animal-bite injuries, staff at this location had no clear internal procedure to follow. The ad-hoc search took approximately 30 minutes and involved multiple colleagues, highlighting the operational cost of missing documentation. Limitations: This is a single anecdotal account from one staff member. The speaker's characterization of their previous job's protocol is unverified and may not reflect a formal written policy elsewhere. The ASR rendering of b0244 ('tests to keep it out') is likely garbled and may not accurately represent the conclusion reached.\n\nUncertainties: The phrase 'tests to keep it out' in b0244 is likely an ASR error for 'SOPs,' 'policies,' or similar; the intended meaning is uncertain.; The referent of 'that is the industry standard' in b0243 is ambiguous: it could mean the absence of an SOP is the norm, or that having one is the norm (contradicting this location's gap). Context slightly favors the latter, but this is not definitive.; The identity of the cat that caused the bite is unknown; it could be any of several cats present during the shift.; No information is recorded about whether the bitten staff member ultimately sought medical care, reported the injury through occupational-health channels, or received any treatment.; The roles of Person, Person, and Person (colleagues who assisted in the document search) are not specified beyond participating in the search.",
+  "articleIds": [
+    "p-99e924fae07fd20390d90348"
+  ],
+  "caseIds": [],
+  "conclusions": "Unassigned to any patient. The cat that caused the bite is never named or linked to a board patient. Multiple cats appear in the shift (Donut, Donut, an unassigned 'cat that's got kittens' in b0014, and others), but no literal identity evidence connects any of them to the biting incident. The incident is a workplace-safety matter involving staff, not a clinical case.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb38790644f824be3f62953"
+      ],
+      "text": "A staff member was bitten by a cat while working at this clinic."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb38790644f824be3f62953"
+      ],
+      "text": "[practical-technique] After the bite, the staff member attempted to determine whether they needed to seek medical follow-up and looked for a governing protocol but could not find one."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb38790644f824be3f62953"
+      ],
+      "text": "The staff member spent approximately half an hour with at least three named colleagues (Person, Person, Person) searching through documents and concluded no SOP for animal injuries exists at this location."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6cb38790644f824be3f62953"
+      ],
+      "text": "[recorded-reasoning] The speaker states that having a protocol for animal bites was standard at their previous job, framing the absence at this Veterinary clinic location as a gap. The phrase 'industry standard' is used, though the surrounding ASR is garbled and the exact referent of 'that' is ambiguous."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6cb38790644f824be3f62953"
+      ],
+      "text": "The specific cat that caused the bite is not identified in the transcript. No clinical assessment, wound care, tetanus/rabies prophylaxis discussion, or occupational-health referral for the bitten staff member is recorded."
+    }
+  ],
+  "id": "p-6cb38790644f824be3f62953",
+  "order": 4500242,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.287944Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 378.024,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 349.32
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 584.6160000000001,
+      "recordingId": "p-3ae6642202823921a81a3756",
+      "startSeconds": 378.50399999999996
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Protocol gap – No SOP for staff animal-bite/injury reporting",
+  "topics": [
+    "p-a5388f5e8ee34b43e3680202"
+  ]
+}

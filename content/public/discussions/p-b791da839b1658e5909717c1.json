@@ -1,0 +1,313 @@
+{
+  "account": "Pickles, a nine-year-old male intact domestic shorthair cat, presented dehydrated and acidotic. Staff discussed the likely diagnosis as either diabetic ketoacidosis or diabetic ketosis, noting the very poor prognosis associated with either condition in cats. The blood was less concentrated than initially expected for the degree of dehydration. The cat's owner, who had previously lost a cat to the same condition at age nineteen, elected euthanasia. The owner did not wish to be present. Aftercare arrangements included two free ink paw prints and private cremation ($240), with the cremains to be returned in a satin pouch (specific urn to be chosen later, within a 72-hour window). The owner discussed the decision with his son Person and indicated he might still retrieve the body for home burial. Euthanasia charges were approximately $298. The overall impression recorded was that DKA in cats carries a grave prognosis, with multiple simultaneous derangements that make correction of one problem risk worsening another.\n\n[confirmed-diagnosis] The cat was assessed as likely suffering from diabetic ketoacidosis or diabetic ketosis. Staff were not entirely certain which of the two applied, leaning toward 'Diabetic ketosis.' The cat was confirmed acidotic.\n[observation] The cat was dehydrated, but its blood was less concentrated than the staff had expected for that degree of dehydration. The thickest PCV one staff member had personally encountered was 74 percent, cited as a reference point rather than necessarily this cat's value.\n[recorded-reasoning] Staff expressed that cats with DKA are among the most difficult patients to manage: multiple simultaneous derangements mean that correcting one problem can precipitate worsening of another. One clinician described them as her 'least favorite thing to see walk in the door' because they 'almost never leave alive' even with extensive financial investment in treatment.\n[owner-report] The owner's previous cat had lived to nineteen years and had experienced the same condition. The current cat, Pickles, is nine years old. The owner was emotionally distressed, described as 'sobbing' when brought to the room.\n[owner-report] The owner described the cat as a 'very, very nice gentleman.' The owner was referred to as 'very cross' in passing, likely meaning distressed/upset rather than angry.\n[actual-treatment] Pre-surgical sedation was administered in preparation for euthanasia. A catheter was referenced for placement (context unclear whether this was for IV access during euthanasia or an earlier attempt at treatment).\n[outcome] Euthanasia was performed. The owner did not wish to be present. Charges for euthanasia were approximately $298. Private cremation was selected at $240.\n[owner-report] The owner initially declined private cremation on cost grounds, stating 'Pickles wouldn't want me spending money on bullshit,' then after discussion with his son Person, reversed his decision and selected private cremation. He indicated he might still retrieve the body for home burial rather than pick up cremains.\n[actual-treatment] Aftercare: two free ink paw prints were ordered (one for the owner, one for his son). A clay paw print would be included with private cremation. The cremains were to be placed in a satin pouch (owner had not yet chosen a specific urn). The owner had 72 hours to confirm the urn selection. Cremains expected in one to two weeks.\n[suspicion] The case was framed as potentially a 'training thing' for a new staff member, suggesting the clinician overseeing it may have been in a learning or supervisory role regarding the euthanasia process.\n[unknown] The exact PCV of Pickles was not stated in the transcript. The 74% figure was cited as a personal high from prior experience, not necessarily this cat's value. Whether the final diagnosis was DKA or diabetic ketosis was never definitively resolved in the transcript.\n[unknown] Whether the cat received any prior treatment (fluids, insulin, monitoring) before the euthanasia decision was made is not documented in the available blocks. The 'pre-surge' sedation was completed before the owner's final confirmation.\n\nIn the euthanasia aftercare process, staff walked the owner through three options: home burial (free, with a sealed bag and handout guide), group cremation ($96, ashes incorporated into coral reef restoration), and private cremation ($240, ashes returned in a chosen urn). The owner was allowed to defer the urn selection by ordering a satin pouch, with a 72-hour window to decide. Limitations: Pricing and specific program details (coral reef, Trusted Journey company) are clinic-specific and may vary by location. The 72-hour window and satin-pouch workaround were not confirmed as universal policy.\nWhen an owner is emotionally distressed during euthanasia consent, staff offered time ('give him a few minutes'), a doorbell to signal readiness, and the option to be absent from the procedure. The owner was not pressured. The 'hardest question' (presence) was asked first, before administrative items like the bite-history inquiry. Limitations: This reflects one clinic's approach in Michigan. The specific sequence and the Michigan bite-history requirement are jurisdiction-specific.\nStaff discussed that DKA in cats is extremely difficult to manage because correcting one derangement (e.g., acidosis, dehydration) can unmask or worsen another. One clinician characterized them as carrying a near-zero survival rate even with maximal financial investment, calling them her 'least favorite thing to see walk in the door.' Limitations: This represents individual clinician experience and opinion, not a validated statistic. The distinction between 'diabetic ketoacidosis' and 'diabetic ketosis' was noted but not fully resolved for this patient.\n\nUncertainties: Whether the final working diagnosis was diabetic ketoacidosis or the less severe diabetic ketosis was never definitively stated; staff leaned toward 'Diabetic ketosis' but used both terms interchangeably at points.; The exact PCV of Pickles was not recorded in the transcript. The 74% figure was a personal reference point from a previous case, not necessarily this cat's value.; The word 'Patient X' at the start of b0278 is almost certainly an ASR error; the intended word (the cat's name 'Pickles' or a descriptor) is unclear.; Whether any treatment (IV fluids, insulin, monitoring) was attempted before the euthanasia decision is not documented in the available blocks.; The 'training thing' reference in b0274 suggests a new or less-experienced staff member was involved, but their specific role and level of supervision are unclear.; Blocks b0266–b0267 discuss a kidney-disease workup with blood work and re-evaluation; it is uncertain whether this pertains to Pickles or a different feline patient discussed in the same time window.; The owner's initial statement about not wanting to spend money on cremation and his subsequent reversal was influenced by a phone call to his son; the full extent of the discussion is not in the transcript.",
+  "articleIds": [
+    "p-4863b3bb26aab8b517b2c423",
+    "p-7907d3f2880db7b6f250d3cd"
+  ],
+  "caseIds": [
+    "p-9506b7eb92ae054115d59194"
+  ],
+  "conclusions": "The name 'Pickles' is explicitly confirmed in b0277 (staff-owner banter: 'There's no way this Cat's name is Pickles Scott. Ha ha It sure is.'), b0284 ('you are Pickles's owner'), b0285 ('do you know if Pickles has bitten anyone'), and b0299 ('private cremation, he does not wish to be present'). The block b0278 begins with 'Patient X is a nine year old male intact. Domestic short hair.' – 'Patient X' is almost certainly an ASR misrendering of the cat's name or a garbled descriptor; the rest of the block ('Domestic short hair') matches the species/sex described elsewhere. The DKA/acidosis discussion (b0269–b0274), the owner's emotional context (b0275), the euthanasia paperwork and aftercare (b0283–b0299), and the charges (b0299) all form a single continuous thread for this cat. Blocks b0266–b0267 discuss a separate kidney-disease workup (likely a different patient) and should not be conflated with Pickles. No other patient in the transcript shares the name 'Pickles' with a cat context.",
+  "facts": [
+    {
+      "kind": "confirmed-diagnosis",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The cat was assessed as likely suffering from diabetic ketoacidosis or diabetic ketosis. Staff were not entirely certain which of the two applied, leaning toward 'Diabetic ketosis.' The cat was confirmed acidotic."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The cat was dehydrated, but its blood was less concentrated than the staff had expected for that degree of dehydration. The thickest PCV one staff member had personally encountered was 74 percent, cited as a reference point rather than necessarily this cat's value."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "[recorded-reasoning] Staff expressed that cats with DKA are among the most difficult patients to manage: multiple simultaneous derangements mean that correcting one problem can precipitate worsening of another. One clinician described them as her 'least favorite thing to see walk in the door' because they 'almost never leave alive' even with extensive financial investment in treatment."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The owner's previous cat had lived to nineteen years and had experienced the same condition. The current cat, Pickles, is nine years old. The owner was emotionally distressed, described as 'sobbing' when brought to the room."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The owner described the cat as a 'very, very nice gentleman.' The owner was referred to as 'very cross' in passing, likely meaning distressed/upset rather than angry."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "Pre-surgical sedation was administered in preparation for euthanasia. A catheter was referenced for placement (context unclear whether this was for IV access during euthanasia or an earlier attempt at treatment)."
+    },
+    {
+      "kind": "outcome",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "Euthanasia was performed. The owner did not wish to be present. Charges for euthanasia were approximately $298. Private cremation was selected at $240."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The owner initially declined private cremation on cost grounds, stating 'Pickles wouldn't want me spending money on bullshit,' then after discussion with his son Person, reversed his decision and selected private cremation. He indicated he might still retrieve the body for home burial rather than pick up cremains."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "Aftercare: two free ink paw prints were ordered (one for the owner, one for his son). A clay paw print would be included with private cremation. The cremains were to be placed in a satin pouch (owner had not yet chosen a specific urn). The owner had 72 hours to confirm the urn selection. Cremains expected in one to two weeks."
+    },
+    {
+      "kind": "clinical-suspicion",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The case was framed as potentially a 'training thing' for a new staff member, suggesting the clinician overseeing it may have been in a learning or supervisory role regarding the euthanasia process."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "The exact PCV of Pickles was not stated in the transcript. The 74% figure was cited as a personal high from prior experience, not necessarily this cat's value. Whether the final diagnosis was DKA or diabetic ketosis was never definitively resolved in the transcript."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-b791da839b1658e5909717c1"
+      ],
+      "text": "Whether the cat received any prior treatment (fluids, insulin, monitoring) before the euthanasia decision was made is not documented in the available blocks. The 'pre-surge' sedation was completed before the owner's final confirmation."
+    }
+  ],
+  "id": "p-b791da839b1658e5909717c1",
+  "order": 5100268,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.285462Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 361.016,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 76.056
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 560.68,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 361.608
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 599.208,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 562.4879999999999
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 634.0079999999999,
+      "recordingId": "p-0bc720b638c3d31168653e11",
+      "startSeconds": 602.568
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 137.64,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 3.416
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 165.56,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 138.968
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 191.896,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 166.44
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 227.944,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 192.424
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 368.968,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 228.96800000000002
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 490.76,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 404.05600000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 540.52,
+      "recordingId": "p-6ed42f54d483b50ddea6b5d6",
+      "startSeconds": 491.168
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 110.496,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 1.688
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 362.384,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 110.768
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 398.264,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 363.35200000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 440.376,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 398.488
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 468.54400000000004,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 441.064
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 486.696,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 469.048
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 510.52000000000004,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 487.16
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 539.24,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 512.936
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 566.7520000000001,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 540.184
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 593.4480000000001,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 568.296
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 625.168,
+      "recordingId": "p-1532d6c14d2eff2e96bef07f",
+      "startSeconds": 593.816
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 30.392,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 11.768
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 60.472,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 31.032
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 95.80000000000001,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 59.872
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 147.4,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 97.43199999999999
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 274.68,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 152.392
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 90.85600000000001,
+      "recordingId": "p-b88d6532c9e1542b40437d30",
+      "startSeconds": 22.567999999999998
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Pickles – 9-yo intact DSH cat with diabetic ketoacidosis; euthanasia and private cremation",
+  "topics": [
+    "p-08b723bead1f656f08a31548",
+    "p-8ea52bb9f24f66c9325623be"
+  ]
+}

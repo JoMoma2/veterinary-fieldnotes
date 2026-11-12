@@ -1,0 +1,324 @@
+{
+  "date": "2026-11-11",
+  "id": "p-d9fe04dcd6dae18f05131c06",
+  "origin": "authorized-record",
+  "processing": "partial",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.221356Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "recordings": [
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.1116666666667,
+      "id": "p-c5e5cee7ad764f77dfa0d305",
+      "sequence": 0
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 535.7629166666667,
+      "id": "p-b196d6941120ef7df729be8e",
+      "sequence": 1
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 452.05916666666667,
+      "id": "p-277fd96203fae4b98a5d9a4d",
+      "sequence": 2
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 633.7329166666667,
+      "id": "p-863698aa862953cc74e22466",
+      "sequence": 4
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.6166666666667,
+      "id": "p-797eff53c59e13d18e314758",
+      "sequence": 5
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.6166666666667,
+      "id": "p-910c11578534219fcd714cd1",
+      "sequence": 6
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 487.6195833333333,
+      "id": "p-1962c2cc4c00da4bf355b151",
+      "sequence": 7
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 60.8525,
+      "id": "p-bffbd1f73e7f8bd3f43772f8",
+      "sequence": 10
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.1116666666667,
+      "id": "p-28636f62e4d4a238bba9b1e4",
+      "sequence": 11
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5745833333333,
+      "id": "p-393f63a3517cf7a423455ee6",
+      "sequence": 12
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5325,
+      "id": "p-0982b43456e98b6f03645ef8",
+      "sequence": 13
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5745833333333,
+      "id": "p-9dbe163b8b61bb2c91385f4e",
+      "sequence": 14
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 112.57291666666667,
+      "id": "p-1f406b415bf6bb77310bb59f",
+      "sequence": 15
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.65875,
+      "id": "p-0d33cd43f044690e96937fbc",
+      "sequence": 16
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5325,
+      "id": "p-12a205d8407aa60c6af4c85d",
+      "sequence": 17
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.3220833333334,
+      "id": "p-f6e3ed47b79a3f65e1dae9bf",
+      "sequence": 19
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.4904166666666,
+      "id": "p-df01d3badfe0999638057b34",
+      "sequence": 20
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 39.34791666666667,
+      "id": "p-e489ea2077f08b5f411810f4",
+      "sequence": 21
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 281.62166666666667,
+      "id": "p-5550a3a7424c9cb9eb7f3721",
+      "sequence": 22
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.65875,
+      "id": "p-fed7c4b559943c3e3832899d",
+      "sequence": 23
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 169.38541666666666,
+      "id": "p-4fd0ee7f1f4439fde9140b99",
+      "sequence": 24
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 240.38,
+      "id": "p-52a4c8a62f015c05c6fb37cb",
+      "sequence": 30
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.3220833333334,
+      "id": "p-438a7d83ad35df18437f8596",
+      "sequence": 35
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.6166666666667,
+      "id": "p-4c695ae7569c55fc21dd3a77",
+      "sequence": 36
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5745833333333,
+      "id": "p-fbc1791aa9b74173ff5d15b5",
+      "sequence": 37
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5745833333333,
+      "id": "p-2f3859036bf34fc73081252a",
+      "sequence": 38
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 613.0279166666667,
+      "id": "p-8dbcd7618a00d80b15776fe7",
+      "sequence": 39
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.4904166666666,
+      "id": "p-87f63c5ad493cbb84d3c5121",
+      "sequence": 40
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 277.07666666666665,
+      "id": "p-bc6bb015a97ab5fc90bf2861",
+      "sequence": 41
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 399.7495833333333,
+      "id": "p-3d4c5968733405d0d96162c6",
+      "sequence": 42
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.7429166666667,
+      "id": "p-cff270a313ee741118d5529c",
+      "sequence": 43
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5325,
+      "id": "p-b5df0f245625736d98fff721",
+      "sequence": 44
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5325,
+      "id": "p-3ae6642202823921a81a3756",
+      "sequence": 45
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.5325,
+      "id": "p-3afe4a4132728921a158c05d",
+      "sequence": 47
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.4483333333334,
+      "id": "p-dab13e4acd244a5f531120c2",
+      "sequence": 48
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.1116666666667,
+      "id": "p-0bc720b638c3d31168653e11",
+      "sequence": 51
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.6166666666667,
+      "id": "p-6ed42f54d483b50ddea6b5d6",
+      "sequence": 52
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 634.65875,
+      "id": "p-1532d6c14d2eff2e96bef07f",
+      "sequence": 53
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 318.4025,
+      "id": "p-3202d60b13c33515ff889101",
+      "sequence": 54
+    },
+    {
+      "capturedAt": null,
+      "clockConfidence": "unknown",
+      "durationSeconds": 102.05208333333333,
+      "id": "p-b88d6532c9e1542b40437d30",
+      "sequence": 55
+    }
+  ],
+  "schemaVersion": 1,
+  "summary": "Source-linked veterinary educational notes. AI extraction; uncertainties retained.",
+  "timezone": "Unknown until configured",
+  "title": "Learning archive · 2026-11-11",
+  "topics": [
+    "p-ea4064c1816e07d7c0edaa73",
+    "p-dc7d536ae9653b2c898d5ec7",
+    "p-e4233e2bc8e95ec67ceee5d4",
+    "p-28c556c7a8e9f51514b94736",
+    "p-18e0fcdc5795b356a3764f91",
+    "p-32f89cc299bb4f61daed6008",
+    "p-3f43271a61a7a9b72ab78db1",
+    "p-e17355d9d7fd6b9c3c9c18dc",
+    "p-19b955abe0da120bdccf38b1",
+    "p-839abaec89ca200b69686ae4",
+    "p-e3d7fa6c802df6316f1fa346",
+    "p-08b723bead1f656f08a31548",
+    "p-8ea52bb9f24f66c9325623be",
+    "p-aa2c308a893b440490632dbc",
+    "p-3d2b021945f5e7e834c74d1a",
+    "p-d2222d70e8a98144b26a5e8c",
+    "p-f7dd7f6e142d15c47ea6a2ab",
+    "p-918bf2cb855c8e0826376b29",
+    "p-3f05a6d0a75aaaeed1402445",
+    "p-fbc3c57c547358d034158dcf",
+    "p-a5388f5e8ee34b43e3680202",
+    "p-9544e9a195551e178b5baf26",
+    "p-729754ec6068dab68f3ec8d6"
+  ]
+}

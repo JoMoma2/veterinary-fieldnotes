@@ -1,0 +1,100 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X presented lethargic, not eating or drinking, with a known history of heart murmur."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X was lethargic and difficult to transport; the owner noted that when the door opened, Patient X would try to bolt, and the handler had to carry him physically."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X has a self-taught habit of covering himself with a blanket at home, which the owner described as cute and something they wish their dog would do."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The plan was to place an IV catheter in Patient X and run saline through it. No sedation was planned; the procedure was described as a 'quick line' lasting approximately five to ten minutes."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "[recorded-reasoning] The IV could not be done in Patient X's room because ICU personnel needed to remain at the station in case further emergencies arrived during an already heavily occupied shift."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The owner's main concern was that Patient X might come back sedated after the procedure; this concern was explicitly addressed and dismissed by the team."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The IV setup was located in ICU, and the team was preparing the IV line (referred to as 'the youth line' in the ASR, likely 'IV line')."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "The reason for the IV catheter beyond maintaining vascular access is not stated in the available blocks. No medication other than saline was mentioned for the initial line. The underlying cause of the lethargy and the significance of the heart murmur in the current presentation are not discussed."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-6b6ec6f9e4130bc85f7641d6"
+      ],
+      "text": "Patient X's species is not explicitly stated in any block. The owner's comparison of Patient X's blanket behavior to what they wish their dog would do strongly implies Patient X is a cat, but no block says 'cat' or 'feline' in direct reference to Patient X."
+    }
+  ],
+  "id": "p-93c92d0cc3bc3ec8fd92646f",
+  "linkBasis": "Name 'Patient X' is stated in the triage summary, the IV placement discussion, and the owner interaction about the cat's blanket. The heart-murmur history and lethargy presentation are tied to this name.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Patient X",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.218520Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-6b6ec6f9e4130bc85f7641d6"
+  ],
+  "species": "Unknown",
+  "summary": "Patient X, a patient with a known history of heart murmur, was triaged as lethargic and not eating or drinking. During a heavily occupied shift, the team needed to place an IV catheter in Patient X but faced a logistical conflict: ICU personnel were needed back at the station in case further emergencies arrived, so the owner was asked to transport Patient X to the treatment area. The owner's primary concern was whether Patient X would be sedated for the procedure. The team clarified that no sedation would be used, that the procedure would involve only setting a quick IV catheter and running saline, and that Patient X would be returned to the room within approximately five to ten minutes. Patient X was difficult to move due to his lethargy, and the owner had to physically carry him. The IV setup was confirmed to be in ICU, and the team was preparing the line.",
+  "title": "Patient X – Cat with heart murmur, lethargy; IV catheter placement in ICU",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ],
+  "uncertainties": [
+    "Patient X's species is strongly implied to be a cat by the owner's comparison to their dog, but no block explicitly states 'cat' or 'feline' for Patient X.",
+    "The medical reason for needing IV access beyond saline maintenance is not stated in the available blocks. No diagnosis, fluid plan, or cardiac workup is discussed.",
+    "The heart murmur is listed as history in the triage summary, but its current clinical significance, severity, or any planned cardiac evaluation is not addressed in the available recordings.",
+    "The b0162 mention of Patient X ('I my guess is that Patient X did not eat it') occurs in a block focused on euthanasia paperwork and paw-print supplies; it is unclear whether this refers to the same Patient X or is an unrelated aside.",
+    "The b0278 reference ('Room is Pickles Patient X') appears in the context of a different patient (Pickles, a diabetic cat) and a new patient (Patient X); this 'Patient X' is almost certainly not the same patient.",
+    "The outcome of Patient X's ICU stay, the IV placement, and any subsequent treatment or disposition are not captured in the available blocks.",
+    "The term 'youth line' in b0093 is almost certainly an ASR error for 'IV line,' but this is an inference, not a verified correction.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

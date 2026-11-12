@@ -1,0 +1,393 @@
+{
+  "account": "No fully cited summary accepted. Review the individually cited details below.\n\n[owner-report] Bella was a 12-year-old female Golden Doodle who had been running five miles a day until last year, when she 'retired herself.' She was described as very active and in good health. She had a well-check a couple of weeks prior to presentation.\n[owner-report] On the morning of presentation Bella was normal. She had a normal breakfast, attended a grooming appointment at 1 pm, and was picked up at approximately 3 pm. The groomer reported that she had vomited once. She appeared wobbly and weak when the owner was picking her up and walking her to the car.\n[owner-report] After arriving home, Bella lay on her bed and did not move for four to five hours. She had one bowel movement in the bed. The owners noted this was highly unusual for her. When they tried to lift her to clean the bed, she stood up but could not walk—falling to the right and left, splaying her legs.\n[owner-report] Bella showed no tail-wag when her owner's partner came home, no acknowledgement, and no interest in food. The owners emphasized these behaviors were very unusual for her.\n[actual-treatment] The euthanasia was performed using two injections: the first was a sedation injection so the animal would not feel anything, followed by a second injection of the euthanasia solution. The state of Michigan required the staff to ask whether the animal had bitten anyone in the preceding ten days.\n[actual-treatment] A catheter with saline was in place at the time of euthanasia preparation, and medication was drawn up. The team waited for the owners to be ready before proceeding, using a doorbell for communication.\n[owner-report] The owners noted it was Bella's birthday and requested to wait approximately one hour before the procedure so she would not die on her birthday. The staff accommodated this request.\n[actual-treatment] The owners chose private cremation with a scattering-style urn. They were uncertain which specific urn design they wanted, so the staff recorded the order with a satin pouch so the owners could select an urn externally. The owners indicated they would call the next day (within a 72-hour window) to confirm the urn selection after consulting with family.\n[practical-technique] For the euthanasia positioning, the team lifted the animal onto a padded surface, noting the need for careful handling. The process involved a catheter line with saline, drawn-up medication, and a two-injection protocol. The staff used a doorbell system to coordinate timing with the owners.\n[unknown] The specific underlying cause of Bella's sudden collapse was not identified or stated in the available transcript. The team discussed the Giardia finding but characterized it as an incidental detection inconsistent with the acute presentation. No definitive diagnosis for the collapse was recorded in the blocks reviewed. The staff noted they did not know what condition the dog came in at when discussing the owners' initial calmness.\n[owner-report] The owners reported that the dog's previous veterinary care included a well-check a couple of weeks prior where a few Giardia organisms were found in the stool. The five-day metronidazole course (and possibly an additional product referred to as 'flagell') was completed the day of presentation. The owners also noted the dog was not an adventurous eater, did not visit dog parks, and the family was with her constantly.\n[unknown] The transcript references a 'flagell' product in addition to metronidazole for the Giardia treatment. The exact identity of this product is unclear from the ASR text and could not be confirmed. It may be a misspelling or ASR error for another anti-parasitic agent.\n\nWhen presenting aftercare options after euthanasia, staff should walk through all available choices (home burial, group cremation, private cremation) with pricing, include free memorial options like ink paw prints and clay paw prints, explain the logistics of urn shipping (turnaround time, signature requirements, delivery attempt policy), and offer flexible packaging (satin pouch) when the owner is undecided on a specific urn. Confirming the state-mandated bite-history question is part of the euthanasia documentation process. Limitations: These observations come from a single euthanasia encounter and reflect the specific options and pricing available at this facility. They do not represent universal veterinary aftercare standards. The 'Trusted Journey' company, coral reef program, and specific pricing are facility-specific details.\nWhen an owner requests to delay a euthanasia procedure for a personal reason (in this case, the animal's birthday), staff can accommodate the wait by offering a private space, refreshments, and a doorbell for when the owners are ready. The staff should validate the owner's concern while maintaining clinical readiness. Limitations: This is a single instance of accommodating a specific request. Not all facilities or situations may permit the same flexibility. The request was for approximately one hour.\n\nUncertainties: The specific underlying cause of Bella's sudden collapse (inability to walk, splaying legs, lack of responsiveness) was not identified in the available transcript blocks. The team noted they did not know the condition and discussed the Giardia finding as likely incidental, but no definitive diagnosis was recorded.; The product referred to as 'flagell' in the Giardia treatment (b0053) could not be confirmed from the ASR text. It may be a transcription error for another anti-parasitic agent. The exact treatment regimen beyond the metronidazole is uncertain.; The phrase 'They are a rule letter' in b0054 is unclear in context and may be an ASR error. Its intended meaning is unknown.; The b0042 reference to 'Stabilized DNR room eleven doctor. Ninety nine point three.' is likely referring to Bella given the room assignment and DNR context, but the 'ninety nine point three' value is not explicitly identified as a vital sign type (temperature, blood pressure, etc.) in the transcript.; The transcript does not record whether any diagnostic workup (blood work, imaging, toxicology) was performed on Bella before the euthanasia decision, or what findings, if any, contributed to the decision.; The owners' initial calm demeanor was noted by staff (b0055), but the full scope of the discussion between the veterinary team and the owners regarding the severity of the situation is not captured in the available blocks.; The 'GRD of rare live eggs' phrase in b0051 is ASR-uncertain and may not accurately represent the fecal test result terminology.",
+  "articleIds": [],
+  "caseIds": [
+    "p-5f1aaad8113868145dfbcae4"
+  ],
+  "conclusions": "The identity of 'Bella' is explicitly and consistently stated across the clinical thread: in the history intake request (b0044), the summary to the doctor (b0053), the room assignment and DNR status (b0042, b0044), the euthanasia authorization (b0095), the aftercare discussion (b0094, b0131), and a post-procedure reference to a blanket (b0214). All clinical details (Golden Doodle breed, age, giardia history, groomer visit, sudden inability to walk) are narrated in a continuous conversational thread that is unambiguously about the same patient. No identity conflict or competing patient appears within these blocks. The association is explicit and secure.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "Bella was a 12-year-old female Golden Doodle who had been running five miles a day until last year, when she 'retired herself.' She was described as very active and in good health. She had a well-check a couple of weeks prior to presentation."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "On the morning of presentation Bella was normal. She had a normal breakfast, attended a grooming appointment at 1 pm, and was picked up at approximately 3 pm. The groomer reported that she had vomited once. She appeared wobbly and weak when the owner was picking her up and walking her to the car."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "After arriving home, Bella lay on her bed and did not move for four to five hours. She had one bowel movement in the bed. The owners noted this was highly unusual for her. When they tried to lift her to clean the bed, she stood up but could not walk—falling to the right and left, splaying her legs."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "Bella showed no tail-wag when her owner's partner came home, no acknowledgement, and no interest in food. The owners emphasized these behaviors were very unusual for her."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The euthanasia was performed using two injections: the first was a sedation injection so the animal would not feel anything, followed by a second injection of the euthanasia solution. The state of Michigan required the staff to ask whether the animal had bitten anyone in the preceding ten days."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "A catheter with saline was in place at the time of euthanasia preparation, and medication was drawn up. The team waited for the owners to be ready before proceeding, using a doorbell for communication."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners noted it was Bella's birthday and requested to wait approximately one hour before the procedure so she would not die on her birthday. The staff accommodated this request."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners chose private cremation with a scattering-style urn. They were uncertain which specific urn design they wanted, so the staff recorded the order with a satin pouch so the owners could select an urn externally. The owners indicated they would call the next day (within a 72-hour window) to confirm the urn selection after consulting with family."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "[practical-technique] For the euthanasia positioning, the team lifted the animal onto a padded surface, noting the need for careful handling. The process involved a catheter line with saline, drawn-up medication, and a two-injection protocol. The staff used a doorbell system to coordinate timing with the owners."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The specific underlying cause of Bella's sudden collapse was not identified or stated in the available transcript. The team discussed the Giardia finding but characterized it as an incidental detection inconsistent with the acute presentation. No definitive diagnosis for the collapse was recorded in the blocks reviewed. The staff noted they did not know what condition the dog came in at when discussing the owners' initial calmness."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The owners reported that the dog's previous veterinary care included a well-check a couple of weeks prior where a few Giardia organisms were found in the stool. The five-day metronidazole course (and possibly an additional product referred to as 'flagell') was completed the day of presentation. The owners also noted the dog was not an adventurous eater, did not visit dog parks, and the family was with her constantly."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-ca1353b60a50b13b458da11e"
+      ],
+      "text": "The transcript references a 'flagell' product in addition to metronidazole for the Giardia treatment. The exact identity of this product is unclear from the ASR text and could not be confirmed. It may be a misspelling or ASR error for another anti-parasitic agent."
+    }
+  ],
+  "id": "p-ca1353b60a50b13b458da11e",
+  "order": 600043,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.293024Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 300.28,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 182.592
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 343.4,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 300.85600000000005
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 389.08,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 345.544
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 433.76800000000003,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 390.264
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 467.48,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 435.704
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 500.776,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 467.816
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 558.008,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 505.57599999999996
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 591.048,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 558.984
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 634.376,
+      "recordingId": "p-910c11578534219fcd714cd1",
+      "startSeconds": 591.624
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 27.183999999999997,
+      "recordingId": "p-1962c2cc4c00da4bf355b151",
+      "startSeconds": 0.08
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 60.888,
+      "recordingId": "p-1962c2cc4c00da4bf355b151",
+      "startSeconds": 27.976
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 133.096,
+      "recordingId": "p-1962c2cc4c00da4bf355b151",
+      "startSeconds": 61.087999999999994
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 412.248,
+      "recordingId": "p-1962c2cc4c00da4bf355b151",
+      "startSeconds": 133.65599999999998
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 417.496,
+      "recordingId": "p-1962c2cc4c00da4bf355b151",
+      "startSeconds": 413.496
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 276.232,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 145.176
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 356.776,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 276.88800000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 385.64799999999997,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 357.91200000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 428.08,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 387.03200000000004
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 463.912,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 428.2
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 480.2,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 464.28000000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 498.36,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 480.44
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 534.136,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 498.872
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 571.672,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 535.1120000000001
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 607.784,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 573.56
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 634.4240000000001,
+      "recordingId": "p-9dbe163b8b61bb2c91385f4e",
+      "startSeconds": 608.568
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 33.688,
+      "recordingId": "p-1f406b415bf6bb77310bb59f",
+      "startSeconds": 3.368
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 75.832,
+      "recordingId": "p-1f406b415bf6bb77310bb59f",
+      "startSeconds": 39.672
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 101.88,
+      "recordingId": "p-1f406b415bf6bb77310bb59f",
+      "startSeconds": 76.104
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 41.760000000000005,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 0.16
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 82.072,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 42.216
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 147.352,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 83.68799999999999
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 217.208,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 148.6
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 269.688,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 218.024
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 307.656,
+      "recordingId": "p-0d33cd43f044690e96937fbc",
+      "startSeconds": 270.152
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 470.472,
+      "recordingId": "p-fed7c4b559943c3e3832899d",
+      "startSeconds": 53.128
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 143.952,
+      "recordingId": "p-4fd0ee7f1f4439fde9140b99",
+      "startSeconds": 78.44
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 522.04,
+      "recordingId": "p-87f63c5ad493cbb84d3c5121",
+      "startSeconds": 294.248
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 95.80000000000001,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 59.872
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 60.472,
+      "recordingId": "p-3202d60b13c33515ff889101",
+      "startSeconds": 31.032
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 157.56,
+      "recordingId": "p-5550a3a7424c9cb9eb7f3721",
+      "startSeconds": 114.92
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Bella – 12-yo Golden Doodle with sudden collapse; euthanasia and aftercare planning",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ]
+}

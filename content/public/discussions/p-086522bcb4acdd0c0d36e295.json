@@ -1,0 +1,99 @@
+{
+  "account": "A staff member shares personal experience administering Posatex to their own dog, noting that the solution does not come out in discrete, countable drops but rather as a continuous stream. Because of this, when a prescription calls for a specific drop count (eight drops for Spot, q24h), the administrator must estimate the volume by feel in the ear canal rather than literally counting individual drops. The staff member also corrected an initial dosing-frequency error: Posatex is every 24 hours (not 12) and hydromorphone is every 8 hours (not 24). Practical advice given to Spot's owner included administering the pain medication (hydromorphone) first, waiting for it to take effect, then thoroughly cleaning the ear canal before applying the antibiotic solution, since the liquid does not penetrate well through earwax or debris.\n\n[practical-technique] Posatex (an ophthalmic/otic antibiotic solution) does not dispense in discrete, countable drops from the bottle; it comes out as a continuous stream. When a prescription specifies a drop count, the administrator must estimate the approximate volume by feel in the ear canal rather than counting individual drops.\n[actual-treatment] Spot's Posatex prescription is eight drops every 24 hours. The staff member initially misstated the frequency as every 12 hours and corrected it to every 24 hours at discharge.\n[actual-treatment] Spot's concurrent pain medication is hydromorphone, one tablet every 8 hours for 3 days. The staff member initially misstated this as every 24 hours and corrected it.\n[unknown] The specific identity of the dog the staff member personally treated with Posatex a month prior is not stated in the transcript. The anecdote is offered as a practical reference, not as a clinical case.\n[recorded-reasoning] The staff member acknowledged that Posatex does not come out in countable drops and that the prescribed 'eight drops' is an approximation that must be estimated by volume/feel in the canal, acknowledging the imprecision of the dosing instruction.\n\nWhen a liquid ophthalmic or otic solution (such as Posatex) dispenses as a continuous stream rather than discrete drops, the prescribed 'drop count' must be estimated by approximate volume in the ear canal. The administrator develops a tactile feel for the target volume rather than counting individual drops. Limitations: This is a single staff member's personal anecdote about administering to their own dog. It is not a formalized institutional protocol or a statement from the product manufacturer. The exact method (squeezing a specific volume, using a syringe tip, etc.) is described informally and may not represent the optimal technique for all situations.\nDosing frequencies must be double-checked and corrected before the owner leaves. In this case, Posatex was initially stated as q12h and hydromorphone as q24h, but the correct frequencies were Posatex q24h and hydromorphone q8h. The staff member explicitly acknowledged the initial error and provided the correction. Limitations: This reflects a single instance of a verbal correction at discharge. It does not establish a systemic issue or a verified final prescription; the transcript captures the correction conversation but the ultimate written prescription details are not independently verified here.\n\nUncertainties: The identity of the dog the staff member personally treated with Posatex a month ago is not stated; it is offered only as a practical anecdote and cannot be confirmed as any patient on this shift.; Whether the Posatex bottle/tip design universally fails to produce discrete drops, or whether this was specific to the staff member's experience (e.g., a damaged tip, a different lot, or a different administration method), is unclear. The staff member states flatly 'It does not come out in drops' without elaboration.; The exact technique the staff member used to estimate volume ('shoved the needle in my dog's ear') is described informally and may not represent a safe or recommended method. No institutional guideline for this estimation is cited.; The working diagnosis for Spot (ear infection) was not confirmed by cytology or culture; the staff member acknowledged this explicitly. The Posatex prescription was based on clinical suspicion of infection (pain, discharge) without laboratory confirmation.; The initial dosing frequency error (Posatex q12h, hydromorphone q24h) was verbally corrected, but the transcript does not confirm whether the written discharge paperwork already reflected the correct frequencies or required a physical correction.",
+  "articleIds": [
+    "p-45ce4ed4d54b7ad18ca9129b"
+  ],
+  "caseIds": [],
+  "conclusions": "The technique anecdote is a staff member's personal experience with their own dog (b0225, b0229). It is referenced in the context of instructing Spot's owner on the 8-drop Posatex prescription, but the identity of the dog the staff member treated personally is not stated and cannot be confirmed as Spot. The dosing correction (b0226) is explicitly for Spot's discharge. The practical technique note is general and transferable; the specific patient link is Spot (confirmed via b0215, b0226, b0229).",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-086522bcb4acdd0c0d36e295"
+      ],
+      "text": "[practical-technique] Posatex (an ophthalmic/otic antibiotic solution) does not dispense in discrete, countable drops from the bottle; it comes out as a continuous stream. When a prescription specifies a drop count, the administrator must estimate the approximate volume by feel in the ear canal rather than counting individual drops."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-086522bcb4acdd0c0d36e295"
+      ],
+      "text": "Spot's Posatex prescription is eight drops every 24 hours. The staff member initially misstated the frequency as every 12 hours and corrected it to every 24 hours at discharge."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-086522bcb4acdd0c0d36e295"
+      ],
+      "text": "Spot's concurrent pain medication is hydromorphone, one tablet every 8 hours for 3 days. The staff member initially misstated this as every 24 hours and corrected it."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-086522bcb4acdd0c0d36e295"
+      ],
+      "text": "The specific identity of the dog the staff member personally treated with Posatex a month prior is not stated in the transcript. The anecdote is offered as a practical reference, not as a clinical case."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-086522bcb4acdd0c0d36e295"
+      ],
+      "text": "[recorded-reasoning] The staff member acknowledged that Posatex does not come out in countable drops and that the prescribed 'eight drops' is an approximation that must be estimated by volume/feel in the canal, acknowledging the imprecision of the dosing instruction."
+    }
+  ],
+  "id": "p-086522bcb4acdd0c0d36e295",
+  "order": 4200223,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.292033Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 213.848,
+      "recordingId": "p-3d4c5968733405d0d96162c6",
+      "startSeconds": 133.464
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 347.64,
+      "recordingId": "p-3d4c5968733405d0d96162c6",
+      "startSeconds": 214.07999999999998
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 251.56,
+      "recordingId": "p-cff270a313ee741118d5529c",
+      "startSeconds": 226.2
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 273.008,
+      "recordingId": "p-cff270a313ee741118d5529c",
+      "startSeconds": 252.28
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 165.57600000000002,
+      "recordingId": "p-cff270a313ee741118d5529c",
+      "startSeconds": 141.976
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Technique – Administering Posatex ear drops that do not dispense in clear drops",
+  "topics": [
+    "p-fbc3c57c547358d034158dcf"
+  ]
+}

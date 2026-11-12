@@ -1,0 +1,143 @@
+{
+  "account": "A single, continuous vitals-check conversation (b0075–b0082) involves a patient referred to as 'Patient X' at the start, 'Patient X' in the middle, and 'Patient X' at the end of the opening line. The speaker (who introduces themselves as [private detail removed]) performs a brief triage vitals check to confirm the patient is stable enough to wait in the queue. The patient is in a carrier, is described as extremely anxious, and the owner reports the animal has been wobbly, possibly hurt a leg (attempting to drag it, unable to manage a couple of stairs from a sunken living room), and has 'really bad anxiety' for which they are on a prescription medication. At the time of the check the patient had received only a small fraction of a liquid anxiety medication dose (approximately a quarter of the 1.2 mL prescribed amount). Vitals obtained: gums appeared acceptable, respiratory effort was assessed by watching abdominal movement, a pulse could not be palpated, and a temperature was deferred because the patient was too uncooperative. The patient was declared stable ('not worried about not dying') and asked to wait, with the explanation that many critical patients were being handled simultaneously. Species is not explicitly confirmed; the animal is referred to as 'he' and 'him,' kept in a carrier, and called a 'good boy,' but the ASR is garbled enough ('He's a printoy') that species cannot be stated with certainty.\n\n[owner-report] The owner reports the patient has been wobbly, was attempting to drag (a limb), and was unable to step up a couple of stairs from a sunken living room. The owner and staff both suspect a limb was injured ('we physically think he hurt this one').\n[owner-report] The owner reports the patient has 'really bad anxiety' and is on a prescription medication for it. A medication attempt was made before the current visit (or shortly before the vitals check), but the patient was too fidgety to receive the full dose; only about a quarter of the 1.2 mL liquid dose was administered.\n[observation] During the vitals check, the patient's gums were assessed and appeared acceptable ('Has a good one'). Respiratory effort was assessed by the owner holding the patient and the clinician watching the abdomen move. A pulse could not be palpated despite at least two attempts. A rectal temperature was deferred because the patient would not cooperate.\n[observation] The patient is kept in a carrier, is described as not liking being in it, and is referred to as a 'good boy' while being coaxed out. The ASR includes 'He's a printoy' which is unclear and does not definitively identify species.\n[observation] The clinician concludes the patient is stable enough to wait in the queue, explicitly stating 'not worried about not dying' and 'not worried about them dying instantly.' The patient is asked to wait because many critical patients are being handled.\n[unknown] Species of the patient is not explicitly stated. The animal is referred to as 'he'/'him,' kept in a carrier, and called a 'good boy,' but the ASR fragment 'He's a printoy' is garbled and does not confirm whether the patient is a cat, small dog, or other species.\n[unknown] The cause of the wobbly gait and possible limb injury is unknown. The owner suspects the patient hurt a leg, but no examination finding, imaging, or diagnosis is recorded in these blocks. The phrase 'He just had this weird gay happening' is likely an ASR error (possibly 'gait') and does not constitute a clear clinical description.\n[unknown] The full medication details (drug name, indication beyond 'anxiety,' and whether the 1.2 mL dose is the full prescribed volume or a per-dose amount) are not clearly stated. The ASR is garbled around the dosing discussion, and the phrase 'he was fresh and I think he wore more of it than what he got in him' is unclear.\n\nIn a highly anxious, uncooperative patient, a full set of vital signs may not be obtainable during a brief triage check. The clinician here assessed gums and respiratory effort (by watching abdominal movement with the owner assisting), attempted a pulse twice without success, and deferred temperature. The patient was still declared stable based on the available data and the absence of overt distress signs beyond anxiety. This demonstrates a pragmatic approach to triage vitals when the patient cannot be fully restrained or cooperated with. Limitations: This is a single observation of a pragmatic triage approach. The transcript does not state the threshold for what vitals would have changed the 'stable' assessment, nor does it document whether the deferred pulse and temperature were obtained later. No general protocol is established by this single instance.\nAdministering a liquid oral medication to an extremely anxious, fidgety patient can result in significant under-dosing. In this case, only about a quarter of the 1.2 mL prescribed dose was successfully administered because the patient moved and the owner reports the patient 'wore more of it than what he got in him' (exact meaning unclear from ASR). This highlights the practical difficulty of accurate liquid medication administration in uncooperative patients. Limitations: The exact drug, the reason for the low-dose attempt (anxiolysis versus another indication), and the outcome are not documented. The ASR is heavily garbled around this passage, so the precise dosing details are uncertain. This is a single anecdote, not a generalizable guideline.\n\nUncertainties: The identity of the patient: 'Patient X,' 'Patient X,' and 'Patient X' appear in the same continuous conversation and most likely refer to the same animal, but no block explicitly equates the names. This is a reasonable inference from conversational flow, not confirmed identity.; Species of the patient is unconfirmed. The ASR fragment 'He's a printoy' is garbled. The use of 'good boy,' 'he,' and 'carrier' is consistent with a small dog or possibly a cat, but no block states the species explicitly.; The cause of the wobbly gait and possible limb injury is unknown. The owner's suspicion of a hurt leg and the observed dragging are not corroborated by any examination finding in these blocks.; The phrase 'He just had this weird gay happening' (b0079) is almost certainly an ASR error. It may refer to a gait abnormality, but the intended meaning is unclear and should not be interpreted as a specific clinical finding.; The medication administered (or attempted) is not identified by name. It is described as a 'prescription med' for 'really bad anxiety' in a 1.2 mL liquid form, but the drug name, class, and full dosing regimen are not recorded.; The extent of the limb injury (if any) is unknown. No imaging, neurological exam, or orthopedic exam is documented in these blocks. The patient was deferred for a full workup.; The full clinical picture beyond this brief vitals check is not available in the cited blocks. The patient's history, previous vet visits, and the eventual diagnosis or disposition are not recorded here.",
+  "articleIds": [
+    "p-7bd8d0b05b3ed98cefe11208",
+    "p-9660d80b0a4083b8b3a004c4"
+  ],
+  "caseIds": [],
+  "conclusions": "The names 'Patient X' (b0075), 'Patient X' (b0076, b0081), and 'Patient X' (end of b0075) all appear within a single continuous speaker-to-owner conversation about the same patient in the same carrier, with the same clinical actions performed sequentially. The most natural reading is that these are ASR variations of one patient's name. However, no block contains a literal cross-reference that confirms 'Patient X = Patient X' or 'Patient X = Patient X.' The association is therefore based on conversational continuity and consistent clinical description rather than explicit identity evidence. This is the strongest available link, but it remains a reasonable inference rather than a confirmed fact.",
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The owner reports the patient has been wobbly, was attempting to drag (a limb), and was unable to step up a couple of stairs from a sunken living room. The owner and staff both suspect a limb was injured ('we physically think he hurt this one')."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The owner reports the patient has 'really bad anxiety' and is on a prescription medication for it. A medication attempt was made before the current visit (or shortly before the vitals check), but the patient was too fidgety to receive the full dose; only about a quarter of the 1.2 mL liquid dose was administered."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "During the vitals check, the patient's gums were assessed and appeared acceptable ('Has a good one'). Respiratory effort was assessed by the owner holding the patient and the clinician watching the abdomen move. A pulse could not be palpated despite at least two attempts. A rectal temperature was deferred because the patient would not cooperate."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The patient is kept in a carrier, is described as not liking being in it, and is referred to as a 'good boy' while being coaxed out. The ASR includes 'He's a printoy' which is unclear and does not definitively identify species."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The clinician concludes the patient is stable enough to wait in the queue, explicitly stating 'not worried about not dying' and 'not worried about them dying instantly.' The patient is asked to wait because many critical patients are being handled."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "Species of the patient is not explicitly stated. The animal is referred to as 'he'/'him,' kept in a carrier, and called a 'good boy,' but the ASR fragment 'He's a printoy' is garbled and does not confirm whether the patient is a cat, small dog, or other species."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The cause of the wobbly gait and possible limb injury is unknown. The owner suspects the patient hurt a leg, but no examination finding, imaging, or diagnosis is recorded in these blocks. The phrase 'He just had this weird gay happening' is likely an ASR error (possibly 'gait') and does not constitute a clear clinical description."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-364c88ed3c6e5c89cfe8f1a5"
+      ],
+      "text": "The full medication details (drug name, indication beyond 'anxiety,' and whether the 1.2 mL dose is the full prescribed volume or a per-dose amount) are not clearly stated. The ASR is garbled around the dosing discussion, and the phrase 'he was fresh and I think he wore more of it than what he got in him' is unclear."
+    }
+  ],
+  "id": "p-364c88ed3c6e5c89cfe8f1a5",
+  "order": 1200074,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:38:22.294200Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 548.792,
+      "recordingId": "p-393f63a3517cf7a423455ee6",
+      "startSeconds": 374.584
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 579.6800000000001,
+      "recordingId": "p-393f63a3517cf7a423455ee6",
+      "startSeconds": 551.816
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 632.2639999999999,
+      "recordingId": "p-393f63a3517cf7a423455ee6",
+      "startSeconds": 580.296
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 68.792,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 3.2880000000000003
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 96.68,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 69.96
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 138.136,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 98.04
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 179.73600000000002,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 138.456
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 209.464,
+      "recordingId": "p-0982b43456e98b6f03645ef8",
+      "startSeconds": 180.28
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Patient X / Patient X – Anxious patient with wobbly gait and possible limb injury; stable at vitals check but deferred for full workup",
+  "topics": [
+    "p-aa2c308a893b440490632dbc",
+    "p-3d2b021945f5e7e834c74d1a"
+  ]
+}

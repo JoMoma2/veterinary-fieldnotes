@@ -130,3 +130,11 @@ def test_identity_registry_checks_questions_and_reuses_only_unchanged_record_rev
     second=ensure_registry(store,source,source,cfg,fields,judge)
     assert first['inputSha256']!=second['inputSha256']
     assert calls==[['q-private'],['a-new']]
+
+
+@pytest.mark.parametrize('species,expected',[('Dog','Dog X'),('Cat','Cat X'),('Unknown','Patient X')])
+def test_unnamed_case_with_known_species_uses_exact_species_fallback(species,expected):
+    lib=empty_library();lib['cases']=[{'id':'c-unnamed','title':'Unnamed case','summary':'Notes',
+        'species':species,'patientLabel':'Unknown','facts':[],'uncertainties':[],'linkBasis':'Source evidence'}]
+    registry={'caseNames':{'c-unnamed':'Unknown'},'entities':[]}
+    assert anonymize(lib,registry,fields)['cases'][0]['patientLabel']==expected

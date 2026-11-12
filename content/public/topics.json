@@ -1,38 +1,140 @@
 [
   {
-    "id": "feline-medicine",
-    "name": "Feline medicine",
-    "description": "Clinical observations and diagnostic questions in cats.",
-    "color": "green"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-ea4064c1816e07d7c0edaa73",
+    "name": "Albuterol (beta-2 agonist) toxicity in dogs: expected signs and monitoring window"
   },
   {
-    "id": "emergency-care",
-    "name": "Emergency care",
-    "description": "Assessment, uncertainty, and decisions in the ER.",
-    "color": "rose"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-18e0fcdc5795b356a3764f91",
+    "name": "Clinical significance of vomiting breaking through maropitant therapy"
   },
   {
-    "id": "clinical-reasoning",
-    "name": "Clinical reasoning",
-    "description": "Evidence, differentials, and what remains unknown.",
-    "color": "blue"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-dc7d536ae9653b2c898d5ec7",
+    "name": "Normal systolic blood pressure range in dogs"
   },
   {
-    "id": "equipment",
-    "name": "Equipment & techniques",
-    "description": "Device observations, troubleshooting, and practical learning.",
-    "color": "amber"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-3f43271a61a7a9b72ab78db1",
+    "name": "Clinical discussions"
   },
   {
-    "id": "communication",
-    "name": "Communication",
-    "description": "Owner histories, team handovers, and questions worth asking.",
-    "color": "green"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-e3d7fa6c802df6316f1fa346",
+    "name": "Verifying and correcting verbal medication dosing instructions at discharge"
   },
   {
-    "id": "workflows",
-    "name": "Hospital workflows",
-    "description": "Reliable handovers and everyday systems.",
-    "color": "blue"
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-28c556c7a8e9f51514b94736",
+    "name": "Empiric broad-spectrum antibiotic use when infection source is unconfirmed"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-8ea52bb9f24f66c9325623be",
+    "name": "Euthanasia aftercare: owner options, paw prints, and cremation logistics"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-08b723bead1f656f08a31548",
+    "name": "Feline diabetic ketoacidosis: clinical difficulty and prognosis"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-19b955abe0da120bdccf38b1",
+    "name": "Undifferentiated seizure-like neurologic signs in a cat: limits of emergency bloodwork"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-e17355d9d7fd6b9c3c9c18dc",
+    "name": "Acute and maintenance anticonvulsant selection in feline seizure-like presentations"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-d2222d70e8a98144b26a5e8c",
+    "name": "IV catheter placement and site care in a matted/furred feline patient"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-3d2b021945f5e7e834c74d1a",
+    "name": "Practical difficulty of liquid oral medication administration in an anxious, fidgety patient"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-729754ec6068dab68f3ec8d6",
+    "name": "Medication order verification and modification authority"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-f7dd7f6e142d15c47ea6a2ab",
+    "name": "Administering IV medications exactly as prescribed without alteration"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-918bf2cb855c8e0826376b29",
+    "name": "Staff response to an occupational animal bite when no written SOP exists"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-a5388f5e8ee34b43e3680202",
+    "name": "Workplace protocol for occupational animal-bite injuries in veterinary settings"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-839abaec89ca200b69686ae4",
+    "name": "Clinical diagnosis of otitis externa without cytologic confirmation"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-fbc3c57c547358d034158dcf",
+    "name": "Estimating volume for ophthalmic/otic solutions that do not dispense in discrete drops"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-9544e9a195551e178b5baf26",
+    "name": "Secure disposal of documents containing client personally identifiable information"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-3f05a6d0a75aaaeed1402445",
+    "name": "Written authorization before supervised procedural learning"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-e4233e2bc8e95ec67ceee5d4",
+    "name": "Administering liquid oral medications to small-breed dogs"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-32f89cc299bb4f61daed6008",
+    "name": "Thoracic effusion: imaging, thoracentesis, and diagnostic reasoning"
+  },
+  {
+    "color": "green",
+    "description": "Source-extracted; private pending review.",
+    "id": "p-aa2c308a893b440490632dbc",
+    "name": "Triage vital-sign assessment in an uncooperative, anxious patient"
   }
 ]

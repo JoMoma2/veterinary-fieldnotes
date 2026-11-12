@@ -1,0 +1,127 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "Spot is a 14-week-old puppy described as 'chunky round' by staff."
+    },
+    {
+      "kind": "confirmed-diagnosis",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "The working diagnosis on admission was possible albuterol ingestion (toxicity)."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "A Nova blood-gas analysis and a comprehensive blood panel were ordered. The team noted there is no standalone 'comprehensive' order option; the CBC is typically included and crossed off as part of it."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "Spot's PCV was 38, which the clinician noted was 'not that low.'"
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "Systolic blood pressure was measured at 110 mmHg. A staff member asked if this was normal; the clinician confirmed it was, stating the normal range for a dog is approximately 80 to 180 mmHg."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "One dose of maropitant (referred to as 'sirenia' in the transcript) was administered as an anti-emetic."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "[recorded-reasoning] The clinician explained that the most common signs of albuterol toxicity are vomiting and diarrhea; in more severe cases, tachycardia and hypotension would be expected."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "[recorded-reasoning] Albuterol toxicity was described as 'very fast acting.' The monitoring window was set at 3–4 hours, with 6 hours as a safety margin. If Spot had not worsened within 3–4 hours, it was reasoned he likely did not ingest a large amount."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "[recorded-reasoning] Vomiting despite maropitant was flagged as a concerning ('bad') sign warranting immediate return to the clinic."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "[practical-technique] A bandage was applied (likely at an IV catheter site). The owner was specifically instructed not to let the puppy chew or eat the bandage, noting he had already attempted to remove one. The bandage was later removed before discharge."
+    },
+    {
+      "kind": "proposed-treatment",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "Discharge instructions included: feed normal diet, restrict activity, do not let the puppy out in the yard unsupervised, monitor closely for any changes, and return if vomiting occurs (especially through maropitant)."
+    },
+    {
+      "kind": "outcome",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "Spot was discharged home with his owners after the monitoring period, with the clinician's assessment that his continued stability was a very good sign."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-8d8068de7afaece1d8cfeb79"
+      ],
+      "text": "The exact quantity or concentration of albuterol ingested was not stated in the transcript. The clinician's inference that Spot 'probably did not get too much' was based on his clinical stability, not on a confirmed exposure amount."
+    }
+  ],
+  "id": "p-acfdfdab480f90e1ab11e97f",
+  "linkBasis": "Name 'Spot' is stated directly in multiple blocks alongside the albuterol-toxicity presentation, Nova/CBC ordering, PCV result, blood pressure check, maropitant administration, and discharge instructions.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Spot",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:12:33.218088Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-8d8068de7afaece1d8cfeb79"
+  ],
+  "species": "Unknown",
+  "summary": "Spot, a 14-week-old 'chunky round' puppy, presented for suspected albuterol ingestion. The team ordered a Nova blood-gas analysis and a comprehensive blood panel (with CBC included, as there is no standalone comprehensive option). A PCV of 38 was recorded, and a systolic blood pressure of 110 mmHg was measured and confirmed as within the normal 80–180 mmHg range for a dog. One dose of maropitant (sirenia) was administered for anti-nausea. The treating clinician explained to the owners that the most common signs of albuterol toxicity are vomiting and diarrhea, while more serious presentations would include tachycardia and hypotension. Because albuterol is fast-acting, the monitoring window was set at 3–4 hours (6 hours to be safe); the fact that Spot was still clinically stable at that point was interpreted as a very good sign suggesting he likely did not ingest a large amount. Discharge instructions included feeding his normal diet, restricting activity, keeping him out of the yard unsupervised, monitoring closely for any changes, and returning immediately if he vomited—especially if vomiting occurred despite the maropitant, which was flagged as a concerning sign. A bandage was applied at an IV site, and the owner was specifically warned not to let the puppy eat it, noting he had already attempted to chew off one.",
+  "title": "Spot – Albuterol toxicity in a 14-week-old puppy; discharge with monitoring",
+  "topics": [
+    "p-ea4064c1816e07d7c0edaa73",
+    "p-dc7d536ae9653b2c898d5ec7"
+  ],
+  "uncertainties": [
+    "The exact amount, concentration, and form of albuterol ingested by Spot is not stated anywhere in the transcript. All clinical reasoning about the likely dose is inferential, based on the puppy's continued stability.",
+    "The Nova blood-gas and comprehensive panel results (beyond the PCV of 38) are not fully detailed in the transcript. b0014 confirms the Nova was delivered to Person, and b0007 notes the Nova was still calibrating earlier, but specific analyte values are not quoted.",
+    "b0004 says 'He didn't get the sirenia' while b0070 (discharge) confirms 'We did give one dose of sirenia.' The most likely explanation is temporal ordering (the dose was administered between those two points), but the transcript does not explicitly confirm this sequence.",
+    "The identity of the person who initially 'poked' Spot is attributed to 'Person' in b0001 ('That was Person, not you'), but this is a single unverified reference and the speaker's own involvement is unclear.",
+    "Whether Spot actually ingested albuterol or whether exposure was merely suspected is not resolved in the transcript. The discharge summary uses the phrase 'possible ingestion of albuterol.'",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}

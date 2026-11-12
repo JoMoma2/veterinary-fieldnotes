@@ -1,0 +1,85 @@
+{
+  "account": "During a busy shift, a staff member expressed interest in practicing venipuncture. The experienced colleague explained that the clinic's normal protocol requires a written email authorization from management before a trainee is permitted to perform or learn the procedure. The experienced staff member recounted having been taught informally by another colleague (identified as Person) without such a document, and noted that the clinic's management tends to ask accountability questions (\"Who said that you can do that?\") if an unauthorized procedure is performed. The resolution agreed upon was that the interested staff member should obtain the email first, after which the experienced colleague would help them learn the procedure. No patient is involved in this exchange; it is a peer-to-peer workplace discussion about authorization and accountability for procedural learning.\n\n[recorded-reasoning] The experienced staff member explained that the clinic's normal routine is for management to send an email explicitly authorizing a trainee to begin learning a procedure before hands-on practice can occur.\n[recorded-reasoning] The experienced staff member acknowledged that they had previously been taught venipuncture informally by another colleague named Person, without the formal email authorization, and expressed discomfort with the lack of a documented approval process.\n[recorded-reasoning] The experienced colleague articulated the accountability concern: without written authorization, management could question who permitted the trainee to perform the procedure, and they expressed personal frustration at being placed on a list of staff who had already caused issues.\n[actual-treatment] The agreed-upon resolution was that the interested staff member would obtain the email authorization, and once received, the experienced colleague would assist them with learning venipuncture.\n[unknown] Whether the email authorization was ever actually obtained and the venipuncture training subsequently took place is not recorded in this shift's transcript.\n\nBefore assisting a trainee in performing a clinical procedure such as venipuncture, obtain written (email) authorization from clinic management. This protects both the trainee and the supervising staff member from accountability questions if an adverse event occurs. Limitations: This reflects one clinic's stated internal protocol as described by staff during a shift conversation. It is not a universal regulatory requirement and may vary by practice or jurisdiction. The transcript records the stated policy and the rationale given by the experienced colleague, not an externally verified regulatory standard.\n\nUncertainties: The exact identities and roles of the two staff members discussing venipuncture authorization are not confirmed beyond the reference to 'Person' as a past teacher. It is unclear whether 'Person' is the same Person referenced elsewhere in the shift.; Whether the email was ever sent and the training actually conducted is not documented in this transcript.; The experienced colleague's statement about being on a list of staff who had caused issues ('rocking their shit list') is a personal anecdote and its specific context is unclear.; The term 'vanipuncture' in the transcript is an ASR rendering of 'venipuncture'; no separate procedure is intended.",
+  "articleIds": [
+    "p-a3369dffca807a4f527bfb2d"
+  ],
+  "caseIds": [],
+  "conclusions": "This exchange is unassigned to any patient. It is a staff-to-staff conversation about workplace authorization for procedural training. The speaker expressing interest in learning venipuncture and the experienced colleague who explains the email-authorization protocol are two different staff members, but their exact names/roles beyond what is stated are not confirmed. The experienced colleague references having been taught by \"Person\" in the past. No patient chart, room, or clinical context is attached to this discussion.",
+  "facts": [
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-32f494f3b12bef86d554be9e"
+      ],
+      "text": "[recorded-reasoning] The experienced staff member explained that the clinic's normal routine is for management to send an email explicitly authorizing a trainee to begin learning a procedure before hands-on practice can occur."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-32f494f3b12bef86d554be9e"
+      ],
+      "text": "[recorded-reasoning] The experienced staff member acknowledged that they had previously been taught venipuncture informally by another colleague named Person, without the formal email authorization, and expressed discomfort with the lack of a documented approval process."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-32f494f3b12bef86d554be9e"
+      ],
+      "text": "[recorded-reasoning] The experienced colleague articulated the accountability concern: without written authorization, management could question who permitted the trainee to perform the procedure, and they expressed personal frustration at being placed on a list of staff who had already caused issues."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-32f494f3b12bef86d554be9e"
+      ],
+      "text": "The agreed-upon resolution was that the interested staff member would obtain the email authorization, and once received, the experienced colleague would assist them with learning venipuncture."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-32f494f3b12bef86d554be9e"
+      ],
+      "text": "Whether the email authorization was ever actually obtained and the venipuncture training subsequently took place is not recorded in this shift's transcript."
+    }
+  ],
+  "id": "p-32f494f3b12bef86d554be9e",
+  "order": 100009,
+  "origin": "authorized-record",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:23:25.286733Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "questions": [],
+  "schemaVersion": 1,
+  "segments": [
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 448.0,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 276.728
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 477.96,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 449.24
+    },
+    {
+      "clockConfidence": "unknown",
+      "clockTime": null,
+      "endSeconds": 499.88800000000003,
+      "recordingId": "p-b196d6941120ef7df729be8e",
+      "startSeconds": 479.84799999999996
+    }
+  ],
+  "shiftId": "p-d9fe04dcd6dae18f05131c06",
+  "title": "Teaching/authorization – Venipuncture learning requires written (email) approval",
+  "topics": [
+    "p-3f05a6d0a75aaaeed1402445"
+  ]
+}

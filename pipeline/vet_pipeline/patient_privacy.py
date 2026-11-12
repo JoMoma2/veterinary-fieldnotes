@@ -301,7 +301,10 @@ def anonymize(lib, registry, fields, alias_proof=None):
                 else:parent[parts[-1]] = value
             if group == 'cases':
                 original = registry['caseNames'].get(record['id'], '')
-                record['patientLabel'] = label({**local[key(original)], 'kind': 'patient'}) if key(original) in local else 'Patient X'
+                fallback = {'kind': 'patient', 'sex': 'unknown', 'species': {
+                    'dog': 'dog', 'canine': 'dog', 'cat': 'cat', 'feline': 'cat'
+                }.get(key(record.get('species', '')), 'unknown')}
+                record['patientLabel'] = label({**local.get(key(original), fallback), 'kind': 'patient'})
                 public = record['patientLabel']
                 alias_proof[(group, record['id'], 'patientLabel')] = [{'start': 0, 'end': len(public), 'label': public}]
     assert_anonymous(out, registry, fields, alias_proof)

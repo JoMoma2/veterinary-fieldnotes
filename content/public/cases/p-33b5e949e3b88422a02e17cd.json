@@ -1,0 +1,99 @@
+{
+  "diagnosis": null,
+  "facts": [
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "Dog X presented for decreased drinking and general malaise; the triage abbreviation used was 'ADR.'"
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "A fever was recorded; the ASR renders it as 'one of four seven,' which in context almost certainly represents 104.7°F, though the exact digits are garbled by the transcription."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "Multiple ticks were found on Dog X during the examination; the staff described removing or treating them ('trying to roll that out')."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "A 4DX panel was sent and was still running at the time of the recorded discussion; results are not reported in any available block."
+    },
+    {
+      "kind": "actual-treatment",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The dog was discharged with some medication, described in passing as something that 'works pretty quickly, even just a little medication.' The specific drug is not named in the available blocks."
+    },
+    {
+      "kind": "owner-report",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The owner had the money but chose to use Care Credit for a payment plan; approximately seventy dollars could be deferred."
+    },
+    {
+      "kind": "direct-observation",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "[recorded-reasoning] The treating clinician was Person, who was preparing the discharges while the owner's concern was being addressed."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The meaning of 'ADR' is never expanded in the available blocks. It is used as the triage reason but its full form is not stated."
+    },
+    {
+      "kind": "unknown",
+      "sourceDiscussionIds": [
+        "p-d308d5607352533ae441eee6"
+      ],
+      "text": "The 4DX results, any confirmed diagnosis, and the identity of the medication dispensed at discharge are not captured in the available transcript blocks."
+    }
+  ],
+  "id": "p-33b5e949e3b88422a02e17cd",
+  "linkBasis": "Name 'Dog X' appears in the triage summary (ADR, fever 104.7, ticks), the 4DX test discussion, and the discharge interaction where the owner is upset about the dog being left unattended.",
+  "origin": "authorized-record",
+  "outcome": null,
+  "patientLabel": "Dog X",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T15:01:57.059049Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-d308d5607352533ae441eee6"
+  ],
+  "species": "Unknown",
+  "summary": "No fully cited summary accepted. Review the individually cited details below.",
+  "title": "Dog X – Dog with fever, ticks, ADR; brief stay and discharge with owner upset",
+  "topics": [
+    "p-3f43271a61a7a9b72ab78db1"
+  ],
+  "uncertainties": [
+    "The abbreviation 'ADR' is used at triage but never expanded in any available block; its meaning cannot be confirmed from the transcript alone.",
+    "The fever reading is garbled by ASR ('one of four seven'); while 104.7°F is the most plausible reading, the exact value cannot be stated with certainty.",
+    "The 4DX panel was sent but its results are never reported in the available blocks; no diagnosis is confirmed.",
+    "The specific medication dispensed at discharge is described only as something that 'works pretty quickly'; its identity is not named.",
+    "The total amount of the bill and whether the Care Credit application was approved on the spot are not clearly resolved in the available text.",
+    "It is unclear whether the ticks were removed in-clinic or whether the owner was instructed to remove them at home; the phrase 'trying to roll that out' is ambiguous.",
+    "AI-proposed association; formal species/diagnosis/outcome fields await review of cited findings."
+  ]
+}
