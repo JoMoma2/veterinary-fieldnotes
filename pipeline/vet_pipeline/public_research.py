@@ -53,9 +53,8 @@ def plan(question, registry, cfg, raw_path, judge=ask_json):
     fields = {k: question[k] for k in ['prompt', 'answer', 'explanation'] if k in question}
     for k in ['correct', 'distractors', 'choices']:
         if k in question: fields[k] = question[k]
-    # Reject identifiable input before even considering external queries.
-    if replace_names(json.dumps(fields), registry, check_only=True, allow_public_labels=False):
-        raise ValueError('Study research input contains a private identity')
+    # This planning step runs ONLY on the local model. Case wording stays local;
+    # every proposed outbound concept is checked below before any web request.
     messages = [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content': json.dumps({
         'general_study_material': fields, 'response_schema': SCHEMA}, ensure_ascii=False)}]
     result = judge(messages, SCHEMA, cfg, raw_path)

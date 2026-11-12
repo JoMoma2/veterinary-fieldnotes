@@ -38,7 +38,7 @@ full text retain source URLs, hashes and retrieval dates outside source Git.
 The medical checker evaluates the core teaching and allows reasonable synthesis
 from relevant evidence. It still holds contradictions, unsupported claims, ambiguous
 answers and unverified options. If a private draft overclaims, a separate public
-study-card proposal may narrow or correct it using actual references. The private
+study-card proposal may narrow or correct it using actual references. Existing wording is checked first; supported originals are retained. The private
 draft and extraction remain unchanged. A proposal needs independent verification
 of its exact content and ordinary privacy review before publication. The website
 adds the verified reference links.

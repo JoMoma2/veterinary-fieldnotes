@@ -16,4 +16,3 @@ PrivateTmp=true
 ProtectSystem=strict
 ReadWritePaths=%h/FieldNotes/data/library %h/FieldNotes/app -%h/.config/.wrangler -%h/.wrangler
 ReadOnlyPaths=%h/FieldNotes/app/.git
-

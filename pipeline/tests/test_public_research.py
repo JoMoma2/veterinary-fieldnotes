@@ -60,3 +60,15 @@ def test_empty_phrase_search_broadens_only_checked_generic_words(monkeypatch):
     assert result and len(seen)==2
     assert '"albuterol" OR "salbutamol"' in seen[1] and 'TITLE_ABS:(dog' in seen[1]
     assert 'PrivatePatient' not in seen[1] and 'Bella' not in seen[1]
+
+
+def test_case_question_stays_in_local_planning_and_only_generic_terms_are_accepted(cfg,tmp_path):
+    question={'prompt':'PrivatePatient needs thoracentesis. Why?', 'answer':'Relieve pleural fluid.', 'explanation':'Case-based teaching.'}
+    def local_judge(messages,schema,cfg,path):
+        assert 'PrivatePatient' in messages[-1]['content']
+        return {'queries':[{'terms':['thoracentesis','pleural effusion'],'species':'dog'}]}
+    result=web.plan(question,registry(),cfg,tmp_path/'local.raw.json',local_judge)
+    assert 'PrivatePatient' not in json.dumps(result)
+    def unsafe_local_proposal(messages,schema,cfg,path):
+        return {'queries':[{'terms':['PrivatePatient'],'species':'dog'}]}
+    with pytest.raises(ValueError):web.plan(question,registry(),cfg,tmp_path/'rejected.raw.json',unsafe_local_proposal)

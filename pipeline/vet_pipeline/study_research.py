@@ -161,6 +161,19 @@ def research(store, cfg, judge=ask_json):
     # Finish gathering sources before checking any card: all proofs bind the same reference set.
     docs = verify.documents(settings['references_dir'], settings['max_reference_age_days'])
     ref_sha = hashlib.sha256(json.dumps([(d['id'], d['bodySha256']) for d in docs], sort_keys=True).encode()).hexdigest()
+    # Check existing wording against the newly relevant evidence FIRST. A good
+    # original card should not be rewritten merely because its old proof expired.
+    originals_to_check = []
+    for original in questions:
+        if original['origin'] == 'synthetic': continue
+        path = revision_path(store, original)
+        saved = load_json(path) if path.exists() else {}
+        if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:
+            continue
+        if verify.status(store, original)['status'] == 'pending':
+            originals_to_check.append(original['id'])
+    if originals_to_check:
+        verify.run_checks(store, cfg, question_ids=originals_to_check)
     candidates = {}
     for original in questions:
         if original['origin'] == 'synthetic': continue
@@ -170,6 +183,8 @@ def research(store, cfg, judge=ask_json):
         path = revision_path(store, original); saved = load_json(path) if path.exists() else {}
         if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:
             candidates[original['id']] = saved['question']; continue
+        if verify.status(store, original)['status'] == 'pending':
+            continue  # Shared-resource deferral is not evidence that wording needs correction.
         refs = verify.retrieve(original, docs, max_chars=settings['reference_char_limit'])
         if not refs: continue
         candidate = draft(original, refs, cfg, folder / (record_hash(original) + '.draft.raw.json'), judge)

@@ -79,3 +79,29 @@ def test_public_draft_changes_only_question_text_not_private_metadata(store,cfg)
     assert original==before
     for key in ['id','topics','sourceDiscussionIds','articleIds','origin','format']:
         assert candidate[key]==original[key]
+
+
+def test_relevant_sources_check_original_before_proposing_any_rewrite(store,cfg,monkeypatch):
+    from vet_pipeline import auto_publication as ap,patient_privacy as privacy,library
+    original=question()
+    store.db.execute('INSERT INTO library_records VALUES(?,?,?)',('questions',original['id'],json.dumps(original)));store.db.commit()
+    source=library.current(store)
+    write_json(store.root/'publication/patient-identities.json',{'complete':True,'version':privacy.VERSION,
+        'inputSha256':privacy.identity_fingerprint(source,ap.prepared(source),ap.fields),'entities':[]})
+    cfg['question_verification']['research_enabled']=True
+    monkeypatch.setattr(research.web,'plan',lambda *a:[{'terms':['thoracentesis'],'species':'dog'}])
+    monkeypatch.setattr(research.web,'search',lambda *a,**kw:[])
+    monkeypatch.setattr(verify,'documents',lambda *a:[])
+    checked=set();calls=[]
+    monkeypatch.setattr(verify,'status',lambda store,q:{'status':'supported' if q['id'] in checked else 'pending'})
+    def check(view,cfg,question_ids=None):
+        calls.append(question_ids)
+        if question_ids:checked.update(question_ids)
+        return [{'id':original['id'],'status':'supported'}]
+    monkeypatch.setattr(verify,'run_checks',check)
+    def unnecessary(*args,**kwargs):raise AssertionError('A supported original must not be rewritten')
+    monkeypatch.setattr(research,'draft',unnecessary)
+    result=research.research(store,cfg)
+    assert calls[0]==[original['id']] and result['status']=='checked'
+    assert not research.revision_path(store,original).exists()
+    assert library.current(store)['questions']==[original]

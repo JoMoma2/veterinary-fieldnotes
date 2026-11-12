@@ -15,4 +15,3 @@ PrivateTmp=true
 ProtectSystem=strict
 ReadWritePaths=%h/FieldNotes/data/medical-references
 InaccessiblePaths=%h/FieldNotes/data/library -%h/FieldNotes-Archives
-
