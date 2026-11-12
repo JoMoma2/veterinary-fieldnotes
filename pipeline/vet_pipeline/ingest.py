@@ -160,8 +160,9 @@ def transcribe(store, job, cfg):
     )
     if job["source_kind"] == "transcript":
         t = transcript_valid(load_json(source))
-    elif cfg["transcription"]["kind"] == "whisper-cpp":
+    elif cfg["transcription"]["kind"] in ["whisper-cpp", "parakeet"]:
         from .whisper_cpp import transcribe_cpp
+        from .parakeet import transcribe_parakeet
         from .audio_prepare import normalize_copy
         needs_conversion = True
         try:
@@ -201,7 +202,8 @@ def transcribe(store, job, cfg):
                 preprocessing = filter_copy(source, filtered, profile, max_seconds=86400)
                 write_json(metadata, preprocessing)
             source = filtered
-        t = transcribe_cpp(source, {**cfg["transcription"],
+        backend = transcribe_parakeet if cfg['transcription']['kind'] == 'parakeet' else transcribe_cpp
+        t = backend(source, {**cfg["transcription"],
             "details_path": str(store.root / "transcription-details" / f"{job['id']}.json"),
             "quality_path": str(store.root / 'transcription-quality' / f"{job['id']}.json")})
         if preprocessing is not None:

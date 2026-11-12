@@ -35,8 +35,8 @@ def validate(cfg):
     endpoint = urlparse(p['base_url'])
     if p['kind'] != 'ollama' or endpoint.hostname not in ['localhost', '127.0.0.1', '::1'] or endpoint.port != 11434 or endpoint.path not in ['', '/'] or endpoint.username or endpoint.query:
         raise ValueError('Unattended processing requires local Ollama, not a proxy or external inference')
-    if cfg['transcription']['kind'] != 'whisper-cpp' or cfg['transcription']['allow_model_download']:
-        raise ValueError('Select installed whisper.cpp weights; automatic downloads are forbidden')
+    if cfg['transcription']['kind'] not in ['whisper-cpp', 'parakeet'] or cfg['transcription']['allow_model_download']:
+        raise ValueError('Select installed local ASR weights; automatic downloads are forbidden')
 
 
 def resource_gate(cfg, stage='transcribe'):
@@ -78,6 +78,18 @@ def cycle(store, cfg):
     private_path(store.root)
     folder = store.root / 'unattended'
     with lock(folder):
+        # The publisher owns this guard for privacy inference AND deployment.
+        # Yield before discovery, model calls or report changes when it is busy.
+        publication = store.root / 'publication'
+        if (publication / 'pipeline.lock').exists():
+            try:
+                with lock(publication):
+                    pass
+            except RuntimeError:
+                return {'imports': [], 'processing': [{'status': 'deferred',
+                    'stage': 'publication', 'reason': 'Automatic publication is running'}],
+                    'sourcePreservation': True,
+                    'incomplete': sum(j['stage'] != 'done' for j in store.jobs())}
         state_path = folder / 'state.json'
         state = load_json(state_path) if state_path.exists() else {}
         state['lastPoll'] = now()

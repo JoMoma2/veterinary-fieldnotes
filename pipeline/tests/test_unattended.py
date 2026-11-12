@@ -86,6 +86,22 @@ def test_busy_gpu_defers_without_consuming_retry_or_losing_audio(store, cfg, tmp
     assert cycle(store, cfg)['incomplete'] == 0
 
 
+def test_import_poll_yields_to_publisher_then_resumes_without_losing_source(store, cfg, tmp_path, monkeypatch):
+    from vet_pipeline.util import lock, write_json
+    usb, wav = setup(cfg, tmp_path, monkeypatch)
+    before = digest_file(wav)
+    state = store.root / 'unattended/state.json'
+    write_json(state, {'lastPoll': 'preserved prior poll'})
+    with lock(store.root / 'publication'):
+        result = cycle(store, cfg)
+        assert result['processing'][0]['status'] == 'deferred'
+        assert result['processing'][0]['stage'] == 'publication'
+        assert not store.jobs() and load_json(state)['lastPoll'] == 'preserved prior poll'
+        assert digest_file(wav) == before
+    assert cycle(store, cfg)['newImports'] == 1
+    assert store.jobs()[0]['stage'] == 'done' and digest_file(wav) == before
+
+
 def test_unclassified_accounts_are_visible_in_private_recording_report(store, cfg, tmp_path, monkeypatch):
     setup(cfg, tmp_path, monkeypatch)
     from vet_pipeline.grounded import project

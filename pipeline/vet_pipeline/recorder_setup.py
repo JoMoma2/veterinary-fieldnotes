@@ -15,7 +15,7 @@ PROOF = location('tools', 'setup', 'synthetic-test.json')
 
 def core_fingerprint():
     h = hashlib.sha256()
-    for name in ['automation', 'unattended', 'resources', 'ingest', 'audio_prepare', 'audio_filter', 'asr_quality', 'runner', 'morning', 'config', 'backup', 'whisper_cpp', 'grounded', 'github']:
+    for name in ['automation', 'unattended', 'resources', 'ingest', 'audio_prepare', 'audio_filter', 'asr_quality', 'runner', 'morning', 'config', 'backup', 'whisper_cpp', 'parakeet', 'native_asr', 'shift_context', 'shift_workflow', 'study_policy', 'shift_context_report', 'question_verification', 'publication', 'auto_publication', 'patient_privacy', 'local_judge', 'public_research', 'study_research', 'grounded', 'github']:
         h.update((REPO / 'pipeline/vet_pipeline' / (name + '.py')).read_bytes())
     return h.hexdigest()
 

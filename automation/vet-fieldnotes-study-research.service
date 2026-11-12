@@ -1,0 +1,19 @@
+[Unit]
+Description=Research public medical references and verify study-card public copies
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+UMask=0077
+WorkingDirectory=%h/FieldNotes/app
+ExecStart=%h/FieldNotes/app/pipeline/.venv/bin/python -m vet_pipeline.study_research --workspace %h/FieldNotes/data/library --config %h/FieldNotes/config/pipeline.toml
+TimeoutStartSec=infinity
+Nice=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/FieldNotes/data/library/question-verification %h/FieldNotes/data/library/review %h/FieldNotes/data/medical-references %h/FieldNotes/data/library/publication/pipeline.lock
+ReadOnlyPaths=%h/FieldNotes/data/library/jobs.sqlite3
+InaccessiblePaths=-%h/FieldNotes/data/library/inputs -%h/FieldNotes/data/library/transcripts -%h/FieldNotes/data/library/transcription-details -%h/FieldNotes/data/library/normalized -%h/FieldNotes/data/library/filtered -%h/FieldNotes/data/library/retained -%h/FieldNotes-Archives %h/FieldNotes/app/.git
+

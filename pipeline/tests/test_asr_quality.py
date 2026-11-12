@@ -93,7 +93,7 @@ def test_invalid_whisper_offsets_retain_raw_and_review_report(tmp_path, monkeypa
     assert summary['recordingsAwaitingTranscriptReview'] == 1
     assert summary['recordingsWithASRWarnings'] == 1
     html = (store.root / 'review/recordings' / (rid + '.html')).read_text()
-    assert 'Full raw Whisper output' in html and '&lt;script&gt;' in html
+    assert 'Full raw ASR output' in html and '&lt;script&gt;' in html
     assert '<script>' not in html
 
 

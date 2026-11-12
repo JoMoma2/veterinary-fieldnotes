@@ -79,7 +79,7 @@ def _memory_admission(cfg, stage, digest, models, gpu):
         if gpu['used'] - size / 1024**2 > limits['gpu_memory_limit_mb']:
             raise ProcessingDeferred('Other GPU allocations remain; cached-model reuse deferred')
     if stage == 'transcribe' and gpu['free'] < limits['transcription_free_memory_mb']:
-        raise ProcessingDeferred('Insufficient free GPU memory for Whisper alongside cached allocations; waiting without unloading models')
+        raise ProcessingDeferred('Insufficient free GPU memory for transcription alongside cached allocations; waiting without unloading models')
     if stage == 'extract' and models and gpu['free'] < limits['reuse_free_memory_mb']:
         raise ProcessingDeferred('Insufficient GPU headroom for cached-model reuse; inference deferred')
 
@@ -97,12 +97,26 @@ def check_resources(cfg, stage):
         digest = verified_local_model(cfg)
     except Exception:
         raise ProcessingDeferred('Local Ollama/model metadata is unavailable; saved jobs remain queued') from None
-    # Keep the interval fixed and short; repeated timer polls provide later retry.
-    for sample in range(3):
+    # Allow recent activity (including our previous ASR window) to settle, but
+    # still require three consecutive quiet samples. Never bypass client or
+    # memory checks and never unload another application's model.
+    quiet = 0
+    for sample in range(8):
         models = resident_models(cfg)
         ollama_clients()
-        _memory_admission(cfg, stage, digest, models, gpu_snapshot())
-        if sample < 2:
+        gpu = gpu_snapshot()
+        if gpu['busy'] > cfg['unattended']['gpu_busy_limit']:
+            quiet = 0
+            if sample == 7:
+                _memory_admission(cfg, stage, digest, models, gpu)
+        else:
+            _memory_admission(cfg, stage, digest, models, gpu)
+            quiet += 1
+            if quiet == 3:
+                break
+        if sample < 7:
             time.sleep(1)
+    else:
+        raise ProcessingDeferred('Shared GPU did not remain quiet long enough; inference deferred')
     # Catch a client that connected while the last GPU sample was being read.
     ollama_clients()

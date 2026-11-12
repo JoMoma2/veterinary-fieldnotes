@@ -156,6 +156,24 @@ def export(store, review_path: Path, target: Path, allow_clinical=False):
                 for s in d["segments"]
             }
             shift["recordings"] = [r for r in shift["recordings"] if r["id"] in rs]
+        if any(e['origin'] != 'synthetic' for group, rows in output.items() if group != 'topics' for e in rows):
+            # Manual approval cannot accidentally bypass the owner's name policy.
+            from .auto_publication import prepared, fields, prune, public_ids
+            from .patient_privacy import anonymize, identity_fingerprint
+            registry_path = store.root / 'publication/patient-identities.json'
+            if not registry_path.exists():
+                raise ValueError('Clinical export needs a complete current patient identity catalog')
+            registry = load_json(registry_path)
+            if (not registry.get('complete') or registry.get('inputSha256') != identity_fingerprint(lib, prepared(lib), fields)):
+                raise ValueError('Clinical export needs a complete current patient identity catalog')
+            import secrets
+            key_path = store.root / 'publication/public-id-key'
+            if not key_path.exists():
+                fd = os.open(key_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+                with os.fdopen(fd, 'wb') as f: f.write(secrets.token_bytes(32)); f.flush(); os.fsync(f.fileno())
+            secret = key_path.read_bytes()
+            if len(secret) != 32: raise ValueError('Invalid persistent public-ID key')
+            output = public_ids(prune(anonymize(prepared(output), registry, fields)), secret)
         validate_library(output)
         target = target.absolute()
         if target.is_symlink():

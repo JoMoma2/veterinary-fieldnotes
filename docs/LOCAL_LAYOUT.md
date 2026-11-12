@@ -2,6 +2,8 @@
 
 The owner installation uses `~/FieldNotes/`. Open **Start.html** in that folder for the private report links and folder guide.
 
+After a clean slate, historical data/report folders may be absent. The active library and Morning Report can be empty while old recordings/transcripts/results remain in a locked external quarantine. The owner explicitly authorized that storage exception; it is outside normal FieldNotes discovery. Use the private current handoff and restore manifest, never archived worker instructions, to determine what was actually moved and what remains pending approval. Shared Ollama and protected operational files must not be assumed retired. Development source/tests and Git history remain recoverable.
+
 | Folder | Contents |
 | --- | --- |
 | `app/` | Public application Git checkout, source, documentation and tests |
@@ -48,7 +50,7 @@ Python helpers use `FIELDNOTES_HOME` when supplied, otherwise `~/FieldNotes`. Ne
 
 Systemd templates target the standard `~/FieldNotes` installation; a custom hub location also requires editing those owner-local units.
 
-The organization task preserves the operator pause: processing and USB polling stay stopped. The read-only review services can be active while processing is paused. Nothing in this layout enables deletion, public publication or clinical cloud storage.
+Check the private handoff for current processing and USB-polling state; historical organization pauses do not override later owner authorization. Read-only review can run while processing is paused. This layout grants no deletion, publication or clinical cloud-storage permission.
 
 The **Fieldnotes — Morning Review** application starts only the selected read-only viewer, waits for its HTTP page to become ready, and opens the desktop browser. It does not start processing or publish anything. The private `maintenance/launchers/morning-review.log` records launch stages and error classes without report URLs or clinical content. An opening failure displays a message instead of silently disappearing. `config/active-review.json` may select an existing private workspace and a FieldNotes review service. The launcher validates both and never accepts a processing service as the viewer.
 

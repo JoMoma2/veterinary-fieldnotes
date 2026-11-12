@@ -1,0 +1,18 @@
+[Unit]
+Description=Refresh selected public veterinary references without clinical workspace access
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+UMask=0077
+WorkingDirectory=%h/FieldNotes/app
+ExecStart=%h/FieldNotes/app/pipeline/.venv/bin/python %h/FieldNotes/app/scripts/refresh-medical-references.py --config %h/FieldNotes/config/pipeline.toml
+TimeoutStartSec=15min
+Nice=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/FieldNotes/data/medical-references
+InaccessiblePaths=%h/FieldNotes/data/library -%h/FieldNotes-Archives
+

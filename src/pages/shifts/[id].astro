@@ -1,14 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Discussion from '../../components/Discussion.astro';
-import { getLibrary } from '../../lib/library';
+import { getLibrary, compareDiscussions } from '../../lib/library';
 import { dateLabel, offset } from '../../lib/format';
 export async function getStaticPaths() {
   const lib = await getLibrary();
   return lib.shifts.map((shift) => ({ params: { id: shift.id }, props: { shift, lib } }));
 }
 const { shift: s, lib } = Astro.props;
-const ds = lib.discussions.filter((d) => d.shiftId === s.id).sort((a, b) => a.order - b.order);
+const ds = lib.discussions.filter((d) => d.shiftId === s.id).sort(compareDiscussions);
 ---
 
 <Layout title={s.title} section="Shift archive">

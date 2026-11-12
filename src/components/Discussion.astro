@@ -2,6 +2,7 @@
 import Tags from './Tags.astro';
 import Facts from './Facts.astro';
 import { offset, markdown } from '../lib/format';
+import { compareDiscussions } from '../lib/library';
 import type { Discussion, PublicLibrary } from '../lib/schemas';
 const { discussion: d, library: lib } = Astro.props as {
   discussion: Omit<Discussion, 'publication'>;
@@ -10,7 +11,7 @@ const { discussion: d, library: lib } = Astro.props as {
 const ordinal =
   lib.discussions
     .filter((x) => x.shiftId === d.shiftId)
-    .sort((a, b) => a.order - b.order)
+    .sort(compareDiscussions)
     .findIndex((x) => x.id === d.id) + 1;
 ---
 

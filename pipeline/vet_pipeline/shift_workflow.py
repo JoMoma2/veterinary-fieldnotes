@@ -12,11 +12,21 @@ from .private import private_path
 from .util import load_json, write_json, digest_file, lock, now
 from .library import current, metadata, fact, unique_add, validate_library, materialize
 from .grounded import slug
-from .study_policy import MEDICAL_QUESTION_RULES, question_rejection
+from .study_policy import MEDICAL_QUESTION_RULES, QUESTION_FORMAT_RULES, question_rejection
 
 INDEX_RULES = '''Coverage matters: preserve each clinically or practically meaningful thread, including incomplete/contradictory cases and equipment/technique discussions. Do not compress unrelated patients into a few broad episodes. Do not turn greetings or incidental chatter into teaching. Source coverage is audited separately; omitted text remains in the private archive, never silently discarded.'''
 TOPIC_SCHEMA = sc.obj({'key': sc.TEXT, 'title': sc.TEXT, 'summary': sc.TEXT, 'account': sc.TEXT,
                        'evidence': {'type':'array','items':sc.EVIDENCE,'minItems':1}})
+CHOICE_SCHEMA = sc.obj({'id': {'type':'string','pattern':'^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$'},
+                        'text': {'type':'string','minLength':1}})
+QUESTION_BASE = {key:copy.deepcopy(sc.QUESTION['properties'][key]) for key in ['prompt','explanation','evidence']}
+MIXED_QUESTION_SCHEMA = {'anyOf':[
+    sc.obj({**QUESTION_BASE,'format':{'const':'flashcard'},'answer':sc.TEXT}),
+    sc.obj({**QUESTION_BASE,'format':{'const':'multiple-choice'},'correct':CHOICE_SCHEMA,
+            'distractors':{'type':'array','items':CHOICE_SCHEMA,'minItems':3,'maxItems':9}}),
+    sc.obj({**QUESTION_BASE,'format':{'const':'multiple-select'},
+            'choices':{'type':'array','items':CHOICE_SCHEMA,'minItems':3},
+            'correctIds':{'type':'array','items':CHOICE_SCHEMA['properties']['id'],'minItems':1,'uniqueItems':True}})]}
 
 
 def detail_contract(root, task):
@@ -25,6 +35,10 @@ def detail_contract(root, task):
     schema['required'].append('knowledge_topics')
     topic_index = load_json(root / 'topic-index.json')
     task += '\n' + MEDICAL_QUESTION_RULES + '\n' + sc.SPEAKER_ID_UNCERTAINTY
+    experiment=root/'experiment.json'
+    if experiment.exists() and load_json(experiment).get('studyQuestionFormats')=='mixed-v1':
+        schema['properties']['study_questions']['items']=copy.deepcopy(MIXED_QUESTION_SCHEMA)
+        task += '\n' + QUESTION_FORMAT_RULES
     task += '\nFor knowledge_topics, extract reusable medical/equipment/practical subjects actually taught. Titles/keys describe the subject, never a patient name/date. A case-only history can have zero topics; retain its details in facts. Reuse an existing key for the SAME topic. Write a detailed source-supported account preserving uncertainties and limitations; no external facts or recommendations. Supply exact evidence for every account. Existing bounded naming index (not clinical evidence):\n' + json.dumps(topic_index, ensure_ascii=False)
     return task, schema
 
@@ -108,7 +122,12 @@ def persist(store, root, cfg):
             if question_rejection(q,labels):continue
             qid='q-'+hashlib.sha256((did+q['prompt']).encode()).hexdigest()[:24]
             if any(x['id']==qid for x in lib['questions']):continue
-            lib['questions'].append({**metadata(qid,origin),'format':'flashcard','prompt':q['prompt'],'answer':q['answer'],'explanation':q['explanation'] or 'Source-grounded educational draft; review required.','topics':tids,'articleIds':discussion['articleIds'],'sourceDiscussionIds':[did]})
+            form=q.get('format','flashcard')
+            fields=['correct','distractors'] if form=='multiple-choice' else ['choices','correctIds'] if form=='multiple-select' else ['answer']
+            lib['questions'].append({**metadata(qid,origin),'format':form,'prompt':q['prompt'],
+                **{key:copy.deepcopy(q[key]) for key in fields},
+                'explanation':q['explanation'] or 'Source-grounded educational draft; review required.',
+                'topics':tids,'articleIds':discussion['articleIds'],'sourceDiscussionIds':[did]})
         write_records(marker);saved.add(marker)
     # All omitted source blocks remain independently addressable in the shift archive.
     for key,block in sources.items():
@@ -156,6 +175,14 @@ def run(store,cfg,force_retry=False,before_stage=None):
     results=recording_run(store,cfg,force_retry,before_stage,transcribe_only=True)
     settings=cfg['shift_context']
     with lock(store.root):
+        pending=[j for j in store.jobs() if j['stage']=='transcribe']
+        if pending:
+            # A deferred ASR pass must not start an LLM that then occupies the
+            # GPU needed by the remaining recordings, even in another shift.
+            results.append({'status':'deferred','stage':'whole-shift',
+                            'reason':'Waiting for the transcription queue to finish before extraction',
+                            'pendingRecordings':len(pending)})
+            return results
         for sid in dict.fromkeys(j['shift_id'] for j in store.jobs() if j['stage']=='extract'):
             jobs=[dict(j) for j in store.jobs() if j['shift_id']==sid]
             fingerprint=hashlib.sha256(json.dumps([(j['id'],digest_file(store.root/'transcripts'/(j['id']+'.json')) if (store.root/'transcripts'/(j['id']+'.json')).exists() else None) for j in jobs]).encode()).hexdigest()[:16]
@@ -167,8 +194,12 @@ def run(store,cfg,force_retry=False,before_stage=None):
                     from .recorder_setup import save_config
                     profile=store.root/'shift-profiles'/(fingerprint+'.toml');save_config(profile,cfg)
                     sc.prepare(store.root,sid,root,profile)
-                    exp=load_json(root/'experiment.json');exp.update(libraryWorkflow=True,medicalOnlyQuestions=True,speakerIdentityPolicy='uncertain-v2',repetitionExclusionThreshold=5,gpuLayers=settings['gpu_layers'])
+                    exp=load_json(root/'experiment.json');exp.update(libraryWorkflow=True,medicalOnlyQuestions=True,studyQuestionFormats='mixed-v1',speakerIdentityPolicy='uncertain-v2',repetitionExclusionThreshold=5,gpuLayers=settings['gpu_layers'])
                     exp['provider'].update(context_window=settings['context_window'],max_output_tokens=settings['max_output_tokens'],timeout_seconds=settings['timeout_seconds'])
+                    exp['provider'].update({key:settings[key] for key in ['temperature','top_p','top_k','min_p']})
+                    exp['streamResponses']=settings['stream_responses']
+                    if settings['chat_template_path']:
+                        exp.update(chatTemplatePath=settings['chat_template_path'],chatTemplateSha256=settings['chat_template_sha256'],nativeReasoningEffort=settings['native_reasoning_effort'])
                     write_json(root/'experiment.json',exp)
                     write_json(root/'topic-index.json',([{'key':a['id'].removeprefix('a-'),'title':a['title']} for a in current(store)['articles']]+(load_json(store.root/'topic-seed.json') if (store.root/'topic-seed.json').exists() else []))[:200])
                 sc.run(root,on_checkpoint=lambda p:persist(store,p,cfg));persist(store,root,cfg)

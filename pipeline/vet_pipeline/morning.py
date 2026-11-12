@@ -29,7 +29,10 @@ def diagnostic_links(workspace, recording_id):
             links.append('<li><a href="' + href + '">' + E(label + ': ' + item.relative_to(directory).as_posix()) + '</a></li>')
     raw = workspace / 'transcription-details' / (recording_id + '.json')
     if raw.is_file() and workspace in raw.resolve().parents:
-        links.append('<li><a href="../../transcription-details/' + quote(recording_id, safe='') + '.json">Full Whisper JSON</a></li>')
+        links.append('<li><a href="../../transcription-details/' + quote(recording_id, safe='') + '.json">Full raw ASR JSON</a></li>')
+    for item in sorted((workspace / 'transcription-details' / (recording_id + '.windows')).glob('*.json')):
+        if item.is_file() and workspace in item.resolve().parents:
+            links.append('<li><a href="../../' + quote(item.relative_to(workspace).as_posix(), safe='/') + '">ASR window checkpoint: ' + E(item.name) + '</a></li>')
     return '<details><summary>Private diagnostics</summary><ul>' + ''.join(links) + '</ul></details>' if links else '<p>No saved diagnostic files yet.</p>'
 
 def report(store, cfg, state):
@@ -94,15 +97,17 @@ def report(store, cfg, state):
             body += '<h2>Full saved transcript</h2>'
             for s in text['segments']:
                 label = f"{s['start']:.2f}–{s['end']:.2f}s"
-                body += '<p>' + (('<a href="' + media + f'#t={s["start"]},{s["end"]}">' + label + '</a> ') if media else label + ' ') + E(s['text']) + '</p>'
+                body += '<p>' + (('<a href="' + media + f'#t={s["start"]},{s["end"]}">' + label + '</a> ') if media else label + ' ') + E(s['text']) + (' <small>(input-window timing)</small>' if s.get('timing') == 'audio-window' else '') + '</p>'
         else:
             body += '<p>Transcript not available here: pending processing or recovered permanent knowledge without its original source media.</p>'
             raw_path = store.root / 'transcription-details' / (rid + '.json')
             if raw_path.exists():
                 raw = load_json(raw_path)
-                body += '<details><summary>Full raw Whisper output — unvalidated text and timestamps</summary><p>Preserved even when timestamp validation failed. These offsets are model output, not verified source links.</p>'
+                body += '<details><summary>Full raw ASR output — unvalidated text and timestamps</summary><p>Preserved even when timestamp validation failed. These offsets are model output, not verified source links.</p>'
                 for entry in raw.get('transcription', []):
                     body += '<p>' + E(json.dumps(entry.get('offsets', {}))) + ' ' + E(entry.get('text', '')) + '</p>'
+                for window in raw.get('windows', []):
+                    body += '<p>' + E(str(window.get('range', []))) + ' samples: ' + E(window.get('raw', {}).get('raw_text', '')) + '</p>'
                 body += '</details>'
         body += '<h2>Extracted discussions</h2>'
         for d in lib['discussions']:
@@ -165,9 +170,14 @@ def report(store, cfg, state):
                'masterSync': state.get('masterSync', {}), 'lastPoll': state.get('lastPoll')}
     write_json(root / 'summary.json', summary)
     body = '<p>Private local review. Audio, full transcripts and intermediate results are retained. Import batches are not verified recording dates; clock offsets remain recording-relative.</p>'
+    if not jobs:
+        body += '<section><h2>No recordings imported</h2><p>This library is empty.</p>'
+        if state.get('operatorState') == 'paused':
+            body += '<p>Automatic processing is paused.</p>'
+        body += '</section>'
     if asr_flagged:
         body += '<section class="flag"><h2>Audio/transcription review required</h2><p>' + str(asr_flagged) + ' recordings have ASR quality warnings. Read the warnings on each recording page and compare with its audio. Previously generated notes and questions from flagged sources are unreviewed; successful processing does not establish accuracy.</p></section>'
-    if cfg.get('shift_context', {}).get('enabled'):
+    if jobs and cfg.get('shift_context', {}).get('enabled'):
         body += '<section><h2>Whole-shift extraction</h2><p>The available shift is processed together with a '+str(cfg['shift_context']['context_window'])+'-token context. Detailed episode checkpoints survive interruptions.</p>'
         if (root/'whole-shift.html').exists():body += '<p><a href="whole-shift.html">Read full-context medical notes, questions and source evidence</a></p>'
         else:body += '<p>Preparing transcripts or waiting for the first model result. Retained transcripts/audio are available below.</p>'
@@ -184,7 +194,10 @@ def report(store, cfg, state):
     for q in lib['questions']:
         checked = verification_status(store,q) if q['origin']!='synthetic' else {'status':'synthetic demonstration'}
         body += '<details><summary>' + E(q['prompt']) + ' — ' + E(checked['status'].upper()) + '</summary><p>Independent reference check: ' + E(checked['status']) + '</p><pre>' + E(json.dumps(q, indent=2)) + '</pre></details>'
-    body += '<h2>Publication candidates</h2><p><a href="publication-candidates.json">Generated review template</a> (all unapproved). Copy to a separate approval file before owner review; this candidate file is regenerated. Unapproved material never blocks private processing. The existing reviewed-publication helper pushes approved content; Cloudflare then rebuilds automatically.</p>'
+    body += '<h2>Publication</h2>'
+    if (store.root / 'review/automatic-publication.json').exists():
+        body += '<p><a href="automatic-publication.html">Automatic publication status and held-record counts</a>. A separate local privacy gate reviews the public copy; uncertain content stays private. Study questions also require independent medical-reference support. Private recordings and full transcripts are retained locally.</p>'
+    body += '<p><a href="publication-candidates.json">Manual review template</a> (all unapproved; regenerated). Manual approvals and automatic public-copy decisions are separate. Unapproved material never blocks private processing.</p>'
     if pending:
         body += '<h2>Needs attention / waiting</h2><p>GPU/Ollama deferral does not consume retries. Recording errors retry up to the configured limit. After resolving an exhausted job, use vet-pipeline retry JOB_ID for this workspace; no successful transcription/extraction is repeated.</p><pre>' + E(json.dumps([dict(j) for j in pending], indent=2)) + '</pre>'
     atomic_write(root / 'index.html', page('Veterinary Fieldnotes — morning review', body))

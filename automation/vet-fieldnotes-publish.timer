@@ -1,0 +1,11 @@
+[Unit]
+Description=Retry automatic FieldNotes publication after local processing
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+AccuracySec=10s
+Unit=vet-fieldnotes-publish.service
+
+[Install]
+WantedBy=timers.target

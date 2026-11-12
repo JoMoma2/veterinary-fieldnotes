@@ -7,15 +7,19 @@ import {
   validateGraph,
   canPublish,
   contentRoot,
+  compareDiscussions,
 } from '../src/lib/library';
 import { questionSchema, articleSchema, sourceSegmentSchema } from '../src/lib/schemas';
 import { optionsFor, isCorrect, selectQuestions, shuffle } from '../src/lib/study';
 import { markdown, offset } from '../src/lib/format';
 const demo = await readLibrary(path.resolve('fixtures/demo/public'));
-test('production is empty of clinical and medical records', async () => {
+test('production contains only authorized records approved for public publication', async () => {
   const lib = await readLibrary(path.resolve('content/public'));
   for (const group of ['articles', 'cases', 'shifts', 'discussions', 'questions'] as const)
-    assert.equal(lib[group].length, 0);
+    for (const record of lib[group]) {
+      assert.equal(record.origin, 'authorized-record');
+      assert.equal(canPublish(record), true);
+    }
 });
 test('demo graph is valid and all formats are represented', () => {
   validateGraph(demo);
@@ -98,6 +102,32 @@ test('source bounds, missing references, and duplicate IDs fail validation', () 
   lib = structuredClone(demo);
   lib.articles.push(lib.articles[0]);
   assert.throws(() => validateGraph(lib));
+});
+test('discussions sharing a source position keep distinct IDs, evidence and stable ordering', () => {
+  const lib = structuredClone(demo);
+  const first = lib.discussions[0];
+  const other = { ...structuredClone(first), id: 'd-shared-source-position' };
+  lib.discussions.push(other);
+  const before = JSON.stringify(lib);
+  validateGraph(lib);
+  const discussions = lib.discussions.filter((d) => d.shiftId === first.shiftId);
+  const forward = [...discussions].sort(compareDiscussions).map((d) => d.id);
+  const reversed = [...discussions].reverse().sort(compareDiscussions).map((d) => d.id);
+  assert.deepEqual(forward, reversed);
+  assert.ok(forward.includes(first.id) && forward.includes(other.id));
+  assert.deepEqual(other.segments, first.segments);
+  assert.equal(JSON.stringify(lib), before);
+  const view = publicProjection(lib);
+  assert.ok(view.discussions.some((d) => d.id === other.id));
+});
+test('shared discussion positions do not permit duplicate recording identities or sequences', () => {
+  let lib = structuredClone(demo);
+  const recording = lib.shifts[0].recordings[0];
+  lib.shifts[0].recordings.push(structuredClone(recording));
+  assert.throws(() => validateGraph(lib), /duplicate recording ID/);
+  lib = structuredClone(demo);
+  lib.shifts[0].recordings.push({ ...structuredClone(recording), id: 'r-other-id' });
+  assert.throws(() => validateGraph(lib), /duplicate recording sequence/);
 });
 test('cases retain unknown diagnosis and outcome', () => {
   for (const c of demo.cases) {

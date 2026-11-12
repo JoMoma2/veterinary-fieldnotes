@@ -41,6 +41,12 @@ DEFAULT = {
         "max_text_context": -1,
         "temperature_fallback": True,
         "audio_filter": "none",
+        "runtime": "",
+        "runtime_sha256": "",
+        "model_sha256": "",
+        "vad_model": "",
+        "vad_model_sha256": "",
+        "gpu_name": "7900",
     },
     "archive": {"timezone": "Unknown until configured"},
     "retry": {"max_attempts": 3, "base_delay_seconds": 30},
@@ -52,8 +58,12 @@ DEFAULT = {
         "max_retry_seconds": 3600,
         "verify_interval_seconds": 3600,
     },
-    "question_verification": {"enabled": False, "references_dir": "", "max_reference_age_days": 180, "reference_char_limit": 14000, "auto_refresh_sources": False, "refresh_days": 7, "max_output_tokens": 32768, "max_attempts": 2, "timeout_seconds": 1800},
-    "shift_context": {"enabled": False, "context_window": 98304, "max_output_tokens": 32768, "gpu_layers": 32, "timeout_seconds": 3600},
+    "question_verification": {"enabled": False, "references_dir": "", "max_reference_age_days": 180, "reference_char_limit": 14000, "auto_refresh_sources": False, "refresh_days": 7, "max_output_tokens": 32768, "max_attempts": 2, "timeout_seconds": 1800, "research_enabled": False, "search_results": 4},
+    "shift_context": {"enabled": False, "context_window": 98304, "max_output_tokens": 32768,
+                      "gpu_layers": 32, "timeout_seconds": 3600,
+                      "chat_template_path": "", "chat_template_sha256": "",
+                      "native_reasoning_effort": "high", "stream_responses": False,
+                      "temperature": .6, "top_p": .95, "top_k": 20, "min_p": 0.0},
     "retention": {"enabled": False, "days": 14, "require_remote": True,
                   "automatic_deletion": False, "retain_source_audio": True,
                   "retain_transcripts": True},
@@ -131,6 +141,7 @@ def config(path: Path | None = None):
         raise ValueError("Invalid private GitHub synchronization settings")
     v=out['question_verification']
     if (type(v['enabled']) is not bool or type(v['auto_refresh_sources']) is not bool
+        or type(v['research_enabled']) is not bool or not 1 <= v['search_results'] <= 6
         or not 1<=v['max_attempts']<=3 or v['max_output_tokens']<256
         or v['reference_char_limit']<100 or v['max_reference_age_days']<1
         or not 1<=v['refresh_days']<=v['max_reference_age_days'] or v['timeout_seconds']<=0):
@@ -144,14 +155,24 @@ def config(path: Path | None = None):
         raise ValueError("Invalid inference token budget")
     if out["provider"]["extraction_protocol"] not in ["legacy", "grounded-v2"]:
         raise ValueError("Unknown extraction protocol")
-    if t["kind"] not in ["faster-whisper", "whisper-cpp"]:
+    if t["kind"] not in ["faster-whisper", "whisper-cpp", "parakeet"]:
         raise ValueError("Unknown transcription backend")
     if not 1 <= t["threads"] <= 16 or t["timeout_seconds"] <= 0 or t["gpu_device"] < 0:
         raise ValueError("Invalid transcription resource limits")
     if type(t['max_text_context']) is not int or not -1 <= t['max_text_context'] <= 16384 or type(t['temperature_fallback']) is not bool:
         raise ValueError('Invalid Whisper decoding controls')
-    if t['audio_filter'] not in ['none', 'highpass', 'denoise'] or (t['audio_filter'] != 'none' and t['kind'] != 'whisper-cpp'):
-        raise ValueError('Invalid Whisper audio filter')
+    if t['audio_filter'] not in ['none', 'highpass', 'denoise'] or (t['audio_filter'] != 'none' and t['kind'] not in ['whisper-cpp', 'parakeet']):
+        raise ValueError('Invalid ASR audio filter')
+    if t['kind'] == 'parakeet' and any(not t[k] for k in ['runtime', 'runtime_sha256', 'model', 'model_sha256', 'vad_model', 'vad_model_sha256', 'gpu_name']):
+        raise ValueError('Parakeet requires pinned local runtime, weights and an explicit GPU')
+    s = out['shift_context']
+    if (type(s['enabled']) is not bool or type(s['stream_responses']) is not bool
+        or s['context_window'] < 512 or s['max_output_tokens'] < 1 or s['timeout_seconds'] <= 0
+        or bool(s['chat_template_path']) != bool(s['chat_template_sha256'])
+        or s['native_reasoning_effort'] not in ['low', 'medium', 'high', 'xhigh']
+        or not 0 <= s['temperature'] <= 2 or not 0 < s['top_p'] <= 1
+        or not 0 <= s['min_p'] <= 1 or s['top_k'] < 0):
+        raise ValueError('Invalid whole-shift inference settings')
     return out
 
 

@@ -11,6 +11,25 @@ The owner's priority is educational quality and patient continuity, accepting up
 roughly eight hours of processing. Do not reduce source context/detail merely to
 improve tokens per second.
 
+## Native model comparison requests
+
+Isolated experiments can pin a model's official chat template with
+`chatTemplatePath` / `chatTemplateSha256` for offline input budgeting, and use its
+own tokenizer. Native inference still uses local Ollama chat messages. Optional
+`systemPrefix` and `reasoningEffort` support model-specific thinking controls;
+these affect the immutable request identity. Context must cover the complete
+input, schema, reasoning/answer reservation and safety margin. Advertised context
+support does not establish that the model and its working memory fit the hardware.
+
+`streamResponses=true` preserves native events in private JSONL files, including
+interrupted replies, and exposes character-count progress without treating model
+reasoning as evidence. Completed calls retain the assembled native reply and
+timing metrics. Output/context exhaustion and explicit request time limits do not
+repeat an identical expensive request automatically. All existing evidence,
+medical-question, privacy and local-only controls remain in force. Results and
+operator-specific comparison workers belong outside Git; no model is promoted
+automatically from runtime, output counts or successful JSON validation.
+
 ## What changed
 
 - A whole selected import batch is read together, across recording boundaries.

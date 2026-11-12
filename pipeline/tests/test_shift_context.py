@@ -38,6 +38,34 @@ def detail():
             'practical_lessons': [], 'uncertainties': ['Diagnosis not established.'], 'study_questions': []}
 
 
+@pytest.mark.parametrize('form',['multiple-choice','multiple-select'])
+def test_new_question_formats_keep_options_evidence_and_readable_reports(store,tmp_path,monkeypatch,form):
+    from vet_pipeline import shift_workflow as w
+    root=prepared(store,tmp_path,monkeypatch)
+    exp=load_json(root/'experiment.json');exp['studyQuestionFormats']='mixed-v1';write_json(root/'experiment.json',exp)
+    write_json(root/'topic-index.json',[])
+    task,schema=w.detail_contract(root,'Synthetic task')
+    assert 'multiple-choice' in task and 'multiple-select' in task and 'do not force' in task
+    q={'format':form,'prompt':'Which general principle is supported?','explanation':'Synthetic explanation.',
+       'evidence':[{'source':'b0001','quote':'patient is uncomfortable.'}]}
+    if form=='multiple-choice':
+        q.update(correct={'id':'a','text':'Preserve uncertainty.'},distractors=[{'id':k,'text':v} for k,v in [('b','Assume a diagnosis.'),('c','Invent outcomes.'),('d','Hide unknowns.')]])
+    else:
+        q.update(choices=[{'id':k,'text':v} for k,v in [('a','Preserve uncertainty.'),('b','Retain unknowns.'),('c','Invent outcomes.')]],correctIds=['a','b'])
+    value=detail();value.update(study_questions=[q],knowledge_topics=[])
+    accepted,rejected=s.validate_detail(value,load_json(root/'sources.json'),True,(),schema)
+    assert not rejected and accepted['study_questions']==[q]
+    write_json(root/'index-map.json',index());write_json(root/'calls/episode-001.json',{'data':accepted,'metrics':{'seconds':.1,'prompt_eval_count':123}})
+    s.render(root)
+    assert 'Invent outcomes.' in (root/'review/shift-context.html').read_text()
+    assert 'A: Preserve uncertainty.' in (root/'readable-notes.md').read_text()
+    bad=copy.deepcopy(value)
+    if form=='multiple-choice':bad['study_questions'][0]['distractors'][0]['id']='a'
+    else:bad['study_questions'][0]['correctIds']=['unknown']
+    kept,rejected=s.validate_detail(bad,load_json(root/'sources.json'),True,(),schema)
+    assert kept['facts'] and not kept['study_questions'] and rejected
+
+
 def test_prepare_keeps_source_files_and_both_recordings_in_full_context(store, tmp_path, monkeypatch):
     root = prepared(store, tmp_path, monkeypatch)
     text = s.full_context(root)
@@ -337,3 +365,91 @@ def test_excluded_repetition_is_not_reintroduced_as_context_or_citable_evidence(
     with pytest.raises(ValueError, match='exact eligible'):
         s.validate_evidence([{'source': 'b0001', 'quote': original}], sources)
     assert sources['b0001']['text'] == original
+
+
+def test_raw_chatml_thinking_keeps_native_reply_and_separate_reasoning(store, tmp_path, monkeypatch):
+    import httpx
+    from tokenizers import Tokenizer, models
+    root = prepared(store, tmp_path, monkeypatch)
+    tokenizer = tmp_path / 'tokenizer.json'
+    Tokenizer(models.WordLevel({'[UNK]': 0}, unk_token='[UNK]')).save(str(tokenizer))
+    exp = load_json(root / 'experiment.json')
+    original = s.request_fingerprint('same input', exp)
+    exp['requestFormat'] = 'raw-chatml'
+    assert s.request_fingerprint('same input', exp) != original
+    write_json(root / 'experiment.json', exp)
+    cfg = {'provider': {**exp['provider'], 'kind': 'ollama',
+                       'base_url': 'http://127.0.0.1:11434', 'tokenizer_path': str(tokenizer)}}
+    monkeypatch.setattr(s, 'check_resources', lambda *a: None)
+    requests = []
+    def reply(request):
+        body = json.loads(request.content); requests.append(body)
+        assert request.url.path == '/api/generate'
+        assert body['raw'] is True and body['think'] is True and 'format' not in body
+        assert body['prompt'].endswith('<|im_start|>assistant\n<think>\n')
+        assert 'messages' not in body and 'Sample patient' in body['prompt']
+        return httpx.Response(200, json={'response': 'synthetic reasoning</think>\n' + json.dumps(index()),
+                                        'done_reason': 'stop', 'prompt_eval_count': 100})
+    client = httpx.Client
+    monkeypatch.setattr(s.httpx, 'Client', lambda **kw: client(transport=httpx.MockTransport(reply), **kw))
+    result = s.call(root, cfg, s.full_context(root), s.INDEX_TASK, s.INDEX_SCHEMA, 'index')
+    assert result['episodes'][0]['patient_label'] == 'Sample'
+    saved = load_json(root / 'calls/index-raw.json')
+    assert saved['response']['response'].startswith('synthetic reasoning</think>')
+    assert saved['metrics']['reasoningCharacters'] == len('synthetic reasoning')
+    assert s.call(root, cfg, s.full_context(root), s.INDEX_TASK, s.INDEX_SCHEMA, 'index') == result
+    assert len(requests) == 1
+
+
+def test_raw_thinking_delimiter_is_required_and_reasoning_is_not_json_evidence():
+    exp = {'thinking': True, 'requestFormat': 'raw-chatml'}
+    with pytest.raises(ValueError, match='delimiter'):
+        s.response_content({'response': '{"plausible": true}'}, exp)
+    raw = {'response': 'Do not treat {"invented": true} as evidence.</think>\n```json\n{"final": true}\n```'}
+    assert json.loads(s.response_content(raw, exp)) == {'final': True}
+
+
+def test_native_template_budget_preserves_source_and_binds_template_hash(tmp_path):
+    path = tmp_path / 'template.jinja'
+    path.write_text('{% for m in messages %}{{m.role}}:{{m.content}}\n{% endfor %}assistant:')
+    exp = {'thinking': True, 'chatTemplatePath': str(path), 'chatTemplateSha256': digest_file(path),
+           'systemPrefix': '<|think|>', 'reasoningEffort': 'high', 'modelDigest': 'fixture',
+           'provider': {}, 'gpuLayers': 0, 'version': 'fixture'}
+    text = s.experiment_prompt('ALL SOURCE WORDS', 'Extract evidence.', s.INDEX_SCHEMA, exp)
+    assert 'ALL SOURCE WORDS' in text and 'system:<|think|>' in text and 'Extract evidence.' in text
+    first = s.request_fingerprint(text, exp)
+    assert s.request_fingerprint(text, {**exp, 'reasoningEffort': 'low'}) != first
+    path.write_text('Changed template')
+    with pytest.raises(ValueError, match='template changed'):
+        s.experiment_prompt('ALL SOURCE WORDS', 'Extract evidence.', s.INDEX_SCHEMA, exp)
+
+
+def test_stream_retains_partial_reply_and_assembles_separate_thoughts(tmp_path):
+    import httpx
+    root = tmp_path / 'run'; (root / 'calls').mkdir(parents=True)
+    events = [{'message': {'thinking': 'Private reasoning.'}},
+              {'message': {'content': '{"value":'}}, {'message': {'content': 'null}'}},
+              {'message': {'content': ''}, 'done': True, 'done_reason': 'stop', 'eval_count': 12}]
+    def response(request):
+        return httpx.Response(200, text='\n'.join(json.dumps(x) for x in events))
+    with httpx.Client(transport=httpx.MockTransport(response), base_url='http://localhost') as client:
+        raw = s.streamed_reply(client, '/api/chat', {}, root, 'index')
+    assert raw['message']['thinking'] == 'Private reasoning.'
+    assert json.loads(raw['message']['content']) == {'value': None}
+    assert load_json(root / 'calls/index-live.json')['done'] is True
+    assert len(next((root / 'calls').glob('*-stream-*.jsonl')).read_text().splitlines()) == 4
+    events.pop()
+    with httpx.Client(transport=httpx.MockTransport(response), base_url='http://localhost') as client:
+        with pytest.raises(ValueError, match='without completion'):
+            s.streamed_reply(client, '/api/chat', {}, root, 'interrupted')
+    assert next((root / 'calls').glob('interrupted-stream-*.jsonl')).exists()
+
+
+def test_output_exhaustion_does_not_repeat_identical_expensive_request(store, tmp_path, monkeypatch):
+    root = prepared(store, tmp_path, monkeypatch); calls = []
+    def exhausted(*args):
+        calls.append(1); raise s.OutputBudgetError('Retained output budget exhaustion')
+    monkeypatch.setattr(s, 'call', exhausted)
+    with pytest.raises(s.OutputBudgetError):
+        s.bounded_call(root, {}, '', '', s.INDEX_SCHEMA, 'index')
+    assert len(calls) == 1

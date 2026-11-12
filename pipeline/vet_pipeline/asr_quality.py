@@ -42,7 +42,7 @@ def assess_segments(segments, duration=None):
     if invalid:
         reasons.append('Invalid or unordered source timestamps; no offsets were invented or repaired')
     if overrun:
-        reasons.append('Source timestamps exceed audio duration; review original Whisper output')
+        reasons.append('Source timestamps exceed audio duration; review original ASR output')
     if not nonempty:
         reasons.append('No nonempty speech text was retained')
     return {'schemaVersion': 1, 'reviewRequired': bool(reasons), 'reasons': reasons,

@@ -15,7 +15,7 @@ def run(store, cfg, force_retry=False, before_stage=None, transcribe_only=False)
     if cfg.get("shift_context", {}).get("enabled") and not transcribe_only:
         from .shift_workflow import run as run_shift
         results=run_shift(store, cfg, force_retry, before_stage)
-        if cfg.get('question_verification',{}).get('enabled'):
+        if cfg.get('question_verification',{}).get('enabled') and not any(j['stage']=='transcribe' for j in store.jobs()):
             from .question_verification import run_checks
             run_checks(store,cfg)
         return results

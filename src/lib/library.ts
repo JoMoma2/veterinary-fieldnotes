@@ -103,9 +103,8 @@ export function validateGraph(lib: Library) {
       throw new Error(`${shift.id}: duplicate recording ID`);
     if (new Set(shift.recordings.map((r) => r.sequence)).size !== shift.recordings.length)
       throw new Error(`${shift.id}: duplicate recording sequence`);
-    const orders = lib.discussions.filter((d) => d.shiftId === shift.id).map((d) => d.order);
-    if (new Set(orders).size !== orders.length)
-      throw new Error(`${shift.id}: duplicate discussion order`);
+    // Several discussions can begin at the same source block. Their permanent
+    // IDs distinguish them; recording sequence and source bounds remain checked.
   }
   for (const d of lib.discussions) {
     refs([d.shiftId], 'shifts', d.id);
@@ -120,6 +119,13 @@ export function validateGraph(lib: Library) {
         throw new Error(`${d.id}: segment clock cannot be more certain than its recording`);
     }
   }
+}
+
+export function compareDiscussions(
+  a: { order: number; id: string },
+  b: { order: number; id: string },
+) {
+  return a.order - b.order || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }
 
 type Publishable = {

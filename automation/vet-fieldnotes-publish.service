@@ -1,0 +1,19 @@
+[Unit]
+Description=Automatically publish privacy-screened FieldNotes educational content
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+UMask=0077
+WorkingDirectory=%h/FieldNotes/app
+ExecStart=%h/FieldNotes/app/pipeline/.venv/bin/python -m vet_pipeline.auto_publication --settings %h/FieldNotes/config/automatic-publication.json
+EnvironmentFile=-%h/FieldNotes/config/environment
+TimeoutStartSec=infinity
+Nice=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=%h/FieldNotes/data/library %h/FieldNotes/app -%h/.config/.wrangler -%h/.wrangler
+ReadOnlyPaths=%h/FieldNotes/app/.git
+

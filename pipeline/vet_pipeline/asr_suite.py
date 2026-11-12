@@ -27,6 +27,7 @@ from .resources import check_resources, gpu_snapshot, ollama_clients, resident_m
 from .runner import ProcessingDeferred
 from .util import atomic_write, digest_file, load_json, write_json, now, lock
 from .whisper_cpp import transcribe_cpp
+from .native_asr import native, pcm, split_ranges
 
 COMPARISON_SCRIPT = 'document.querySelectorAll("select[data-pane]").forEach((s,i)=>{s.value=i?"granite-vad":"whisper-continuous";function show(){document.getElementById(s.dataset.pane).replaceChildren(document.getElementById(s.value).content.cloneNode(true))}s.addEventListener("change",show);show()});document.addEventListener("click",e=>{const b=e.target.closest("[data-seek]");if(b){const a=document.getElementById("original");a.currentTime=Number(b.dataset.seek);a.play().catch(()=>{})}})'
 
@@ -55,22 +56,6 @@ def variants():
     result.append({'id':'granite-vocabulary','model':'granite','title':'Granite · speech detection + medical vocabulary',
                    'filter':'denoise','vad':True,'vocabulary':VOCABULARY})
     return result
-
-
-def split_ranges(ranges,total_samples,maximum=30*16000,overlap=16000):
-    """Keep offsets and explicit overlap; do not concatenate away uncertain words."""
-    if not (isinstance(maximum,int) and isinstance(overlap,int) and 0<=overlap<maximum):
-        raise ValueError('Invalid comparison window overlap')
-    out=[]
-    for start,end in ranges:
-        if not (isinstance(start,int) and isinstance(end,int) and 0<=start<end<=total_samples):
-            raise ValueError('Invalid source bounds')
-        while start<end:
-            stop=min(start+maximum,end)
-            out.append([start,stop])
-            if stop==end:break
-            start=stop-overlap
-    return out
 
 
 def prepare(source,root,config_path,model_dir,runtime,authorization):
@@ -119,24 +104,6 @@ def prepare(source,root,config_path,model_dir,runtime,authorization):
     write_json(root/'preparation.json',{'status':'complete','recordings':len(recordings),'at':now()})
     render(root)
     return data
-
-
-def native(session):
-    runtime=Path(session['runtime'])
-    library=runtime/'build-vulkan/src/libtranscribe.so'
-    if digest_file(library)!=session['librarySha256']:raise ValueError('Native runtime changed')
-    os.environ['TRANSCRIBE_LIBRARY']=str(library)
-    sys.path.insert(0,str(runtime/'bindings/python/src'))
-    import transcribe_cpp
-    return transcribe_cpp
-
-
-def pcm(path):
-    with wave.open(str(path),'rb') as w:
-        if (w.getnchannels(),w.getframerate(),w.getsampwidth())!=(1,16000,2):raise ValueError('Expected mono16k PCM16')
-        data=array.array('h');data.frombytes(w.readframes(w.getnframes()))
-    if sys.byteorder=='big':data.byteswap()
-    return array.array('f',(v/32768 for v in data))
 
 
 def plans(root,session,rec,variant,api=None):

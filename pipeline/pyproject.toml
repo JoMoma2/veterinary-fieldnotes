@@ -8,7 +8,7 @@ dependencies = ["httpx>=0.28,<1", "jsonschema>=4.25,<5", "cryptography>=46,<48",
 [project.optional-dependencies]
 audio = ["faster-whisper>=1.2,<2", "av>=16,<17"]
 dev = ["pytest>=8,<10"]
-evaluation = ["av>=16,<17"]
+evaluation = ["av>=16,<17", "Jinja2>=3.1.6,<4"]
 
 [project.scripts]
 vet-pipeline = "vet_pipeline.cli:main"

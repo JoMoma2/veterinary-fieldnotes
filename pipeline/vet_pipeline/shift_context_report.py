@@ -127,8 +127,13 @@ def render_report(root):
         if detail['study_questions']:
             body += '<h3>Study questions — unreviewed</h3>'; markdown += ['### Study questions', '']
         for question in detail['study_questions']:
-            body += '<details><summary>' + e(question['prompt']) + '</summary><p><strong>Answer:</strong> ' + e(question['answer']) + '</p><p>' + e(question['explanation']) + '</p>' + evidence(question['evidence']) + '</details>'
-            markdown += ['Q: ' + question['prompt'], 'A: ' + question['answer'], question['explanation'], '']
+            from .study_policy import question_answer, question_options
+            options=question_options(question)
+            option_lines=[x['id']+': '+x['text'] for x in options]
+            body += '<details><summary>' + e(question['prompt']) + '</summary>'
+            if options:body += '<ul>'+''.join('<li>'+e(line)+'</li>' for line in option_lines)+'</ul>'
+            body += '<p><strong>Answer:</strong> ' + e(question_answer(question)) + '</p><p>' + e(question['explanation']) + '</p>' + evidence(question['evidence']) + '</details>'
+            markdown += ['Q: ' + question['prompt'], *option_lines, 'A: ' + question_answer(question), question['explanation'], '']
             markdown += ['Evidence: ' + '; '.join(ref['source'] + ': ' + ref['quote'] for ref in question['evidence']), '']
         rejected = root / 'calls' / f'episode-{number:03d}-rejected.json'
         if rejected.exists():

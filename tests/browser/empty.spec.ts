@@ -1,7 +1,13 @@
 import { test, expect } from '@playwright/test';
 test('empty production sections are usable and contain no demonstration records', async ({
   page,
+  request,
 }) => {
+  const info = await (await request.get('/build-info.json')).json();
+  test.skip(
+    Object.values(info.recordCounts).some((count) => Number(count) > 0),
+    'Published production content is covered by public.spec.ts',
+  );
   for (const [path, text] of [
     ['/knowledge/', 'A place for everything you learn'],
     ['/cases/', 'Clinical stories, carefully preserved'],

@@ -201,8 +201,8 @@ def full_context(root):
     return '\n'.join(lines)
 
 
-def messages(context, task, schema, thinking=True):
-    system = SYSTEM.replace(' /no_think', '') if thinking else SYSTEM
+def messages(context, task, schema, thinking=True, system_prefix=''):
+    system = system_prefix + (SYSTEM.replace(' /no_think', '') if thinking else SYSTEM)
     user = 'AVAILABLE SHIFT TRANSCRIPT:\n' + context + '\nTASK:\n' + task + '\nRESPONSE_SCHEMA:\n' + json.dumps(schema, ensure_ascii=False)
     if not thinking:
         user += '\n/no_think'
@@ -355,14 +355,104 @@ def request_fingerprint(text, experiment):
     identity = {'prompt': text, 'modelDigest': experiment['modelDigest'],
                 'provider': experiment['provider'], 'gpuLayers': experiment['gpuLayers'],
                 'thinking': experiment.get('thinking', False), 'version': experiment['version']}
+    if experiment.get('requestFormat'):
+        identity['requestFormat'] = experiment['requestFormat']
+    if experiment.get('reasoningEffort'):
+        identity['reasoningEffort'] = experiment['reasoningEffort']
     return hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def experiment_prompt(context, task, schema, experiment):
+    if not experiment.get('chatTemplatePath'):
+        return prompt(context, task, schema, experiment.get('thinking', False))
+    from jinja2.sandbox import ImmutableSandboxedEnvironment
+    from jinja2 import nodes
+    from jinja2.ext import Extension
+    class Generation(Extension):
+        # HF marks assistant spans for training masks; inference emits the body.
+        tags = {'generation'}
+        def parse(self, parser):
+            token = next(parser.stream)
+            body = parser.parse_statements(('name:endgeneration',), drop_needle=True)
+            return nodes.Scope(body).set_lineno(token.lineno)
+    template = local_path(experiment['chatTemplatePath'])
+    if digest_file(template) != experiment['chatTemplateSha256']:
+        raise ValueError('Pinned model chat template changed')
+    env = ImmutableSandboxedEnvironment(trim_blocks=True, lstrip_blocks=True,
+                                       extensions=['jinja2.ext.loopcontrols', Generation])
+    def refuse(message):
+        raise ValueError(message)
+    env.globals['raise_exception'] = refuse
+    from datetime import datetime
+    template_date = datetime.fromisoformat(experiment.get('createdAt', '2000-01-01').replace('Z', '+00:00'))
+    env.globals['strftime_now'] = template_date.strftime
+    return env.from_string(template.read_text()).render(
+        messages=messages(context, task, schema, experiment.get('thinking', False), experiment.get('systemPrefix', '')),
+        tools=None, documents=None, add_generation_prompt=True, enable_thinking=experiment.get('thinking', False),
+        reasoning_effort=experiment.get('nativeReasoningEffort', 'high'),
+        bos_token=experiment.get('bosToken', ''), eos_token=experiment.get('eosToken', ''),
+        date_string=experiment.get('createdAt', '')[:10])
+
+
+def streamed_reply(client, endpoint, body, root, key, max_seconds=None):
+    """Retain every native stream event privately, including interrupted replies."""
+    path = root / 'calls' / (key + '-stream-' + str(time.time_ns()) + '.jsonl')
+    content = []; reasoning = []; final = None; last = 0; started = time.monotonic()
+    with path.open('x') as saved, client.stream('POST', endpoint, json=body) as response:
+        response.raise_for_status()
+        for line in response.iter_lines():
+            if not line:
+                continue
+            saved.write(line + '\n'); saved.flush()
+            if max_seconds is not None and time.monotonic() - started > max_seconds:
+                raise RequestTimeLimitError('Request time allowance reached; partial reply retained')
+            event = json.loads(line)
+            if event.get('error'):
+                raise ValueError('Local model stream reported an error; raw event retained')
+            message = event.get('message', {})
+            content.append(message.get('content', event.get('response', '')))
+            reasoning.append(message.get('thinking', event.get('thinking', '')))
+            if time.monotonic() - last >= 2 or event.get('done'):
+                write_json(root / 'calls' / (key + '-live.json'), {
+                    'at': now(), 'done': bool(event.get('done')),
+                    'answerCharacters': sum(map(len, content)), 'reasoningCharacters': sum(map(len, reasoning))})
+                last = time.monotonic()
+            if event.get('done'):
+                final = event
+    if final is None:
+        raise ValueError('Local model stream ended without completion; partial reply retained')
+    if endpoint == '/api/chat':
+        final['message'] = {'role': 'assistant', 'content': ''.join(content), 'thinking': ''.join(reasoning)}
+    else:
+        final.update(response=''.join(content), thinking=''.join(reasoning))
+    return final
+
+
+def response_content(raw, experiment):
+    if experiment.get('requestFormat') == 'raw-chatml':
+        # Imported GGUFs with a passthrough template may have no thinking parser.
+        # Keep their complete reply intact; parse only the final answer delimiter.
+        answer = raw['response']
+        if not raw.get('thinking'):
+            if '</think>' not in answer:
+                raise ValueError('Raw thinking response lacks its final-answer delimiter')
+            answer = answer.split('</think>', 1)[1]
+        answer = answer.strip()
+        if answer.startswith('```json\n') and answer.endswith('```'):
+            answer = answer[len('```json\n'):-3].strip()
+        return answer
+    return raw['message']['content'] if experiment.get('thinking') else raw['response']
 
 
 def call(root, cfg, context, task, schema, key):
     from tokenizers import Tokenizer
     sources = load_json(root / 'sources.json'); experiment = load_json(root / 'experiment.json')
     thinking = experiment.get('thinking', False)
-    text = prompt(context, task, schema, thinking)
+    request_format = experiment.get('requestFormat', 'native-chat')
+    if request_format not in ['native-chat', 'raw-chatml']:
+        raise ValueError('Unsupported experiment request format')
+    raw_chatml = request_format == 'raw-chatml'
+    text = experiment_prompt(context, task, schema, experiment)
     fingerprint = request_fingerprint(text, experiment)
     folder = root / 'calls'; folder.mkdir(exist_ok=True, mode=0o700)
     target = folder / (key + '.json')
@@ -400,31 +490,44 @@ def call(root, cfg, context, task, schema, key):
                    'temperature': cfg['provider'].get('temperature', .6), 'repeat_penalty': 1.0,
                    'top_p': cfg['provider'].get('top_p', .95), 'top_k': cfg['provider'].get('top_k', 20),
                    'min_p': cfg['provider'].get('min_p', 0)}
+        if 'presence_penalty' in cfg['provider']:
+            options['presence_penalty'] = cfg['provider']['presence_penalty']
         if experiment['gpuLayers'] >= 0:
             options['num_gpu'] = experiment['gpuLayers']
-        body = {'model': cfg['provider']['model'], 'stream': False, 'format': schema,
+        body = {'model': cfg['provider']['model'], 'stream': experiment.get('streamResponses', False), 'format': schema,
                 'keep_alive': cfg['provider']['keep_alive'], 'options': options}
-        if thinking:
-            body.update(messages=messages(context, task, schema, True), think=True)
+        if thinking and not raw_chatml:
+            body.update(messages=messages(context, task, schema, True, experiment.get('systemPrefix', '')),
+                        think=experiment.get('reasoningEffort', True))
         else:
             body.update(prompt=text, raw=True)
+            if thinking:
+                body['think'] = True
+            if raw_chatml:
+                # With no runtime thinking parser, a JSON grammar constrains the
+                # reasoning itself. Validate the final JSON after generation.
+                body.pop('format')
         with httpx.Client(base_url=cfg['provider']['base_url'], trust_env=False, timeout=cfg['provider']['timeout_seconds']) as client:
-            response = client.post('/api/chat' if thinking else '/api/generate', json=body)
-            response.raise_for_status(); raw = response.json()
+            endpoint = '/api/chat' if thinking and not raw_chatml else '/api/generate'
+            if body['stream']:
+                raw = streamed_reply(client, endpoint, body, root, key, cfg['provider']['timeout_seconds'])
+            else:
+                response = client.post(endpoint, json=body)
+                response.raise_for_status(); raw = response.json()
         metrics = {k: raw.get(k) for k in ['prompt_eval_count', 'prompt_eval_duration', 'eval_count', 'eval_duration', 'load_duration', 'done_reason']}
         metrics.update(seconds=round(time.monotonic() - started, 3), contextRequested=cfg['provider']['context_window'],
                        thinkingRequested=thinking, gpuLayersRequested=experiment['gpuLayers'],
-                       reasoningCharacters=len(raw.get('message', {}).get('thinking', '')),
+                       reasoningCharacters=len((raw.get('thinking') or raw.get('response', '').split('</think>', 1)[0]) if raw_chatml else raw.get('message', {}).get('thinking', '')),
                        peakGpuMiB=round(max((s['used'] for s in samples), default=0)),
                        minimumAvailableRamMiB=round(min((s['ramAvailableKiB'] / 1024 for s in samples), default=0)))
         retained = {'response': raw, 'metrics': metrics, 'promptSha256': fingerprint}
         write_json(folder / (key + '-raw-' + str(time.time_ns()) + '.json'), retained)
         write_json(folder / (key + '-raw.json'), retained)
         if raw.get('done_reason') == 'length':
-            raise ValueError('Model exhausted output budget; raw response retained')
+            raise OutputBudgetError('Model exhausted output budget; raw response retained')
         if (raw.get('prompt_eval_count') or 0) + maximum > cfg['provider']['context_window']:
             raise ValueError('Runtime context accounting exceeded output reservation')
-        data = json.loads(raw['message']['content'] if thinking else raw['response'])
+        data = json.loads(response_content(raw, experiment))
         if key == 'index':
             speaker_ids = load_json(root / 'speaker-labels.json')['speakers'] if experiment.get('speakerLabels') else None
             data, rejected = project_index(data, sources, speaker_ids)
@@ -452,6 +555,14 @@ class ContextBudgetError(ValueError):
     pass
 
 
+class OutputBudgetError(ValueError):
+    pass
+
+
+class RequestTimeLimitError(ValueError):
+    pass
+
+
 def bounded_call(root, cfg, context, task, schema, key):
     state_file = root / 'attempts.json'
     attempts = load_json(state_file) if state_file.exists() else {}
@@ -462,7 +573,7 @@ def bounded_call(root, cfg, context, task, schema, key):
         entry['attempts'] += 1; write_json(state_file, attempts)
         try:
             return call(root, cfg, context, task, schema, key)
-        except ContextBudgetError:
+        except (ContextBudgetError, OutputBudgetError, RequestTimeLimitError):
             raise
         except ProcessingDeferred:
             entry['attempts'] -= 1; write_json(state_file, attempts)
@@ -629,7 +740,7 @@ def reproject_saved(root):
             if saved.get('projection', {}).get('version') == 2 and saved['projection'].get('rawSha256') == raw_hash:
                 continue
             response = raw['response']
-            value = json.loads(response['message']['content'] if experiment['thinking'] else response['response'])
+            value = json.loads(response_content(response, experiment))
             labels = [episode['patient_label'] for episode in load_json(root / 'index-map.json')['episodes'] if episode['patient_label']] if experiment.get('medicalOnlyQuestions') else []
             data, rejected = validate_detail(value, sources, experiment.get('medicalOnlyQuestions', False), labels); repairs = data.pop('_citationRepairs', [])
             old_hash = hashlib.sha256(before).hexdigest()

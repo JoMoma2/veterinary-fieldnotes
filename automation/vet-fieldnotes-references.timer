@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly refresh of selected public medical references
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+Unit=vet-fieldnotes-references.service
+
+[Install]
+WantedBy=timers.target

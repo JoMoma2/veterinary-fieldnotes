@@ -83,10 +83,30 @@ def test_busy_gpu_and_headroom_still_protect_shared_work(quiet, monkeypatch, gpu
 
 
 def test_activity_during_quiet_interval_prevents_start(quiet, monkeypatch):
-    samples = iter([{'busy': 0, 'used': 600, 'free': 23900}, {'busy': 80, 'used': 600, 'free': 23900}])
+    samples = iter([{'busy': busy, 'used': 600, 'free': 23900} for busy in [0,80,0,80,0,80,0,80]])
     monkeypatch.setattr(resources, 'gpu_snapshot', lambda: next(samples))
     with pytest.raises(ProcessingDeferred, match='Shared GPU busy'):
         resources.check_resources(quiet, 'extract')
+
+
+def test_recent_gpu_activity_can_settle_without_skipping_quiet_interval(quiet,monkeypatch):
+    samples=iter([46,0,0,0]);seen=[]
+    def gpu():
+        busy=next(samples);seen.append(busy)
+        return {'busy':busy,'used':600,'free':23900}
+    monkeypatch.setattr(resources,'gpu_snapshot',gpu)
+    resources.check_resources(quiet,'transcribe')
+    assert seen==[46,0,0,0]
+
+
+def test_busy_sample_resets_required_consecutive_quiet_interval(quiet,monkeypatch):
+    samples=iter([0,0,80,0,0,0]);seen=[]
+    def gpu():
+        busy=next(samples);seen.append(busy)
+        return {'busy':busy,'used':600,'free':23900}
+    monkeypatch.setattr(resources,'gpu_snapshot',gpu)
+    resources.check_resources(quiet,'transcribe')
+    assert seen==[0,0,80,0,0,0]
 
 
 def test_client_connecting_after_last_sample_prevents_start(quiet, monkeypatch):

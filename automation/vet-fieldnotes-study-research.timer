@@ -1,0 +1,11 @@
+[Unit]
+Description=Research and verify study cards after local extraction
+
+[Timer]
+OnBootSec=3min
+OnUnitInactiveSec=2min
+AccuracySec=10s
+Unit=vet-fieldnotes-study-research.service
+
+[Install]
+WantedBy=timers.target
