@@ -169,9 +169,11 @@ def research(store, cfg, judge=ask_json):
     ref_sha = hashlib.sha256(json.dumps([(d['id'], d['bodySha256']) for d in docs], sort_keys=True).encode()).hexdigest()
     # Check existing wording against the newly relevant evidence FIRST. A good
     # original card should not be rewritten merely because its old proof expired.
+    verified_copies={q['id']:public_question(store,q) for q in questions}
     originals_to_check = []
     for original in questions:
         if original['origin'] == 'synthetic': continue
+        if verified_copies[original['id']]!=original:continue
         path = revision_path(store, original)
         saved = load_json(path) if path.exists() else {}
         if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:
@@ -193,6 +195,8 @@ def research(store, cfg, judge=ask_json):
     candidates = {}
     for original in questions:
         if original['origin'] == 'synthetic': continue
+        if verified_copies[original['id']]!=original:
+            candidates[original['id']]=verified_copies[original['id']];continue
         path = revision_path(store, original); saved = load_json(path) if path.exists() else {}
         draft_input = original
         if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:

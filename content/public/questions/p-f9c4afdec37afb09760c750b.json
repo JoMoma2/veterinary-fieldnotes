@@ -1,0 +1,25 @@
+{
+  "answer": "The primary purpose of thoracentesis is therapeutic: to remove accumulated pleural fluid that is compromising ventilation and reducing intrathoracic pressure on the lungs. The additional diagnostic value is that the aspirated fluid can be submitted for analysis (cell count, cytology, chemistry, culture) to help identify the underlying cause of the effusion (e.g., transudate versus exudate, infectious versus neoplastic etiology), guiding further management.",
+  "articleIds": [
+    "p-680e2c76a11e4ddcbd4d6642"
+  ],
+  "explanation": "The transcript explicitly identifies thoracentesis as the procedure to 'suck the fluid out' of the chest when fluid is confirmed on imaging (b0156, b0157), and frames it as both a therapeutic intervention (relieving the fluid) and a step toward determining 'what was causing it' (b0137). The question tests the general veterinary principle that thoracentesis serves dual therapeutic and diagnostic roles in pleural effusion management.\n\nIndependent medical references: Clonal IgG lambda plasmacytoma with Mott cell differentiation causing marked pleural effusion in a dog. — https://pubmed.ncbi.nlm.nih.gov/41562189/; Management of intractable pleural effusion in a dog with pleuroperitoneal shunt. — https://pubmed.ncbi.nlm.nih.gov/3507145/; Cranial vena caval syndrome secondary to central venous obstruction associated with a pacemaker lead in a dog. — https://pubmed.ncbi.nlm.nih.gov/21051305/; Computed tomography attenuation value for the characterization of pleural effusions in dogs: A cross-sectional study in 58 dogs. — https://pubmed.ncbi.nlm.nih.gov/31063900/",
+  "format": "flashcard",
+  "id": "p-f9c4afdec37afb09760c750b",
+  "origin": "authorized-record",
+  "prompt": "In a dog with radiographically confirmed pleural effusion causing respiratory compromise, what is the primary clinical purpose of performing a thoracentesis, and what additional diagnostic value does the procedure provide?",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T16:25:05.010043Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-76071d8d5816a8b5ac6c15d6"
+  ],
+  "topics": [
+    "p-32f89cc299bb4f61daed6008"
+  ]
+}

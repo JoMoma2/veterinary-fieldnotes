@@ -48,3 +48,9 @@ existing shared GPU admission checks. They do not evict another application's mo
 Research retries preserve successful checkpoints. A medical hold cannot block
 eligible articles and cases. Timer enablement, deployment receipts and real-session
 progress belong in the private installation handoff, never this source document.
+
+Model citations use the supplied excerpt IDs. A bare document ID is resolved only
+when its quotation occurs exactly in a supplied excerpt of that same document.
+New proofs bind every passage actually supplied to the judge. Changes to selected
+evidence invalidate the proof; unrelated new papers do not. Historical proofs
+retain their original stricter corpus binding.

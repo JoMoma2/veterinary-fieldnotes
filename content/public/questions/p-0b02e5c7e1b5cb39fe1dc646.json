@@ -1,0 +1,27 @@
+{
+  "answer": "The principal cardiovascular derangement is tachycardia, documented at all tested doses in dogs and the primary indication for beta-blocker therapy (e.g., esmolol) in albuterol toxicosis. Transient hypokalemia also occurs. At supratherapeutic doses, albuterol loses beta-2 selectivity and stimulates beta-1 adrenergic receptors as well, amplifying cardiovascular stimulation. In overdose, the duration of pharmacologic effects can extend up to 3 days.",
+  "articleIds": [
+    "p-23805eafe21bb27565dd3657",
+    "p-64373cfd24d2509df3982f08"
+  ],
+  "explanation": "Albuterol is a synthetic sympathomimetic amine with primarily beta-2 adrenergic receptor agonist properties at therapeutic doses; with overdose, it exerts agonist effects on beta-1 adrenergic receptors as well. In a species-comparison toxicology study, dogs exposed to inhaled albuterol developed tachycardia and transient hypokalemia at all doses tested, with cardiovascular effects consistent with known beta-2 agonist pharmacology. A retrospective veterinary case series confirmed that albuterol ingestion in dogs produces tachycardia severe enough to warrant beta-blocker therapy (esmolol), with a 46% success rate for achieving at least a 20% heart-rate reduction. The pharmacokinetic profile notes rapid absorption and that in overdose, effects can persist up to 3 days, necessitating prolonged cardiovascular monitoring.\n\nIndependent medical references: Toxicoses from human cold and allergy medications — https://www.merckvetmanual.com/toxicology/toxicoses-from-human-cold-and-allergy-medications/toxicoses-in-animals-from-human-cold-and-allergy-medications; Use of esmolol for control of tachycardia in 28 dogs and cats (2003-2020). — https://pubmed.ncbi.nlm.nih.gov/34874604/; Cardiovascular effects after inhalation of large doses of albuterol dry powder in rats, monkeys, and dogs: a species comparison. — https://pubmed.ncbi.nlm.nih.gov/9398487/",
+  "format": "flashcard",
+  "id": "p-0b02e5c7e1b5cb39fe1dc646",
+  "origin": "authorized-record",
+  "prompt": "In a dog that has ingested a beta-2 adrenergic agonist such as albuterol, what cardiovascular derangements are expected, and how does the receptor pharmacology change at supratherapeutic (overdose) levels?",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T16:25:05.009909Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-8d8068de7afaece1d8cfeb79"
+  ],
+  "topics": [
+    "p-ea4064c1816e07d7c0edaa73",
+    "p-dc7d536ae9653b2c898d5ec7"
+  ]
+}

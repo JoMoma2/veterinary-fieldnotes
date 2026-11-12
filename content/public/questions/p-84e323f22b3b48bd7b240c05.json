@@ -1,0 +1,27 @@
+{
+  "answer": "Accumulated cerumen, purulent discharge, or keratinous debris forms a physical barrier that prevents the topical solution from reaching and distributing across the inflamed canal mucosa. Removing the debris by cleaning allows the antibiotic solution to make direct contact with the affected tissue over the full length of the canal, ensuring adequate therapeutic concentration at the site of infection.",
+  "articleIds": [
+    "p-67e6d88778ca16cacfc168cf",
+    "p-189f0d2461732726dfe444f3"
+  ],
+  "explanation": "The recording explicitly states the reasoning: the otic solution 'doesn't work as well through earwax or like all the buildup in there' (b0219). This reflects the general principle that topical medications require direct contact with the inflamed or infected tissue; a physical barrier of cerumen, purulent exudate, or keratinous debris prevents the solution from reaching and distributing across the canal mucosa, thereby reducing therapeutic efficacy. Cleaning removes that barrier and allows the medication to contact the full length of the affected canal.\n\nIndependent medical references: Ear infections and otitis externa in dogs — https://www.merckvetmanual.com/dog-owners/ear-disorders-of-dogs/ear-infections-and-otitis-externa-in-dogs; Treatment Choices for Acute Canine Otitis Externa in Sweden, Finland and Norway: A Comparative Study With a Focus on Antibiotic Use. — https://pmc.ncbi.nlm.nih.gov/articles/PMC13569393/; Comparative Efficacy of a Novel Topical Formulation with Antimicrobial Peptides and Encapsulated Plant Extracts Versus Conventional Therapies for Canine Otitis Externa. — https://pmc.ncbi.nlm.nih.gov/articles/PMC12655140/; New combination for the therapy of canine otitis externa. I. Microbiology of otitis externa. — https://pubmed.ncbi.nlm.nih.gov/9065882/",
+  "format": "flashcard",
+  "id": "p-84e323f22b3b48bd7b240c05",
+  "origin": "authorized-record",
+  "prompt": "Why is it recommended to clean the external ear canal of accumulated debris before applying a topical otic antibiotic solution in a dog with otitis externa?",
+  "publication": {
+    "status": "approved",
+    "audience": "public",
+    "reviewedBy": "Automated local privacy gate",
+    "reviewedAt": "2026-11-12T16:25:05.010160Z",
+    "authorizationRef": "owner-authorized-automatic-publication"
+  },
+  "schemaVersion": 1,
+  "sourceDiscussionIds": [
+    "p-2cc59ec9cdd15cd5296daf4f"
+  ],
+  "topics": [
+    "p-839abaec89ca200b69686ae4",
+    "p-e3d7fa6c802df6316f1fa346"
+  ]
+}

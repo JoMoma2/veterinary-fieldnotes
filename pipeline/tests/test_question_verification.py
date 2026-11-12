@@ -131,3 +131,41 @@ def test_output_exhaustion_is_not_retried_identically(store,cfg,tmp_path):
     cfg['question_verification']['max_output_tokens']+=1024
     run_checks(store,cfg,judge=exhausted)
     assert len(calls)==2
+
+
+def test_document_citation_resolves_only_to_supplied_excerpt_with_an_exact_quote():
+    import copy
+    q=question();r=refs();data=verdict(q,r)
+    for part in data['components']:part['evidence'][0]['source']='ref-test'
+    original=copy.deepcopy(data);result=validate_result(data,q,r)
+    assert result['status']=='supported' and data==original
+    assert all(p['evidence'][0]['source']=='ref-test:0' for p in result['components'])
+    assert len(result['citationNormalizations'])==len(data['components'])
+    for bad_source,bad_quote in [('ref-unprovided','Supported answer.'),('ref-test:999','Supported answer.'),('ref-test','Invented evidence')]:
+        invalid=copy.deepcopy(data);invalid['components'][0]['evidence'][0].update(source=bad_source,quote=bad_quote)
+        with pytest.raises(ValueError,match='quotation'):validate_result(invalid,q,r)
+
+
+def test_model_citation_grammar_allows_only_exact_supplied_excerpt_ids():
+    from vet_pipeline.question_verification import verification_schema
+    schema=verification_schema(refs())
+    source=schema['properties']['components']['items']['properties']['evidence']['items']['properties']['source']
+    assert source['enum']==['ref-test:0']
+
+
+def test_unrelated_new_paper_keeps_exact_proof_but_changed_selected_context_requires_recheck(store,cfg,tmp_path):
+    directory=tmp_path/'refs';directory.mkdir();q=question()
+    def paper(id,body):
+        write_json(directory/(id+'.json'),{'id':id,'url':'https://www.fda.gov/'+id,'title':'Synthetic reference',
+            'scope':'Synthetic test','body':body,'bodySha256':hashlib.sha256(body.encode()).hexdigest(),'fetchedAt':now()})
+    paper('ref-test','Supported answer. Supported explanation. General principle.')
+    cfg['question_verification']['references_dir']=str(directory)
+    store.db.execute('INSERT INTO library_records VALUES(?,?,?)',('questions',q['id'],json.dumps(q)));store.db.commit()
+    calls=[]
+    def judge(q,reference,c):calls.append(1);return verdict(q,reference),{'modelDigest':'synthetic-test'}
+    run_checks(store,cfg,judge=judge)
+    paper('ref-unrelated','Granite basalt feldspar rhyolite.')
+    assert status(store,q)['status']=='supported'
+    run_checks(store,cfg,judge=judge);assert calls==[1]
+    paper('ref-new-evidence','General principle. Supported answer. Supported explanation. Additional evidence.')
+    assert status(store,q)['status']=='pending'

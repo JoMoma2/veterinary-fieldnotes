@@ -173,8 +173,37 @@ def retrieve(question,docs,limit=8,max_chars=14000):
     return out
 
 
+def verification_schema(refs):
+    schema=copy.deepcopy(SCHEMA)
+    schema['properties']['components']['items']['properties']['evidence']['items']['properties']['source']={'enum':list(refs)}
+    return schema
+
+
+def reference_context_fingerprint(refs):
+    # Bind ALL passages supplied to the judge, including uncited/contextual ones.
+    # A fresh download of identical text does not change its medical content;
+    # reference-age and full-document hash checks remain separate requirements.
+    context={key:{k:v for k,v in ref.items() if k!='fetchedAt'} for key,ref in refs.items()}
+    return hashlib.sha256(json.dumps(context,sort_keys=True).encode()).hexdigest()
+
+
 def validate_result(data,question,refs):
-    Draft202012Validator(SCHEMA).validate(data);expected=set(materials(question));seen=set()
+    Draft202012Validator(SCHEMA).validate(data)
+    data=copy.deepcopy(data);normalizations=[]
+    for part in data['components']:
+        for evidence in part['evidence']:
+            if evidence['source'] in refs:continue
+            # A document ID can identify a supplied paper without its excerpt
+            # suffix. Resolve it ONLY when the literal quote is present in an
+            # actually supplied excerpt of that exact document. Never guess an
+            # unknown source, repair a quotation or change the medical verdict.
+            matches=[key for key,ref in refs.items() if ref.get('documentId')==evidence['source']
+                     and evidence['quote'] in ref['text']]
+            if matches:
+                target=sorted(matches)[0]
+                normalizations.append({'documentId':evidence['source'],'excerptId':target})
+                evidence['source']=target
+    expected=set(materials(question));seen=set()
     for part in data['components']:
         if part['id'] not in expected or part['id'] in seen:raise ValueError('Missing, duplicate or invented question component')
         seen.add(part['id'])
@@ -193,7 +222,7 @@ def validate_result(data,question,refs):
     if seen!=expected:raise ValueError('Not every question component was checked')
     statuses={x['verdict'] for x in data['components']}
     status=next((s for s in ['contradicted','ambiguous','insufficient'] if s in statuses),'supported')
-    return {'status':status,**data}
+    return {'status':status,**data,**({'citationNormalizations':normalizations} if normalizations else {})}
 
 
 def result_path(store,q):return store.root/'question-verification'/(record_hash(q)+'.json')
@@ -212,7 +241,12 @@ def status(store,q):
             if not 0<=age<=data.get('maxReferenceAgeDays',180):raise ValueError('Stale reference')
         directory=data.get('referencesDirectory','')
         available=documents(directory,data.get('maxReferenceAgeDays',180))
-        fingerprint=hashlib.sha256(json.dumps([(d['id'],d['bodySha256']) for d in available],sort_keys=True).encode()).hexdigest()
+        if data.get('referenceBinding')=='retrieved-context-v1':
+            selected=retrieve(q,available,limit=data['retrievalLimit'],max_chars=data['referenceCharLimit'])
+            fingerprint=reference_context_fingerprint(selected)
+        else:
+            # Preserve the stricter original binding for historical proofs.
+            fingerprint=hashlib.sha256(json.dumps([(d['id'],d['bodySha256']) for d in available],sort_keys=True).encode()).hexdigest()
         if data.get('referenceSetSha256')!=fingerprint:raise ValueError('Reference set changed')
         if data['status'] in STATUSES:
             if not refs:raise ValueError('Missing external references')
@@ -233,12 +267,12 @@ def ask(question,refs,cfg,raw_path=None):
     from .budget import messages_budget
     p=cfg['provider'];u=urlsplit(p['base_url'])
     if p['kind']!='ollama' or u.hostname not in ['localhost','127.0.0.1','::1'] or u.port!=11434 or u.path not in ['', '/'] or u.username or u.query:raise ValueError('Fact checking requires local Ollama, no external inference')
-    model=verified_local_model(cfg);settings=cfg['question_verification']
-    messages=[{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps({'format':question['format'],'components':materials(question),'external_references':refs,'schema':SCHEMA},ensure_ascii=False)}]
+    model=verified_local_model(cfg);settings=cfg['question_verification'];schema=verification_schema(refs)
+    messages=[{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps({'format':question['format'],'components':materials(question),'external_references':refs,'schema':schema},ensure_ascii=False)}]
     budget=messages_budget(messages,p)
     if budget['estimatedPromptTokens']+settings['max_output_tokens']+512>p['context_window']:raise ValueError('Verification prompt exceeds local budget')
     check_resources(cfg,'extract')
-    body={'model':p['model'],'messages':messages,'format':SCHEMA,'stream':False,'think':True,'keep_alive':'2m','options':{'num_ctx':p['context_window'],'num_predict':settings['max_output_tokens'],'num_gpu':cfg.get('shift_context',{}).get('gpu_layers',32),**RUNTIME}}
+    body={'model':p['model'],'messages':messages,'format':schema,'stream':False,'think':True,'keep_alive':'2m','options':{'num_ctx':p['context_window'],'num_predict':settings['max_output_tokens'],'num_gpu':cfg.get('shift_context',{}).get('gpu_layers',32),**RUNTIME}}
     started=time.monotonic()
     with httpx.Client(timeout=settings['timeout_seconds'],trust_env=False) as client:
         response=client.post(p['base_url'].rstrip('/')+'/api/chat',json=body);response.raise_for_status();raw=response.json()
@@ -255,23 +289,27 @@ def run_checks(store,cfg,force=False,judge=None,question_ids=None):
     settings=cfg['question_verification']
     if settings.get('auto_refresh_sources'):refresh_sources(settings['references_dir'],settings.get('refresh_days',7))
     docs=documents(settings['references_dir'],settings['max_reference_age_days']);results=[]
-    fingerprint=hashlib.sha256(json.dumps([(d['id'],d['bodySha256']) for d in docs],sort_keys=True).encode()).hexdigest()
     for question in current(store)['questions']:
         if question_ids and question['id'] not in question_ids:continue
         if question.get('origin')=='synthetic':continue
         previous=status(store,question)
         if not force and previous['status'] in ['supported','contradicted','ambiguous','insufficient']:results.append({'id':question['id'],'status':previous['status']});continue
         refs=retrieve(question,docs,max_chars=settings['reference_char_limit'])
-        base={'version':VERSION,'referenceSetSha256':fingerprint,'questionSha256':record_hash(question),'questionId':question['id'],'checkedAt':now(),'references':refs,'referencesDirectory':str(private_path(settings['references_dir'])) if settings['references_dir'] else '', 'maxReferenceAgeDays':settings['max_reference_age_days']}
+        fingerprint=reference_context_fingerprint(refs)
+        base={'version':VERSION,'referenceBinding':'retrieved-context-v1','retrievalLimit':8,'referenceCharLimit':settings['reference_char_limit'],'referenceSetSha256':fingerprint,'questionSha256':record_hash(question),'questionId':question['id'],'checkedAt':now(),'references':refs,'referencesDirectory':str(private_path(settings['references_dir'])) if settings['references_dir'] else '', 'maxReferenceAgeDays':settings['max_reference_age_days']}
         if not refs:
             write_json(result_path(store,question),{**base,'status':'pending','reason':'No current independent medical references matched; held, not verified'});results.append({'id':question['id'],'status':'pending'});continue
-        request_identity=hashlib.sha256(json.dumps([VERSION,SYSTEM,fingerprint,refs,settings['max_output_tokens'],cfg['provider']['model'],cfg['provider']['context_window'],RUNTIME],sort_keys=True).encode()).hexdigest()
+        request_identity=hashlib.sha256(json.dumps([VERSION,SYSTEM,verification_schema(refs),fingerprint,refs,settings['max_output_tokens'],cfg['provider']['model'],cfg['provider']['context_window'],RUNTIME],sort_keys=True).encode()).hexdigest()
         attempt_path=result_path(store,question).with_suffix('.attempts.json');attempts=load_json(attempt_path).get('attempts',0) if attempt_path.exists() and not force and load_json(attempt_path).get('requestIdentity')==request_identity else 0
         for attempt in range(attempts,settings['max_attempts']):
             write_json(attempt_path,{'attempts':attempt+1,'referenceSetSha256':fingerprint,'requestIdentity':request_identity})
             try:
                 raw,metrics=judge(question,refs,cfg) if judge else ask(question,refs,cfg,result_path(store,question).with_suffix('.provider-response.json'))
-                write_json(result_path(store,question).with_suffix('.response.json'),{'data':raw,'metrics':metrics})
+                response_path=result_path(store,question).with_suffix('.response.json')
+                if response_path.exists():
+                    shutil.copyfile(response_path,response_path.with_name(response_path.stem+'-previous-'+str(time.time_ns())+response_path.suffix))
+                write_json(response_path,{'data':raw,'metrics':metrics,'questionSha256':record_hash(question),
+                    'requestIdentity':request_identity,'referenceSetSha256':fingerprint,'references':refs})
                 result=validate_result(raw,question,refs);write_json(result_path(store,question),{**base,**result,'metrics':metrics});results.append({'id':question['id'],'status':result['status']})
                 if judge is None:time.sleep(2)  # Let telemetry from OUR completed request settle; never bypass admission.
                 break
