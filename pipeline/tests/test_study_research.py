@@ -16,8 +16,9 @@ def question():
         'explanation':'Private wording from the recording.', 'articleIds':[], 'sourceDiscussionIds':['d-test']}
 
 
-def supported_revision(store, tmp_path, original):
+def supported_revision(store, tmp_path, original, public_prompt=None):
     candidate={**copy.deepcopy(original),'explanation':'Supported explanation.'}
+    if public_prompt is not None:candidate['prompt']=public_prompt
     directory=tmp_path/'public-references';directory.mkdir()
     body='General medical principle. Supported answer. Supported explanation.'
     doc={'id':'ref-test','url':'https://www.fda.gov/test','title':'Fictional reference fixture',
@@ -105,3 +106,60 @@ def test_relevant_sources_check_original_before_proposing_any_rewrite(store,cfg,
     assert calls[0]==[original['id']] and result['status']=='checked'
     assert not research.revision_path(store,original).exists()
     assert library.current(store)['questions']==[original]
+
+
+def test_case_question_alias_gets_its_own_exact_medical_proof_without_private_changes(store,cfg,monkeypatch):
+    from vet_pipeline import auto_publication as ap,patient_privacy as privacy,library
+    original={**question(),'prompt':'Why does PrivateDog need thoracentesis?'}
+    store.db.execute('INSERT INTO library_records VALUES(?,?,?)',('questions',original['id'],json.dumps(original)));store.db.commit()
+    source=library.current(store)
+    write_json(store.root/'publication/patient-identities.json',{'complete':True,'version':privacy.VERSION,
+        'inputSha256':privacy.identity_fingerprint(source,ap.prepared(source),ap.fields), 'caseNames':{},
+        'entities':[{'name':'PrivateDog','kind':'patient','species':'dog','sex':'male'}]})
+    cfg['question_verification']['research_enabled']=True
+    monkeypatch.setattr(research.web,'plan',lambda *a:[{'terms':['thoracentesis'],'species':'dog'}])
+    monkeypatch.setattr(research.web,'search',lambda *a,**kw:[])
+    monkeypatch.setattr(verify,'documents',lambda *a:[])
+    checked=set()
+    monkeypatch.setattr(verify,'status',lambda store,q:{'status':'supported' if record_hash(q) in checked else 'pending'})
+    def check(view,cfg,question_ids=None):
+        candidate=library.current(view)['questions'][0]
+        assert candidate['prompt']=='Why does Spot need thoracentesis?'
+        checked.add(record_hash(candidate))
+        return [{'id':candidate['id'],'status':'supported'}]
+    monkeypatch.setattr(verify,'run_checks',check)
+    def unnecessary(*a,**kw):raise AssertionError('Name-only changes need proof, not a medical rewrite')
+    monkeypatch.setattr(research,'draft',unnecessary)
+    result=research.research(store,cfg)
+    public=research.public_question(store,original)
+    assert public['prompt']=='Why does Spot need thoracentesis?' and result['publicProposals']==1
+    assert library.current(store)['questions']==[original]
+
+
+def test_verified_public_alias_does_not_cascade_when_another_private_pet_has_that_name(store,tmp_path):
+    from vet_pipeline import patient_privacy as privacy,auto_publication as ap,library
+    original={**question(),'prompt':'Why does PrivateDog need care?'}
+    candidate,_=supported_revision(store,tmp_path,original,public_prompt='Why does Spot need care?')
+    registry={'caseNames':{},'entities':[
+        {'name':'PrivateDog','kind':'patient','species':'dog','sex':'male'},
+        {'name':'Spot','kind':'patient','species':'dog','sex':'female'}]}
+    source=library.empty_library();source['questions']=[original]
+    enriched=privacy.with_public_questions(registry,store,source)
+    public=library.empty_library();public['questions']=[candidate]
+    assert privacy.anonymize(public,enriched,ap.fields)['questions'][0]==candidate
+    # A private original named Spot must still follow its OWN female-dog mapping.
+    private=library.empty_library();private['questions']=[{**original,'prompt':'Why does Spot need care?'}]
+    assert privacy.anonymize(private,enriched,ap.fields)['questions'][0]['prompt']=='Why does Bella need care?'
+
+
+def test_medically_supported_public_copy_still_cannot_exempt_a_private_person_name(store,tmp_path):
+    from vet_pipeline import patient_privacy as privacy,auto_publication as ap,library
+    original=question()
+    candidate,_=supported_revision(store,tmp_path,original,public_prompt='What did PrivateClinician say?')
+    registry={'caseNames':{},'entities':[{'name':'PrivateClinician','kind':'person','species':'unknown','sex':'unknown'}]}
+    source=library.empty_library();source['questions']=[original]
+    enriched=privacy.with_public_questions(registry,store,source)
+    proposed=library.empty_library();proposed['questions']=[candidate]
+    checked=privacy.anonymize(proposed,enriched,ap.fields)['questions'][0]
+    assert checked['prompt']=='What did Person say?'
+    assert record_hash(checked)!=record_hash(candidate)  # Exact medical proof must be redone; no exemption.

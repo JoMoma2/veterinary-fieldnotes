@@ -100,7 +100,7 @@ def import_article(result, directory):
     if source not in ['MED', 'PMC']: raise ValueError('Expected PubMed/PMC literature')
     url = ('https://pubmed.ncbi.nlm.nih.gov/' + article_id + '/' if source == 'MED'
            else 'https://pmc.ncbi.nlm.nih.gov/articles/' + article_id + '/')
-    text = plain(result.get('abstractText', '')); scope = 'Public peer-reviewed abstract; limited to abstract claims'
+    text = plain(result.get('abstractText', '')); scope = 'Public PubMed/PMC abstract; limited to abstract claims'
     pmcid = result.get('pmcid', '')
     downloaded = json.dumps(result, sort_keys=True).encode()
     if re.fullmatch(r'PMC[0-9]+', pmcid):

@@ -295,14 +295,14 @@ def document(store):
     from .morning import page
     e=lambda x:html.escape(str(x),quote=True)
     quote_budget={}
-    body='<p>Independent public medical references, checked locally. The transcript and model memory are not reference evidence. Automated corroboration is not clinical certification. Pending, contradicted, ambiguous or insufficient questions are held from real publication. Nothing is automatically corrected or published.</p>'
+    body='<p>Independent public medical references, checked locally. The transcript and model memory are not reference evidence. Automated corroboration is not clinical certification. Pending, contradicted, ambiguous or insufficient questions are held from real publication. Private extraction stays unchanged. Eligible public study copies pass separate privacy and publication gates.</p>'
     for q in current(store)['questions']:
         from .study_research import public_question
         original=q; q=public_question(store,original)
         if q!=original:
             body+='<p><strong>Evidence-based public study version.</strong> Your original private question and extraction remain unchanged.</p>'
             body+='<details><summary>Original private draft</summary><p>'+e(original['prompt'])+'</p><p>'+e(original.get('answer','See choices'))+'</p></details>'
-        result=status(store,q);body+='<section><h2>'+e(q['prompt'])+'</h2><p><strong>'+e(result['status'].upper())+'</strong></p><p>Original answer: '+e(q.get('answer','See choices'))+'</p><p>'+e(result.get('reason',''))+'</p>'
+        result=status(store,q);body+='<section><h2>'+e(q['prompt'])+'</h2><p><strong>'+e(result['status'].upper())+'</strong></p><p>Answer: '+e(q.get('answer','See choices'))+'</p><p>'+e(result.get('reason',''))+'</p>'
         for component in result.get('components',[]):
             body+='<h3>'+e(component['id'])+' — '+e(component['verdict'])+'</h3><p>'+e(component['reason'])+'</p>'
             for citation in component['evidence']:

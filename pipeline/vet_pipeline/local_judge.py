@@ -1,5 +1,7 @@
 """Small local structured-inference adapter for publication-only processing."""
 import json
+import shutil
+import time
 from pathlib import Path
 from urllib.parse import urlsplit
 import httpx
@@ -28,6 +30,8 @@ def ask_json(messages, schema, cfg, raw_path: Path):
                 'num_gpu': cfg['shift_context']['gpu_layers'], 'temperature': .2,
                 'top_p': .95, 'top_k': 20, 'min_p': 0, 'repeat_penalty': 1.0}})
         response.raise_for_status(); raw = response.json()
+    if raw_path.exists():
+        shutil.copyfile(raw_path, raw_path.with_name(raw_path.stem + '-previous-' + str(time.time_ns()) + raw_path.suffix))
     write_json(raw_path, raw)
     if not raw.get('done') or raw.get('done_reason') == 'length':
         raise ValueError('Incomplete publication reasoning; retain for review')

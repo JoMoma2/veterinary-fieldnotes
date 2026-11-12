@@ -167,6 +167,21 @@ def identity_fingerprint(source, prepared, fields):
         [[c['id'], c['patientLabel']] for c in source['cases']]], sort_keys=True).encode()).hexdigest()
 
 
+def with_public_questions(registry, store, source):
+    """Recognize exact, independently verified public copies; never re-alias them.
+
+    This is ephemeral provenance, not privacy approval. The strict name check and
+    semantic privacy gate still apply. Private source records never get this flag.
+    """
+    from .study_research import public_question
+    from .publication import record_hash
+    copies = set()
+    for original in source['questions']:
+        candidate = public_question(store, original)
+        if candidate != original: copies.add(record_hash(candidate))
+    return {**registry, '_verifiedPublicQuestionHashes': copies}
+
+
 def ensure_registry(store, source, prepared, cfg, fields, judge=ask_json):
     records = identity_records(prepared, fields)
     seeds = [c['patientLabel'] for c in source['cases']]
@@ -177,7 +192,7 @@ def ensure_registry(store, source, prepared, cfg, fields, judge=ask_json):
         saved = load_json(registry_path)
         if (saved.get('complete') and saved.get('version') == VERSION
                 and saved.get('inputSha256') == input_sha and saved.get('policySha256') == policy_sha):
-            return saved
+            return with_public_questions(saved, store, source)
     folder = store.root / 'publication/identity-reviews'; folder.mkdir(parents=True, exist_ok=True)
     record_folder = folder / 'records'; record_folder.mkdir(exist_ok=True)
     reviews = []; pending = []
@@ -217,7 +232,7 @@ def ensure_registry(store, source, prepared, cfg, fields, judge=ask_json):
     registry['policySha256'] = policy_sha
     registry['complete'] = True
     write_json(registry_path, registry)
-    return registry
+    return with_public_questions(registry, store, source)
 
 
 def protected_spans(text):
@@ -262,6 +277,16 @@ def anonymize(lib, registry, fields, alias_proof=None):
         out[group] = [r for r in rows if r['id'] not in registry.get('heldRecordIds', [])]
         rows = out[group]
         for record in rows:
+            if group == 'questions':
+                from .publication import record_hash
+                if record_hash(record) in registry.get('_verifiedPublicQuestionHashes', set()):
+                    subset = {g: [record] if g == group else [] for g in out}
+                    try:
+                        assert_anonymous(subset, registry, fields)
+                    except ValueError:
+                        pass  # Medical support never exempts a private identity.
+                    else:
+                        continue  # Aliasing an already public name can cascade into another alias.
             local = dict(by_name)
             local.update({key(e['name']): e for e in registry.get('recordEntities', {}).get(record['id'], [])})
             scoped = {**registry, 'entities': list(local.values())}

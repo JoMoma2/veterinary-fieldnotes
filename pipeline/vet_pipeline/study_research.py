@@ -13,7 +13,7 @@ import sqlite3
 import time
 from jsonschema import Draft202012Validator, ValidationError
 from .config import config
-from .library import current
+from .library import current, empty_library
 from .local_judge import ask_json
 from .patient_privacy import VERSION as IDENTITY_VERSION
 from .private import private_path
@@ -55,6 +55,12 @@ class RevisionView:
 
 def revision_path(store, original):
     return store.root / 'question-verification/public-revisions' / (record_hash(original) + '.json')
+
+
+def save_revision(path, value):
+    if path.exists():
+        write_json(path.parent / 'history' / (path.stem + '-' + str(time.time_ns()) + '.json'), load_json(path))
+    write_json(path, value)
 
 
 def public_question(store, original):
@@ -133,7 +139,7 @@ def research(store, cfg, judge=ask_json):
     from .patient_privacy import identity_fingerprint
     if registry.get('inputSha256') != identity_fingerprint(current(store), prepared(current(store)), fields):
         return {'status': 'waiting-for-current-identity-review'}
-    questions = current(store)['questions']; folder = store.root / 'question-verification/research'
+    questions = [q for q in current(store)['questions'] if q['id'] not in registry.get('heldRecordIds', [])]; folder = store.root / 'question-verification/research'
     folder.mkdir(parents=True, exist_ok=True, mode=0o700)
     for question in questions:
         if question['origin'] == 'synthetic': continue
@@ -170,6 +176,16 @@ def research(store, cfg, judge=ask_json):
         saved = load_json(path) if path.exists() else {}
         if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:
             continue
+        from .patient_privacy import anonymize
+        subset = empty_library(); subset['questions'] = [original]
+        public_base = anonymize(subset, registry, fields)['questions'][0]
+        if public_base != original:
+            # Bind medical proof to the exact named PUBLIC copy, without changing
+            # the canonical private draft or waiving the evidence gate.
+            save_revision(path, {'version': VERSION, 'kind': 'aliases-only',
+                'originalSha256': record_hash(original), 'publicSha256': record_hash(public_base),
+                'referenceSetSha256': ref_sha, 'question': public_base, 'at': now()})
+            continue
         if verify.status(store, original)['status'] == 'pending':
             originals_to_check.append(original['id'])
     if originals_to_check:
@@ -177,19 +193,23 @@ def research(store, cfg, judge=ask_json):
     candidates = {}
     for original in questions:
         if original['origin'] == 'synthetic': continue
-        if verify.status(store, original)['status'] == 'supported':
-            candidates[original['id']] = original
-            continue
         path = revision_path(store, original); saved = load_json(path) if path.exists() else {}
+        draft_input = original
         if saved.get('version') == VERSION and saved.get('referenceSetSha256') == ref_sha:
-            candidates[original['id']] = saved['question']; continue
-        if verify.status(store, original)['status'] == 'pending':
+            candidate = saved['question']
+            if saved.get('kind') != 'aliases-only' or verify.status(store, candidate)['status'] in ['supported', 'pending']:
+                candidates[original['id']] = candidate; continue
+            draft_input = candidate
+        if verify.status(store, draft_input)['status'] == 'supported':
+            candidates[original['id']] = draft_input
+            continue
+        if verify.status(store, draft_input)['status'] == 'pending':
             continue  # Shared-resource deferral is not evidence that wording needs correction.
-        refs = verify.retrieve(original, docs, max_chars=settings['reference_char_limit'])
+        refs = verify.retrieve(draft_input, docs, max_chars=settings['reference_char_limit'])
         if not refs: continue
-        candidate = draft(original, refs, cfg, folder / (record_hash(original) + '.draft.raw.json'), judge)
+        candidate = draft(draft_input, refs, cfg, folder / (record_hash(original) + '.draft.raw.json'), judge)
         # Public proposals never change the canonical private question or case records.
-        write_json(path, {'version': VERSION, 'originalSha256': record_hash(original),
+        save_revision(path, {'version': VERSION, 'kind': 'source-backed', 'originalSha256': record_hash(original),
             'publicSha256': record_hash(candidate), 'referenceSetSha256': ref_sha,
             'question': candidate, 'at': now()})
         candidates[original['id']] = candidate
@@ -197,6 +217,7 @@ def research(store, cfg, judge=ask_json):
     try:
         results = verify.run_checks(view, cfg)
     finally: view.close()
+    verify.render(store)  # Owner report uses private originals plus separately labelled public copies.
     return {'status': 'checked', 'questions': len(questions), 'publicProposals': len(candidates),
             'results': results, 'at': now()}
 
